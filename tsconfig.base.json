@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@workspace/types/constants/*": ["libs/types/src/constants/*"],
+      "@workspace/types/dto/*": ["libs/types/src/dto/*"],
+      "@workspace/types/enums/*": ["libs/types/src/enums/*"],
+      "@workspace/types/interfaces/*": ["libs/types/src/interfaces/*"],
+      "@workspace/ui/components/*": ["libs/ui/src/components/*"],
+      "@workspace/ui/hooks/*": ["libs/ui/src/hooks/*"],
+      "@workspace/ui/icons/*": ["libs/ui/src/icons/*"],
+      "@workspace/ui/utils/*": ["libs/ui/src/utils/*"],
+      "@client/*": ["apps/client/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

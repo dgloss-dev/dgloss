@@ -1,0 +1,157 @@
+'use client';
+import React, { useState } from 'react';
+import AntInput from 'antd/es/input';
+import ConfigProvider from 'antd/es/config-provider';
+import Image from 'next/image';
+import { getCDNUrl } from '../../../utils/url';
+
+type ModeTypes = 'search' | 'text' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal';
+export interface InputProps {
+  id?: string;
+  defaultValue?: string;
+  size?: 'small' | 'middle' | 'large';
+  disabled?: boolean;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
+  suffixLabel?: string;
+  allowClear?: boolean;
+  maxLength?: number;
+  showCount?: boolean;
+  value?: string;
+  placeholder?: string;
+  name?: string;
+  label?: string;
+  descriptiveLabel?: string;
+  className?: string;
+  type?: string;
+  errorMessage?: string;
+  theme?: {
+    token?: {
+      [key: string]: any;
+    };
+  };
+  inputMode?: ModeTypes;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPressEnter?: () => void;
+  onFocus?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const Input: React.FC<InputProps> = (props) => {
+  const Component = props.type === 'password' ? AntInput.Password : AntInput;
+
+  return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#007aff',
+          lineType: 'solid',
+          colorBgContainer: '#ffffff',
+          controlOutlineWidth: 1,
+          borderRadius: 6,
+          colorBorder: '#000000FF',
+          ...props.theme?.token,
+        },
+        components: {
+          Input: {
+            paddingBlock: 8,
+            paddingInline: 12,
+            activeBg: '#ffffff',
+            activeBorderColor: '#2563eb',
+            hoverBg: '#ffffff',
+            hoverBorderColor: '#d1d5db',
+          },
+        },
+      }}
+    >
+      {props.label && (
+        <label htmlFor={props.id} className="mb-4 text-sm font-semibold text-gray-600">
+          {props.label}
+        </label>
+      )}
+
+      {props.descriptiveLabel && (
+        <h6 className="pb-1 text-xs font-normal md:pb-3">{props.descriptiveLabel}</h6>
+      )}
+
+      <Component
+        className={`${props.className} !font-normal no-border-input border border-solid border-black`}
+        size={props.size}
+        defaultValue={props.defaultValue}
+        disabled={props.disabled}
+        allowClear={props.allowClear}
+        id={props.id}
+        maxLength={props.maxLength}
+        prefix={props.prefix}
+        suffix={props.suffix}
+        showCount={props.showCount}
+        value={props.value}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
+        onFocus={props.onFocus}
+        onPressEnter={props.onPressEnter}
+        name={props.name}
+        type={props.type}
+        inputMode={props.inputMode}
+      />
+
+      {props.suffixLabel && (
+        <span className="input-suffix" style={{ marginLeft: '8px' }}>
+          {props.suffixLabel}
+        </span>
+      )}
+
+      {props.errorMessage && (
+        <div className="py-2 text-xs font-medium text-secondary">{props.errorMessage}</div>
+      )}
+    </ConfigProvider>
+  );
+};
+
+export interface SearchInputProps extends InputProps {
+  enterButton?: false | React.ReactNode;
+  loading?: boolean;
+  onSearch?: (value: string) => void;
+}
+
+const { Search } = AntInput;
+
+export const SearchInput: React.FC<SearchInputProps> = ({
+  size = 'middle',
+  className,
+  onChange,
+  value,
+  enterButton = false,
+  ...props
+}) => {
+  const [inputValue, setInputValue] = useState(value || '');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    if (onChange) onChange(e);
+  };
+
+  return (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#007aff',
+          lineType: 'solid',
+          colorBgContainer: '#ffffff',
+          controlOutlineWidth: 1,
+          borderRadius: 6,
+          colorBorder: '#e5e7eb',
+          ...props.theme?.token,
+        },
+      }}
+    >
+      <Search
+        className={`no-border-input search-input ${className}`}
+        size={size}
+        value={inputValue}
+        onChange={handleInputChange}
+        prefix={<Image src={getCDNUrl('/icons/Search.svg')} alt="Search" width={16} height={16} />}
+        {...props}
+      />
+    </ConfigProvider>
+  );
+};
