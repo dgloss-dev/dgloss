@@ -1,7 +1,26 @@
 import { Sequelize } from 'sequelize-typescript';
 import DBConfig from '../config/sql.config';
-import { User } from '../models';
+import {
+  User,
+  Label,
+  MyCallList,
+  Settings,
+  AiCallSlot,
+  Caller,
+  CallList,
+  CallerPhone,
+  CallSchedule,
+  CallSession,
+  CallStatusHistory,
+  ConversationFlow,
+  OperatorStatus,
+  VoiceData,
+  VoiceDataGroup,
+  VoiceDataGroupMapping,
+  VoiceDataLabel,
+} from '../models';
 import { logger } from '../utils/winston.utils';
+import { AppConfig } from '../config';
 
 export class SQLLoader {
   private static instance: SQLLoader | null = null;
@@ -35,7 +54,25 @@ export class SQLLoader {
       dialect: 'postgres',
       logQueryParameters: false,
       logging: false,
-      models: [User],
+      models: [
+        User,
+        Label,
+        MyCallList,
+        Settings,
+        AiCallSlot,
+        Caller,
+        CallList,
+        CallerPhone,
+        CallSchedule,
+        CallSession,
+        CallStatusHistory,
+        ConversationFlow,
+        OperatorStatus,
+        VoiceData,
+        VoiceDataGroup,
+        VoiceDataGroupMapping,
+        VoiceDataLabel,
+      ],
       dialectOptions: {
         connectTimeout: 30000,
       },
@@ -43,12 +80,24 @@ export class SQLLoader {
 
     await this.sequelize
       .authenticate()
-      .then(() => {
+      .then(async () => {
         logger.info('✅ SQL Connection has been established successfully.');
+        if (AppConfig.APP_ENV === 'local' || AppConfig.APP_ENV === 'dev') await this.syncDatabase();
       })
       .catch((err) => {
         logger.error('❌ Unable to connect to the SQL database:', err);
       });
+  }
+
+  private async syncDatabase() {
+    if (!this.sequelize) return;
+
+    try {
+      await this.sequelize.sync({ alter: true, force: false });
+      logger.info('✅ Database tables have been synchronized with models.');
+    } catch (error) {
+      logger.error('❌ Error synchronizing database tables:', error);
+    }
   }
 
   public getSequelizeInstance(): Sequelize | null {
