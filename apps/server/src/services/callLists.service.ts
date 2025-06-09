@@ -1,8 +1,9 @@
 import { CallListsDao } from '../dao/callLists.dao';
-import { CreateCallListDto } from '@workspace/types/dto/callList';
+import { CreateCallListDto, FilterCallListDto } from '@workspace/types/dto/callList';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
 import { ThrowError } from '../utils/error.utils';
+import { CallList } from '../models';
 
 export class CallListsService {
   public static instance: CallListsService;
@@ -25,6 +26,19 @@ export class CallListsService {
     try {
       const createdCallList = await this.callListsDao.createCallList(callListData);
       return createdCallList;
+    } catch (error) {
+      throw ThrowError(error);
+    }
+  }
+
+  public async getAllCallLists(
+    filters: FilterCallListDto,
+  ): Promise<{ rows: CallList[]; count: number }> {
+    logger.info('CallListsService - getAllCallLists()');
+
+    try {
+      const callLists = await this.callListsDao.filterCallLists(filters);
+      return callLists;
     } catch (error) {
       throw ThrowError(error);
     }
