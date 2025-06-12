@@ -15,7 +15,7 @@ export class SQLLoader {
   private DB_PORT = DBConfig.DB_PORT;
   private DB_USER = DBConfig.DB_USER;
   private DB_PASSWORD = DBConfig.DB_PASSWORD;
-  private DB_REPLICA_HOST = DBConfig.DB_REPLICA_HOST;
+  // private DB_REPLICA_HOST = DBConfig.DB_REPLICA_HOST;
 
   private constructor() {
     this.connectToSQL();
@@ -64,22 +64,22 @@ export class SQLLoader {
           ca: this.getRDSCertificate(),
         },
       },
-      replication: {
-        read: [
-          {
-            host: this.DB_REPLICA_HOST,
-            port: this.DB_PORT,
-            username: this.DB_USER,
-            password: this.DB_PASSWORD,
-          },
-        ],
-        write: {
-          host: this.DB_HOST,
-          port: this.DB_PORT,
-          username: this.DB_USER,
-          password: this.DB_PASSWORD,
-        },
-      },
+      // replication: {
+      //   read: [
+      //     {
+      //       host: this.DB_REPLICA_HOST,
+      //       port: this.DB_PORT,
+      //       username: this.DB_USER,
+      //       password: this.DB_PASSWORD,
+      //     },
+      //   ],
+      //   write: {
+      //     host: this.DB_HOST,
+      //     port: this.DB_PORT,
+      //     username: this.DB_USER,
+      //     password: this.DB_PASSWORD,
+      //   },
+      // },
       pool: {
         max: 10,
         min: 2,
