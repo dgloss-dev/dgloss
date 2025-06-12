@@ -17,8 +17,8 @@ const notoSans = Noto_Sans_JP({
 });
 
 export const metadata = {
-  title: 'Osaka Gas',
-  description: 'Osaka Gas',
+  title: 'Dgloss',
+  description: 'Dgloss AI Call Center',
 };
 
 export const viewport = {

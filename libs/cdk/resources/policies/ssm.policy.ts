@@ -5,5 +5,6 @@ export const SSMPolicy = (resources: string[]) => {
     actions: ['ssm:GetParameter'],
     resources: resources,
   });
+
   return ssmParameterReadPolicy;
 };

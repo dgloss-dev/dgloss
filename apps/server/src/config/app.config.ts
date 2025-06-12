@@ -31,8 +31,11 @@ const defaultConfig = {
   APP_REGION: 'ap-northeast-1',
 };
 
-const ALLOWED_ORIGINS = ['http://localhost:3000'];
-const PROD_ALLOWED_ORIGINS = [];
+const ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+  process.env.APP_HOME_URL,
+  process.env.APP_LIVE_URL,
+];
 
 export const AppConfig = {
   APP_ENV: process.env.APP_ENV || defaultConfig.APP_ENV,
@@ -40,8 +43,7 @@ export const AppConfig = {
   APP_VERSION: process.env.APP_VERSION || defaultConfig.APP_VERSION,
   APP_REGION: process.env.APP_REGION || defaultConfig.APP_REGION,
   APP_ACCOUNT_ID: process.env.APP_ACCOUNT_ID,
-  APP_ALLOWED_ORIGINS:
-    process.env.APP_ENV === ENVIRONMENTS.PRODUCTION ? PROD_ALLOWED_ORIGINS : ALLOWED_ORIGINS,
+  APP_ALLOWED_ORIGINS: ALLOWED_ORIGINS,
   APP_HOME_URL: process.env.APP_HOME_URL,
   APP_CDN_URL: process.env.APP_CDN_URL,
 };

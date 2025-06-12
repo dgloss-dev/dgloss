@@ -5,5 +5,6 @@ export const IamPolicy = (resources: string[]) => {
     actions: ['iam:PassRole'],
     resources: resources,
   });
+
   return { passRolePolicy };
 };

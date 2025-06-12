@@ -1,6 +1,11 @@
 # -- Base stage
 FROM public.ecr.aws/docker/library/node:lts-alpine as base
 
+ARG ECR_ENVIRONMENT
+ENV ECR_ENVIRONMENT=${ECR_ENVIRONMENT}
+
+RUN echo "Running build command for $ECR_ENVIRONMENT"
+
 # Create app directory
 WORKDIR /app
 
@@ -16,7 +21,16 @@ FROM dependencies AS build
 
 # Copy application source code and build
 COPY . .
-RUN yarn build:server
+RUN if [ "$ECR_ENVIRONMENT" = "dev" ]; then \
+			yarn build:server:dev; \
+    elif [ "$ECR_ENVIRONMENT" = "staging" ]; then \
+      yarn build:server:staging; \
+    elif [ "$ECR_ENVIRONMENT" = "prod" ]; then \
+      yarn build:server:prod; \
+    else \
+      echo "Unknown environment: $ECR_ENVIRONMENT" && \
+      yarn build:server; \
+    fi
 
 # -- Release stage
 FROM public.ecr.aws/docker/library/node:lts-alpine as release

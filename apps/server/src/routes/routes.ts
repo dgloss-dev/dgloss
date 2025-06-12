@@ -10,14 +10,15 @@ import UsersRoutes from './user.routes';
 export async function SetRoutes(app: Application) {
   const apiRouter = Router();
 
-  app.use('/health', (req, res) => {
+  app.use('/api', apiRouter);
+
+  apiRouter.use('/health', (_, res) => {
     return cb(HTTPSTATUS.OK, res, {
       status: 'OK',
       version: AppConfig.APP_VERSION,
     });
   });
 
-  app.use('/api', apiRouter);
   apiRouter.use(`/${APIS.USERS}`, new UsersRoutes().router);
   apiRouter.use(`/${APIS.UTILS}`, new UtilsRoutes().router);
 

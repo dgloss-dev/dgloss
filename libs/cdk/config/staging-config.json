@@ -1,0 +1,35 @@
+{
+  "parameters": {
+    "serverPort": 3001,
+    "gitRepo": {
+      "name": "dgloss",
+      "owner": "peaceflat",
+      "branch": "staging",
+      "authToken": "repo-oauth-token"
+    },
+    "application": {
+      "JWT_SECRET": "/staging/jwt-secret",
+      "APP_LOCAL_URL": "/staging/app-local-url",
+      "APP_AMPLIFY_URL": "/staging/app-amplify-url",
+      "API_URL": "/staging/api-url",
+      "JWT_ACCESS_TOKEN_EXPIRATION": "/staging/jwt-access-token-expiration",
+      "JWT_REFRESH_TOKEN_EXPIRATION": "/staging/jwt-refresh-token-expiration",
+      "USER_POOL_ID": "/staging/cognito-pool-id",
+      "USER_POOL_CLIENT_ID": "/staging/cognito-pool-client-id",
+      "VOICE_DATA_DISTRIBUTION": "/staging/voice-data-distribution",
+      "INTERNAL_API_KEY": "/staging/internal-api-key"
+    },
+    "email": {
+      "EMAIL_SENDER": "/staging/email-sender",
+      "EMAIL_ALERTS": "/staging/email-alerts"
+    },
+    "database": {
+      "DB_HOST": "/staging/db-host",
+      "DB_REPLICA_HOST": "/staging/db-replica-host",
+      "DB_PORT": "/staging/db-port",
+      "DB_USER": "/staging/db-user",
+      "DB_NAME": "/staging/db-name",
+      "DB_PASSWORD_ARN": "/staging/db-password-arn"
+    }
+  }
+}
