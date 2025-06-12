@@ -16,7 +16,14 @@
         "bundle": false,
         "main": "apps/server/src/main.ts",
         "tsConfig": "apps/server/tsconfig.app.json",
-        "assets": ["apps/server/src/assets"],
+        "assets": [
+          "apps/server/src/assets",
+          {
+            "input": "apps/server/src/certificates",
+            "glob": "*.pem",
+            "output": "apps/server/src/certificates"
+          }
+        ],
         "generatePackageJson": true,
         "externalDependencies": ["mariadb"],
         "esbuildOptions": {
