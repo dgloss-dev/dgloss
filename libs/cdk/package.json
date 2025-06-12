@@ -10,9 +10,11 @@
     "test": "jest",
     "cdk": "cdk",
     "deploy-dev": "ENVIRONMENT=dev cdk deploy",
+    "deploy-stage": "ENVIRONMENT=staging cdk deploy",
     "deploy-prod": "ENVIRONMENT=prod cdk deploy"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
     "@types/jest": "^29.5.12",
     "@types/node": "20.12.7",
     "aws-cdk-lib": "^2.154.1",
@@ -25,8 +27,15 @@
   },
   "dependencies": {
     "@aws-cdk/aws-amplify-alpha": "^2.154.1-alpha.0",
+    "@aws-cdk/aws-apprunner-alpha": "^2.176.0-alpha.0",
+    "@aws-sdk/client-cloudwatch-logs": "^3.812.0",
+    "@aws-sdk/client-ses": "^3.750.0",
+    "@aws-sdk/client-sns": "^3.808.0",
+    "@aws-sdk/client-sqs": "^3.750.0",
+    "@aws-sdk/client-ssm": "^3.772.0",
     "aws-cdk": "^2.154.1",
     "aws-lambda": "^1.0.7",
+    "axios": "^1.7.9",
     "constructs": "^10.0.0",
     "dotenv": "^16.4.5",
     "normalize-text": "^2.5.0",

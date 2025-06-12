@@ -14,8 +14,9 @@ const configSchema = {
     DB_PORT: { type: 'integer' },
     DB_USER: { type: 'string' },
     DB_PASSWORD: { type: 'string' },
+    DB_REPLICA_HOST: { type: 'string' },
   },
-  required: ['DB_NAME', 'DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD'],
+  required: ['DB_NAME', 'DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_REPLICA_HOST'],
 };
 
 const validate = ajv.compile(configSchema);
@@ -26,6 +27,7 @@ const DBConfig = {
   DB_USER: process.env.DB_USER as string,
   DB_PASSWORD: process.env.DB_PASSWORD as unknown as string,
   DB_PORT: (process.env.DB_PORT && parseInt(process.env.DB_PORT, 10)) as unknown as number,
+  DB_REPLICA_HOST: process.env.DB_REPLICA_HOST as string,
 };
 
 if (!validate(DBConfig)) {

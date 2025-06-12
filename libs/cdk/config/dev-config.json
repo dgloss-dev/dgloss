@@ -1,3 +1,35 @@
 {
-  "parameters": {}
+  "parameters": {
+    "serverPort": 3001,
+    "gitRepo": {
+      "name": "dgloss",
+      "owner": "peaceflat",
+      "branch": "main",
+      "authToken": "repo-oauth-token"
+    },
+    "application": {
+      "JWT_SECRET": "/dev/jwt-secret",
+      "APP_LOCAL_URL": "/dev/app-local-url",
+      "APP_AMPLIFY_URL": "/dev/app-amplify-url",
+      "API_URL": "/dev/api-url",
+      "JWT_ACCESS_TOKEN_EXPIRATION": "/dev/jwt-access-token-expiration",
+      "JWT_REFRESH_TOKEN_EXPIRATION": "/dev/jwt-refresh-token-expiration",
+      "USER_POOL_ID": "/dev/cognito-pool-id",
+      "USER_POOL_CLIENT_ID": "/dev/cognito-pool-client-id",
+      "VOICE_DATA_DISTRIBUTION": "/dev/voice-data-distribution",
+      "INTERNAL_API_KEY": "/dev/internal-api-key"
+    },
+    "email": {
+      "EMAIL_SENDER": "/dev/email-sender",
+      "EMAIL_ALERTS": "/dev/email-alerts"
+    },
+    "database": {
+      "DB_HOST": "/dev/db-host",
+      "DB_REPLICA_HOST": "/dev/db-replica-host",
+      "DB_PORT": "/dev/db-port",
+      "DB_USER": "/dev/db-user",
+      "DB_NAME": "/dev/db-name",
+      "DB_PASSWORD_ARN": "/dev/db-password-arn"
+    }
+  }
 }

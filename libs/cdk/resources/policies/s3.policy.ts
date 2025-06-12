@@ -5,10 +5,12 @@ export const S3Policy = (resources: string[]) => {
     actions: ['s3:Get*', 's3:List*'],
     resources: resources,
   });
+
   const putItemPolicy = new PolicyStatement({
     actions: ['s3:Put*'],
     resources: resources,
   });
+
   return { listItemPolicy, putItemPolicy };
 };
 

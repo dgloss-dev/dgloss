@@ -1,0 +1,59 @@
+version: 1
+applications:
+  - appRoot: apps/client
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - echo "Checking for changes in apps/client..."
+            - >
+              if [ -n "$CODEBUILD_RESOLVED_SOURCE_VERSION" ]; then
+                CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $CODEBUILD_RESOLVED_SOURCE_VERSION)
+              else
+                CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+              fi
+
+            - >
+              if echo "$CHANGED_FILES" | grep -q "apps/client" || \
+                 echo "$CHANGED_FILES" | grep -q "libs/ui" || \
+                 echo "$CHANGED_FILES" | grep -q "package.json"; then
+                export CHANGES_DETECTED="true"
+                echo "Changes detected in client-related directories, proceeding with build"
+              else
+                export CHANGES_DETECTED="false"
+                echo "No changes in client-related directories, cancelling build"
+                exit -1
+              fi
+
+            - echo "Installing Dependencies..."
+            - yarn install --frozen-lockfile --ignore-scripts
+            - echo "Dependencies installed successfully"
+            - echo "Clearing nx cache..."
+            - yarn run clear:nx:cache
+            - echo "Nx cache cleared"
+
+        build:
+          commands:
+            - echo "Running build phase..."
+            - >
+              echo "Running build command for $AMPLIFY_ENVIRONMENT";
+              if [ "${AMPLIFY_ENVIRONMENT}" == "dev" ]; then
+                yarn build:client:dev
+              elif [ "${AMPLIFY_ENVIRONMENT}" == "staging" ]; then
+                yarn build:client:staging
+              elif [ "${AMPLIFY_ENVIRONMENT}" == "prod" ]; then
+                yarn build:client:prod
+              else
+                echo "Unknown environment"
+                echo "Falling back to dev build command"
+                yarn build:client:dev
+              fi
+
+      artifacts:
+        baseDirectory: .next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - '.next/cache/**/*'
+          - '../../node_modules/**/*'
