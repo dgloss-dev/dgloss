@@ -2,7 +2,7 @@ import { FilterCallListDto } from '@workspace/types/dto/callList';
 import { CallList } from '../models';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
-import { Op } from 'sequelize';
+import { Op, literal } from 'sequelize';
 
 export class CallListsDao {
   private static instance: CallListsDao;
@@ -44,6 +44,25 @@ export class CallListsDao {
         order: [[sortBy, order === 1 ? 'ASC' : 'DESC']],
         limit,
         offset: start,
+        include: [
+          {
+            association: 'callers',
+            required: false,
+          },
+        ],
+        attributes: {
+          include: [
+            [
+              literal(`(
+                SELECT COUNT(*)
+                FROM callers
+                WHERE callers.call_list_id = "CallList".id
+              )`),
+              'callersCount',
+            ],
+          ],
+        },
+        distinct: true,
       });
 
       return callLists;
