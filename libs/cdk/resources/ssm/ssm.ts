@@ -107,6 +107,14 @@ export const SSM = (stack: Stack) => {
     },
   );
 
+  const apiUrl = StringParameter.fromStringParameterAttributes(
+    stack,
+    `ApiUrlParameter-${environment}`,
+    {
+      parameterName: config.parameters.application.API_URL,
+    },
+  );
+
   const voiceDataDistribution = StringParameter.fromStringParameterAttributes(
     stack,
     `VoiceDataDistributionParameter-${environment}`,
@@ -147,6 +155,7 @@ export const SSM = (stack: Stack) => {
     appLiveUrl,
     amplifyHomeUrl,
     localHomeUrl,
+    apiUrl,
     voiceDataDistribution,
     emailSenderValue,
     emailAlertsValue,

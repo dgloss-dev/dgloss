@@ -6,10 +6,10 @@ import { Construct } from 'constructs';
 
 import { AppGuardDuty } from '../resources/guardduty';
 import { CognitoUserPool } from '../resources/cognito';
-import { VoiceDataDistribution } from '../resources/cloudfront';
+import { UtilsDistribution, VoiceDataDistribution } from '../resources/cloudfront';
 import { RDSDatabase } from '../resources/db';
 import { DglossBastion } from '../resources/ec2';
-import { VoiceDataBucket } from '../resources/s3';
+import { UtilsBucket, VoiceDataBucket } from '../resources/s3';
 import { SSM } from '../resources/ssm';
 
 import { VPCStackProps } from '../resources/lib';
@@ -26,14 +26,8 @@ export class CommonResourcesStack extends Stack {
 
     const vpc = props?.vpc;
 
-    const {
-      // amplifyHomeUrl,
-      // appLiveUrl,
-      // apiUrl,
-      dbUser,
-      dbName,
-      internalApiKey,
-      localHomeUrl } = SSM(this);
+    const { amplifyHomeUrl, appLiveUrl, apiUrl, dbUser, dbName, internalApiKey, localHomeUrl } =
+      SSM(this);
 
     // Cognito throws unverified email error when taking this value from SSM
     const EMAIL_SENDER = process.env.EMAIL_SENDER;
@@ -55,9 +49,9 @@ export class CommonResourcesStack extends Stack {
         clientName: `UserPoolClient-${environment}`,
         adminGroupName: `Admins-${environment}`,
         environmentVariables: {
-          // apiUrl,
-          // appLiveUrl,
-          // amplifyHomeUrl,
+          apiUrl,
+          appLiveUrl,
+          amplifyHomeUrl,
           internalApiKey,
           emailSender: EMAIL_SENDER,
           emailSenderDomain: EMAIL_SENDER.split('@')[1],
@@ -67,16 +61,16 @@ export class CommonResourcesStack extends Stack {
       this.userPool = up.getUserPool;
       this.sgApp = db.getSGApp;
 
-      // if (localHomeUrl && amplifyHomeUrl) {
-      if (localHomeUrl) {
+      if (localHomeUrl && amplifyHomeUrl) {
         const vd = new VoiceDataBucket(this, {
           vpc,
           environment,
           name: `dgloss-projects-${environment}`,
           environmentVariables: {
+            // Uncomment when available
             // appLiveUrl: appLiveUrl?.stringValue,
             localHomeUrl: localHomeUrl.stringValue,
-            // amplifyHomeUrl: amplifyHomeUrl.stringValue,
+            amplifyHomeUrl: amplifyHomeUrl.stringValue,
           },
         });
 
@@ -86,6 +80,23 @@ export class CommonResourcesStack extends Stack {
           vpc,
           environment,
           bucket: vd.getBucket,
+        });
+
+        const utils = new UtilsBucket(this, {
+          vpc,
+          environment,
+          name: `dgloss-utils-${environment}`,
+          environmentVariables: {
+            localHomeUrl: localHomeUrl.stringValue,
+            amplifyHomeUrl: amplifyHomeUrl.stringValue,
+            // appLiveUrl: appLiveUrl?.stringValue,
+          },
+        });
+
+        new UtilsDistribution(this, {
+          vpc,
+          environment,
+          bucket: utils.getBucket,
         });
 
         if (vpc && environment !== 'dev') {

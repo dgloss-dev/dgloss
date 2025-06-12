@@ -38,6 +38,7 @@ export class SSMParameters {
     const APP_LOCAL_URL = process.env.APP_LOCAL_URL;
     const APP_AMPLIFY_URL = process.env.APP_AMPLIFY_URL;
     const APP_LIVE_URL = process.env.APP_LIVE_URL;
+    const API_URL = process.env.API_URL;
     const VOICE_DATA_DISTRIBUTION = process.env.VOICE_DATA_DISTRIBUTION;
 
     const EMAIL_SENDER = process.env.EMAIL_SENDER;
@@ -113,6 +114,10 @@ export class SSMParameters {
         config.parameters.application.APP_AMPLIFY_URL,
         APP_AMPLIFY_URL,
       );
+    }
+
+    if (API_URL) {
+      generateSSMParameter(this.stack, config.parameters.application.API_URL, API_URL);
     }
 
     if (APP_LIVE_URL) {

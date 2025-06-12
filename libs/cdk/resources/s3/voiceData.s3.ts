@@ -7,8 +7,8 @@ import { VPCStackProps } from '../lib';
 
 interface Envs {
   localHomeUrl: string;
-  // amplifyHomeUrl: string;
-  // appLiveUrl?: string;
+  amplifyHomeUrl: string;
+  appLiveUrl?: string;
 }
 
 interface Props extends VPCStackProps {
@@ -46,11 +46,10 @@ export class VoiceDataBucket {
   }
 
   private createBucket() {
-    // const { localHomeUrl, amplifyHomeUrl, appLiveUrl } = this.props.environmentVariables;
-    const { localHomeUrl } = this.props.environmentVariables;
-    const allowedOrigins = [localHomeUrl];
+    const { localHomeUrl, amplifyHomeUrl, appLiveUrl } = this.props.environmentVariables;
+    const allowedOrigins = [localHomeUrl, amplifyHomeUrl];
     if (this.props.environment === 'prod') {
-      // allowedOrigins.push(appLiveUrl!);
+      allowedOrigins.push(appLiveUrl!);
     }
 
     this.bucket = new Bucket(this.stack, `VoiceDataBucket-${this.props.environment}`, {

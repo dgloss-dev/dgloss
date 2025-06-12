@@ -15,9 +15,9 @@ import { CustomMessageLambda, PreAuthLambda, PostAuthLambda, PostConfirmLambda }
 import { VPCStackProps } from '../lib';
 
 interface Envs {
-  // apiUrl: IStringParameter;
-  // amplifyHomeUrl: IStringParameter;
-  // appLiveUrl?: IStringParameter;
+  apiUrl: IStringParameter;
+  amplifyHomeUrl: IStringParameter;
+  appLiveUrl?: IStringParameter;
   internalApiKey: IStringParameter;
   emailSender: string;
   emailSenderDomain: string;
