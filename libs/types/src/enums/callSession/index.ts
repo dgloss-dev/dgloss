@@ -1,1 +1,1 @@
-export * from './callSessionStatus';
+export * from './callSessionStatus.enum';

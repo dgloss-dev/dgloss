@@ -1,1 +1,1 @@
-export * from './callStatus';
+export * from './callStatus.enum';

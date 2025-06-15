@@ -1,7 +1,7 @@
 import { Model, Table, Column, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { User } from './user.model';
 import { CallSession } from './callSession.model';
-import { OPERATOR_STATE } from '@workspace/types/enums/operatorStatus/opratorState';
+import { OPERATOR_STATE } from '@workspace/types/enums/operatorStatus';
 
 @Table({
   tableName: OperatorStatus.OPERATOR_STATUS_TABLE_NAME,
@@ -43,7 +43,7 @@ export class OperatorStatus extends Model {
   @Column({
     type: DataType.INTEGER,
     field: OperatorStatus.OPERATOR_STATUS_CALL_SESSION_ID,
-    allowNull: false,
+    allowNull: true,
   })
   callSessionId: number;
 

@@ -24,7 +24,7 @@ export class AiCallSlot extends Model {
   @Column({
     type: DataType.INTEGER,
     field: AiCallSlot.AI_CALL_SLOT_CALL_LIST_ID,
-    allowNull: false,
+    allowNull: true,
   })
   callListId: number;
 
