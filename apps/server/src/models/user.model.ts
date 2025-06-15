@@ -49,7 +49,7 @@ export class User extends Model {
   @Column({
     type: DataType.ENUM(...Object.values(USER_ROLE)),
     field: User.USER_ROLE,
-    defaultValue: USER_ROLE.OP,
+    defaultValue: USER_ROLE.OPERATOR,
   })
   role: USER_ROLE;
 
