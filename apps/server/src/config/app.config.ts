@@ -46,6 +46,7 @@ export const AppConfig = {
   APP_ALLOWED_ORIGINS: ALLOWED_ORIGINS,
   APP_HOME_URL: process.env.APP_HOME_URL,
   APP_CDN_URL: process.env.APP_CDN_URL,
+  PROJECT_BUCKET: process.env.PROJECT_BUCKET,
 };
 
 // Validate the AppConfig against the schema

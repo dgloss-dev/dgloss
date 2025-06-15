@@ -1,8 +1,8 @@
 import { FilterCallListDto } from '@workspace/types/dto/callList';
-import { CallList } from '../models';
+import { Caller, CallList } from '../models';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
-import { Op, literal } from 'sequelize';
+import { Op, Transaction, literal } from 'sequelize';
 
 export class CallListsDao {
   private static instance: CallListsDao;
@@ -16,11 +16,22 @@ export class CallListsDao {
     return this.instance;
   };
 
-  async createCallList(data: ICallList): Promise<CallList> {
+  async createCallList(data: ICallList, transaction?: Transaction): Promise<CallList> {
     logger.info('CallListsDao - createCallList()');
 
     try {
-      const newCallList = await CallList.create({ ...data });
+      const newCallList = await CallList.create(
+        { ...data },
+        {
+          include: [
+            {
+              model: Caller,
+              as: 'callers',
+            },
+          ],
+          transaction,
+        },
+      );
       return newCallList;
     } catch (error) {
       logger.error('[CallListsDao]: Error in creating call list');

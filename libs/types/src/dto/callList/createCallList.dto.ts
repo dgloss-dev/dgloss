@@ -13,6 +13,7 @@ export const createCallListDtoSchema = {
     isCallPossible: { type: 'boolean' },
     description: { type: 'string' },
     remarks: { type: 'string' },
+    objectKey: { type: 'string' },
   },
   additionalProperties: false,
   required: ['name', 'createdBy', 'callStatus', 'voiceDataGroupId'],
@@ -29,4 +30,5 @@ export interface CreateCallListDto {
   isCallPossible?: boolean;
   description?: string;
   remarks?: string;
+  objectKey?: string;
 }

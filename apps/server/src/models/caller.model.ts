@@ -84,6 +84,7 @@ export class Caller extends Model {
   })
   annualTradingSession: string;
 
+  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
     field: Caller.CALLER_PERSON_IN_CHARGE,
