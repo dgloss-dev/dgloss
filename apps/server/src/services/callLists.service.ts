@@ -45,34 +45,47 @@ export class CallListsService {
 
     try {
       const { objectKey, ...baseCallListData } = callListData;
-      const s3CsvData = await this.utilsService.getStreamFromS3(
-        objectKey,
-        AppConfig.PROJECT_BUCKET,
-      );
+      let records: CreateCallerDto[] = [];
 
-      const csvData = s3CsvData.toString('utf-8');
-      const records = parse(csvData, {
-        columns: true,
-        skip_empty_lines: true,
-        trim: true,
-      });
+      if (objectKey) {
+        const s3CsvData = await this.utilsService.getStreamFromS3(
+          objectKey,
+          AppConfig.PROJECT_BUCKET,
+        );
 
-      // Validate each record
-      const validationErrors: string[] = [];
-      records.forEach((record: any, index: number) => {
-        const validation = this.validateCallerRecord(createCallerDtoSchema, record);
-        if (!validation.isValid) {
-          validationErrors.push(`Record ${index + 1}: ${validation.errors}`);
+        const csvData = s3CsvData.toString('utf-8');
+        records = parse(csvData, {
+          columns: true,
+          skip_empty_lines: true,
+          trim: true,
+        });
+
+        // Validate each record
+        const validationErrors: string[] = [];
+        records.forEach((record: any, index: number) => {
+          const validation = this.validateCallerRecord(createCallerDtoSchema, record);
+          if (!validation.isValid) {
+            validationErrors.push(`Record ${index + 1}: ${validation.errors}`);
+          }
+        });
+
+        if (validationErrors.length > 0) {
+          throw new Error(`Invalid caller records found:\n${validationErrors.join('\n')}`);
         }
-      });
-
-      if (validationErrors.length > 0) {
-        throw new Error(`Invalid caller records found:\n${validationErrors.join('\n')}`);
       }
+
+      const callers = records.map((record) => {
+        const { targetId, phoneNumberOne, phoneNumberTwo, phoneNumberThree, ...rest } = record;
+        const phones = [];
+        if (phoneNumberOne) phones.push({ phoneNumber: phoneNumberOne });
+        if (phoneNumberTwo) phones.push({ phoneNumber: phoneNumberTwo });
+        if (phoneNumberThree) phones.push({ phoneNumber: phoneNumberThree });
+        return { ...rest, phones };
+      });
 
       const data: ICallList = {
         ...baseCallListData,
-        callers: records.map((record: CreateCallerDto) => ({
+        callers: callers.map((record) => ({
           ...record,
           callListId: undefined,
         })),
