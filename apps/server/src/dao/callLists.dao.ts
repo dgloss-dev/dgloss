@@ -1,5 +1,5 @@
 import { FilterCallListDto } from '@workspace/types/dto/callList';
-import { Caller, CallList } from '../models';
+import { Caller, CallerPhone, CallList } from '../models';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
 import { Op, Transaction, literal } from 'sequelize';
@@ -27,6 +27,12 @@ export class CallListsDao {
             {
               model: Caller,
               as: 'callers',
+              include: [
+                {
+                  model: CallerPhone,
+                  as: 'phones',
+                },
+              ],
             },
           ],
           transaction,

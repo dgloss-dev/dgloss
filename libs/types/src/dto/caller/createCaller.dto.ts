@@ -11,12 +11,17 @@ export const createCallerDtoSchema = {
     callPermission: { type: 'boolean', default: false },
     url: { type: 'string', maxLength: 500 },
     memo: { type: 'string' },
+    targetId: { type: 'number' },
+    phoneNumberOne: { type: 'string', maxLength: 50 },
+    phoneNumberTwo: { type: 'string', maxLength: 50 },
+    phoneNumberThree: { type: 'string', maxLength: 50 },
   },
   additionalProperties: false,
   required: ['name'],
 };
 
 export interface CreateCallerDto {
+  targetId?: number;
   callListId?: number;
   name: string;
   ordinalNum?: number;
@@ -27,4 +32,7 @@ export interface CreateCallerDto {
   callPermission?: boolean;
   url?: string;
   memo?: string;
+  phoneNumberOne?: string;
+  phoneNumberTwo?: string;
+  phoneNumberThree?: string;
 }
