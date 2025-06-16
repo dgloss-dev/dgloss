@@ -1,5 +1,9 @@
 import { CallListsDao } from '../dao/callLists.dao';
-import { CreateCallListDto, FilterCallListDto } from '@workspace/types/dto/callList';
+import {
+  CreateCallListDto,
+  FilterCallListDto,
+  DeleteCallListDto,
+} from '@workspace/types/dto/callList';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
 import { ThrowError } from '../utils/error.utils';
@@ -97,6 +101,22 @@ export class CallListsService {
       const callLists = await this.callListsDao.filterCallLists(filters);
       return callLists;
     } catch (error) {
+      throw ThrowError(error);
+    }
+  }
+
+  public async bulkDeleteCallLists(data: DeleteCallListDto): Promise<number> {
+    logger.info('CallListsService - bulkDeleteCallLists()');
+
+    const sequelize = this.sqlLoader.getSequelizeInstance();
+    const transaction = await sequelize.transaction();
+
+    try {
+      const deletedCount = await this.callListsDao.bulkDeleteCallLists(data.ids, transaction);
+      await transaction.commit();
+      return deletedCount;
+    } catch (error) {
+      await transaction.rollback();
       throw ThrowError(error);
     }
   }

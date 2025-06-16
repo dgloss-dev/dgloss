@@ -1,4 +1,8 @@
-import { CreateCallListDto, FilterCallListDto } from '@workspace/types/dto/callList';
+import {
+  CreateCallListDto,
+  FilterCallListDto,
+  DeleteCallListDto,
+} from '@workspace/types/dto/callList';
 import { CallListsService } from '../services/callLists.service';
 import { logger } from '../utils/winston.utils';
 import { cb, cbError } from '../common/handler';
@@ -41,6 +45,18 @@ export class CallListsController {
       return cb(HTTPSTATUS.OK, res, result);
     } catch (error) {
       return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.GET_FAILED, error);
+    }
+  };
+
+  bulkDeleteCallLists = async (req: Request, res: Response) => {
+    logger.info('CallListsController - bulkDeleteCallLists()');
+
+    try {
+      const data: DeleteCallListDto = req.body;
+      const deletedCount = await this.callListsService.bulkDeleteCallLists(data);
+      return cb(HTTPSTATUS.OK, res, { deletedCount });
+    } catch (error: any) {
+      return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.DELETE_FAILED, error);
     }
   };
 }
