@@ -14,6 +14,7 @@ import {
   createCallerDtoSchema,
 } from '@workspace/types/dto/caller/createCaller.dto';
 import { SQLLoader } from '../loaders';
+import { validateCallerRecord } from '../utils/caller.utils';
 
 export class CallListsService {
   public static instance: CallListsService;
@@ -60,10 +61,9 @@ export class CallListsService {
           trim: true,
         });
 
-        // Validate each record
         const validationErrors: string[] = [];
         records.forEach((record: any, index: number) => {
-          const validation = this.validateCallerRecord(createCallerDtoSchema, record);
+          const validation = validateCallerRecord(createCallerDtoSchema, record, this.ajv);
           if (!validation.isValid) {
             validationErrors.push(`Record ${index + 1}: ${validation.errors}`);
           }
@@ -112,33 +112,5 @@ export class CallListsService {
     } catch (error) {
       throw ThrowError(error);
     }
-  }
-
-  private validateCallerRecord(schema: any, record: any): { isValid: boolean; errors?: string } {
-    for (const [key, value] of Object.entries(record)) {
-      if (schema.properties[key]) {
-        if (value === '') {
-          record[key] = undefined;
-        } else if (schema.properties[key].type === 'number') {
-          record[key] = value ? Number(value) : undefined;
-        } else if (schema.properties[key].type === 'boolean') {
-          const lowerValue = typeof value === 'string' ? value.toLowerCase() : value;
-          record[key] = lowerValue === 'true' ? true : lowerValue === 'false' ? false : undefined;
-        } else {
-          record[key] = value || undefined;
-        }
-      }
-    }
-
-    const isValid = this.ajv.validate(schema, record);
-
-    if (!isValid) {
-      return {
-        isValid: false,
-        errors: this.ajv.errorsText(this.ajv.errors, { separator: '\n' }),
-      };
-    }
-
-    return { isValid: true };
   }
 }
