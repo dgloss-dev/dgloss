@@ -23,6 +23,12 @@ module.exports = [
           ],
         },
       ],
+      '@typescript-eslint/no-empty-function': [
+        'error',
+        {
+          allow: ['private-constructors'],
+        },
+      ],
     },
   },
   {
