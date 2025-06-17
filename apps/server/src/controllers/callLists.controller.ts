@@ -1,4 +1,4 @@
-import { CreateCallListDto } from '@workspace/types/dto/callList';
+import { CreateCallListDto, FilterCallListDto } from '@workspace/types/dto/callList';
 import { CallListsService } from '../services/callLists.service';
 import { logger } from '../utils/winston.utils';
 import { cb, cbError } from '../common/handler';
@@ -22,6 +22,25 @@ export class CallListsController {
       return cb(HTTPSTATUS.CREATED, res, createdCallList);
     } catch (error: any) {
       return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.CREATE_FAILED, error);
+    }
+  };
+
+  getAllCallLists = async (req: Request, res: Response) => {
+    logger.info('CallListsController - getAllCallLists()');
+
+    try {
+      const filters: FilterCallListDto = {
+        start: parseInt(req?.query?.start as string, 10) || 0,
+        limit: parseInt(req?.query?.limit as string, 10) || Number.MAX_SAFE_INTEGER,
+        sortBy: (req?.query?.sortBy as string) || 'createdAt',
+        order: parseInt(req?.query?.order as string, 10) as 1 | -1,
+        name: (req?.query?.name as string) || '',
+      };
+
+      const result = await this.callListsService.getAllCallLists(filters);
+      return cb(HTTPSTATUS.OK, res, result);
+    } catch (error) {
+      return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.GET_FAILED, error);
     }
   };
 }
