@@ -16,7 +16,6 @@ export const updateCallListDtoSchema = {
     objectKey: { type: 'string' },
   },
   additionalProperties: false,
-  required: ['name', 'createdBy', 'callStatus', 'voiceDataGroupId'],
 };
 
 export interface UpdateCallListDto {
