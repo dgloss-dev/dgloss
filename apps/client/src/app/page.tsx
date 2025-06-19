@@ -1,12 +1,11 @@
-import React from 'react';
-import { Button } from '@workspace/ui/components/atoms/button';
+'use client';
+import { Logo } from '@workspace/ui/components/atoms/logo';
 
-const Page = async () => {
+const Page = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1>DGLOSS</h1>
-      <Button>Click me</Button>
-    </div>
+    <section className=" w-full h-full bg-primary ">
+      <Logo />
+    </section>
   );
 };
 

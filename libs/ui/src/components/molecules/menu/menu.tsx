@@ -33,7 +33,7 @@ interface LevelKeysProps {
 const getLevelKeys = (items1: LevelKeysProps[]) => {
   const key: Record<string, number> = {};
   const func = (items2: LevelKeysProps[], level = 1) => {
-    items2.forEach((item) => {
+    items2?.forEach((item) => {
       if (item.key) {
         key[item.key] = level;
       }
@@ -83,6 +83,7 @@ export const Menu: React.FC<MenuProps> = ({ items, mode = 'inline', expandIcon, 
       style={{
         width: props.width,
       }}
+      className='!px-4 py-[14px] !w-full !max-w-[246px]'
     >
       <AntMenu
         mode={mode}
@@ -98,6 +99,7 @@ export const Menu: React.FC<MenuProps> = ({ items, mode = 'inline', expandIcon, 
             : expandIconDown({ ...subMenuProps, isOpen });
         }}
         {...props}
+        className='custom_menu'
       />
     </div>
   );

@@ -19,10 +19,10 @@ export const Pagination = (props: PaginationType) => {
       theme={{
         components: {
           Pagination: {
-            itemActiveBg: '#1677ff', // Background color of active item
-            itemActiveBgDisabled: 'rgba(0, 0, 0, 0.15)', // Background of disabled active item
-            itemActiveColorDisabled: 'rgba(0, 0, 0, 0.25)', // Text color of disabled active item
-            itemBg: '#ffffff', // Background color of Pagination item
+            itemActiveBg: '#ffff', // Background color of active item
+            itemActiveBgDisabled: '#00000040', // Background of disabled active item
+            itemActiveColorDisabled: "#00000040", // Text color of disabled active item
+            itemBg: 'undefined', // Background color of Pagination item
             itemInputBg: '#ffffff', // Background color of input
             itemLinkBg: '#ffffff', // Background color of Pagination item link
             itemSize: 32, // Size of Pagination item
@@ -33,15 +33,15 @@ export const Pagination = (props: PaginationType) => {
             colorBgTextActive: 'rgba(0, 0, 0, 0.15)', // Active text background
             colorBgTextHover: 'rgba(0, 0, 0, 0.06)', // Hover text background
             colorBorder: '#d9d9d9', // Default border color
-            colorPrimary: '#ffffff', // Primary color
-            colorPrimaryBorder: '#91caff', // Primary border color
-            colorPrimaryHover: '#4096ff', // Primary hover color
+            colorPrimary: '#000000E0', // Primary color
+            colorPrimaryBorder: '#000000E0', // Primary border color
+            colorPrimaryHover: '#000000E0', // Primary hover color
             colorText: 'rgba(0, 0, 0, 0.88)', // Default text color
             colorTextDisabled: 'rgba(0, 0, 0, 0.25)', // Disabled text color
             colorTextPlaceholder: 'rgba(0, 0, 0, 0.25)', // Placeholder text color
-            borderRadius: 8, // Border radius
-            borderRadiusLG: 8, // Large border radius
-            borderRadiusSM: 4, // Small border radius
+            borderRadius: 6, // Border radius
+            borderRadiusLG: 6, // Large border radius
+            borderRadiusSM: 6, // Small border radius
             controlHeight: 32, // Control height
             controlHeightLG: 40, // Large control height
             controlHeightSM: 24, // Small control height

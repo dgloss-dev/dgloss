@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import { Inter, Noto_Sans_JP } from 'next/font/google';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { AntdConfigProvider } from '../providers/antdConfigProvider';
+import { AppSidebar } from '@workspace/ui/components/organisms/sidebar/appSidebar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,11 +36,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <AntdRegistry>
           <AntdConfigProvider>
-            <div className="min-h-screen bg-gray-50">
-              <main className="">
-                <div className="mx-auto w-full">{children}</div>
-              </main>
-            </div>
+            <section className="flex items-start w-full">
+              <aside className=" w-full !max-w-[246px] !overflow-hidden">
+                <AppSidebar />
+              </aside>
+              <div className="w-full layout-width h-[99vh] !overflow-y-auto">{children}</div>
+            </section>
           </AntdConfigProvider>
         </AntdRegistry>
       </body>
