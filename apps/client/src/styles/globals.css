@@ -31,6 +31,8 @@
   --color-warning: #ff0003;
   --color-warning-dark: #ff26060f;
   --color-overlay: #00000040;
+
+  --font-sf-pro: 'SF Pro Text', sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -47,7 +49,7 @@
 }
 
 body {
-  font-family: var(--font-inter), var(--font-noto-sans-jp), sans-serif;
+  font-family: var(--font-sf-pro), sans-serif;
 }
 
 h1,
@@ -55,8 +57,15 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+span,
+button,
+p,
+a,
+input,
+textarea {
   margin: 0;
+  font-family: var(--font-sf-pro), sans-serif;
 }
 
 /* ------------------- Custom styles for Ant Design Menu Items ----------------------------------------------------------------------- */

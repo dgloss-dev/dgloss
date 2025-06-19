@@ -11,11 +11,11 @@ export const Footer: React.FC<FooterProps> = ({ username = '佐藤敬子', onLog
     <div className="flex items-center justify-between w-full px-4 py-3  text-primary-light">
       <div className="flex items-center gap-1">
         <Image src={'/images/icons/sidebar/user.svg'} alt="user" width={16} height={16} />
-        <span className="text-primary-light text-[16px] font-medium text-center">{username}</span>
+        <span className="text-primary-light cursor-pointer text-[16px] font-medium text-center">{username}</span>
       </div>
       <div onClick={onLogout} className="flex items-center gap-1 text-primary-light">
         <Image src={'/images/icons/sidebar/logout.svg'} alt="logout" width={16} height={16} />
-        <span className="text-primary-light text-[16px] font-medium text-center">ログアウト</span>
+        <span className="text-primary-light cursor-pointer text-[16px] font-medium text-center">ログアウト</span>
       </div>
     </div>
   );

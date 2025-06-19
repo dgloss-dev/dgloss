@@ -19,12 +19,12 @@ export const Header: React.FC<HeaderProps> = ({
   const managementText = activeRole === 'admin' ? '管理メニュー' : 'オペレーターメニュー';
 
   return (
-    <div className="flex flex-col items-center justify-center w-full space-y-4 pt-4 px-4 mb-2">
+    <div className="flex flex-col items-center justify-center w-full  pt-4 px-4 mb-2">
       <Logo />  
-      <div className="flex items-center border border-dust rounded-sm w-full h-full mt-2 mb-[14px]">
+      <div className="flex items-center border border-dust rounded-sm w-full h-full mt-6 mb-5">
         <div
           onClick={() => handleRoleClick('admin')}
-          className={`   py-1 text-center cursor-pointer w-full text-sm font-medium transition-colors duration-200 rounded-l-[4px] border-r border-dust ${
+          className={`  w-[104px] py-1 text-center font-sf-pro cursor-pointer text-sm font-medium transition-colors duration-200 rounded-l-[4px] border-r border-dust ${
             activeRole === 'admin'
               ? 'bg-accent text-primary-light'
               : 'bg-primary-dark text-primary-light hover:bg-accent'
@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
         <div
           onClick={() => handleRoleClick('operator')}
-          className={`  py-1 text-center cursor-pointer  w-full text-sm font-medium transition-colors duration-200 rounded-r-[4px] ${
+          className={`  py-1 text-center cursor-pointer font-sf-pro w-[104px] text-sm font-medium transition-colors duration-200 rounded-r-[4px] ${
             activeRole === 'operator'
               ? 'bg-accent text-primary-light'
               : 'bg-primary-dark text-primary-light hover:bg-accent'
@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
           オペレーター
         </div>
       </div>
-      <div className="flex flex-col items-start w-full">
+      <div className="flex flex-col items-start w-full ">
         <h1 className=' text-primary-light text-[12px] font-[600]'>{managementText}</h1>
         <hr className='w-full bg-white mt-[14px]' />
       </div>

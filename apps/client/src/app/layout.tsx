@@ -1,21 +1,20 @@
 import React from 'react';
 import '../styles/globals.css';
 import { Inter, Noto_Sans_JP } from 'next/font/google';
+import localFont from 'next/font/local';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { AntdConfigProvider } from '../providers/antdConfigProvider';
 import { AppSidebar } from '@workspace/ui/components/organisms/sidebar/appSidebar';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
+
+
+const sfPro = localFont({
+  src: '../../public/fonts/SF-Pro-Text-Regular.otf',
+  variable: '--font-sf-pro',
   display: 'swap',
 });
 
-const notoSans = Noto_Sans_JP({
-  subsets: ['latin'],
-  variable: '--font-noto-sans-jp',
-  display: 'swap',
-});
+
 
 export const metadata = {
   title: 'Dgloss',
@@ -32,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body
-        className={`font-sans antialiased ${inter.variable} ${notoSans.variable} bg-background`}
+        className={`font-sf-pro antialiased  ${sfPro.variable} bg-background`}
       >
         <AntdRegistry>
           <AntdConfigProvider>
