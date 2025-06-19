@@ -43,4 +43,14 @@ export class CallListsService {
       throw ThrowError(error);
     }
   }
+
+  public async getCallListDetails(id: number): Promise<CallList | null> {
+    logger.info('CallListsService - getCallListDetails()');
+    try {
+      const callListDetails = await this.callListsDao.getCallListDetails(id);
+      return callListDetails;
+    } catch (error) {
+      throw ThrowError(error);
+    }
+  }
 }

@@ -25,5 +25,7 @@ export default class CallListRoutes {
       ValidateQueryParams(filterCallListDtoSchema),
       this.callListsController.getAllCallLists,
     );
+
+    this.router.get('/:id/details', this.callListsController.getCallListDetails);
   }
 }

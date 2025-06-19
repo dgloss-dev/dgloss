@@ -1,5 +1,5 @@
 import { FilterCallListDto } from '@workspace/types/dto/callList';
-import { CallList } from '../models';
+import { CallList, Caller, CallSchedule, User, VoiceDataGroup, AiCallSlot } from '../models';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
 import { Op, literal } from 'sequelize';
@@ -68,6 +68,53 @@ export class CallListsDao {
       return callLists;
     } catch (error) {
       logger.error('[CallListsDao]: Error in retrieving call lists');
+      throw error;
+    }
+  }
+
+  async getCallListDetails(id: number): Promise<CallList | null> {
+    logger.info('CallListsDao - getCallListDetails()');
+    try {
+      const callList = await CallList.findByPk(id, {
+        include: [
+          {
+            model: Caller,
+            include: [
+              {
+                model: CallSchedule,
+                include: [
+                  {
+                    model: User,
+                    as: 'operator',
+                    attributes: ['id', 'name', 'email']
+                  }
+                ]
+              },
+              {
+                model: User,
+                as: 'personInChargeUser',
+                attributes: ['id', 'name', 'email']
+              }
+            ]
+          },
+          {
+            model: VoiceDataGroup,
+            attributes: ['id', 'name', 'description']
+          },
+          {
+            model: AiCallSlot,
+            attributes: ['id', 'startTime', 'endTime']
+          },
+          {
+            model: User,
+            as: 'createdByUser',
+            attributes: ['id', 'name', 'email']
+          }
+        ]
+      });
+      return callList;
+    } catch (error) {
+      logger.error('Error in retrieving CallList details');
       throw error;
     }
   }

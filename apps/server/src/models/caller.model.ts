@@ -84,6 +84,7 @@ export class Caller extends Model {
   })
   annualTradingSession: string;
 
+  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
     field: Caller.CALLER_PERSON_IN_CHARGE,
@@ -115,6 +116,9 @@ export class Caller extends Model {
 
   @BelongsTo(() => CallList)
   callList: CallList;
+
+  @BelongsTo(() => User, 'personInCharge')
+  personInChargeUser: User;
 
   @HasMany(() => MyCallList)
   myCallLists: MyCallList[];
