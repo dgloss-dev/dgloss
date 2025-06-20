@@ -47,7 +47,8 @@ export class CommonResourcesStack extends Stack {
         environment,
         name: `UserPool-${environment}`,
         clientName: `UserPoolClient-${environment}`,
-        adminGroupName: `Admins-${environment}`,
+        operatorGroupName: `Operators-${environment}`,
+        supervisorGroupName: `Supervisors-${environment}`,
         environmentVariables: {
           apiUrl,
           appLiveUrl,

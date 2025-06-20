@@ -26,7 +26,8 @@ interface Envs {
 interface Props extends VPCStackProps {
   name: string;
   clientName: string;
-  adminGroupName: string;
+  operatorGroupName: string;
+  supervisorGroupName: string;
   environmentVariables: Envs;
 }
 
@@ -56,7 +57,8 @@ export class CognitoUserPool {
   private initialize() {
     this.createUserPool();
     this.createAppClient();
-    this.createAdminsGroup();
+    this.createOperatorsGroup();
+    this.createSupervisorsGroup();
     // this.createTriggers();
   }
 
@@ -113,9 +115,16 @@ export class CognitoUserPool {
     });
   }
 
-  private createAdminsGroup() {
-    new CfnUserPoolGroup(this.stack, this.props.adminGroupName, {
-      groupName: this.props.adminGroupName,
+  private createOperatorsGroup() {
+    new CfnUserPoolGroup(this.stack, this.props.operatorGroupName, {
+      groupName: this.props.operatorGroupName,
+      userPoolId: this.userPool.userPoolId,
+    });
+  }
+
+  private createSupervisorsGroup() {
+    new CfnUserPoolGroup(this.stack, this.props.supervisorGroupName, {
+      groupName: this.props.supervisorGroupName,
       userPoolId: this.userPool.userPoolId,
     });
   }
