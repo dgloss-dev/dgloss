@@ -88,4 +88,23 @@ export class CallListsDao {
       throw error;
     }
   }
+
+  async bulkDeleteCallLists(ids: number[], transaction?: Transaction): Promise<number> {
+    logger.info('CallListsDao - bulkDeleteCallLists()');
+
+    try {
+      const deletedCount = await CallList.destroy({
+        where: {
+          id: {
+            [Op.in]: ids,
+          },
+        },
+        transaction,
+      });
+      return deletedCount;
+    } catch (error) {
+      logger.error('[CallListsDao]: Error in bulk deleting call lists');
+      throw error;
+    }
+  }
 }
