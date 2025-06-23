@@ -26,7 +26,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
         separator={
           <Image
             src="/images/icons/rightArrow.svg"
-            className="pt-1"
+            className="!max-w-none mt-[6px]"
             alt="rightArrow"
             width={10}
             height={16}

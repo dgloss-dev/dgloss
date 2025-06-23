@@ -16,7 +16,7 @@ export const ImageIcon = ({ path, size = 16, className = '', alt = 'icon' }: Ima
       alt={alt}
       width={size}
       height={size}
-      className={className}
+      className={`${className} !max-w-none`}
       style={{
         width: size,
         height: size,

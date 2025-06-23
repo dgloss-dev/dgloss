@@ -1,11 +1,21 @@
-'use client';
+import { PageHeader } from '@workspace/ui/components/organisms/pageHeader';
+import { PageLayout } from './_components/common/pageLayout';
+import { ROUTES } from '@client/constants';
 import { TableActionBar } from '@workspace/ui/components/organisms/table';
 
-const Page = () => {
+const Page = async () => {
   return (
-    <section className=" w-full h-full bg-primary   ">
-      <div className="py-10 px-4"></div>
-    </section>
+    <PageLayout>
+      <PageHeader
+        titleKey="accountList"
+        buttonLabelKey="add"
+        addRoute={ROUTES.ADD_USER}
+        breadcrumbItems={[
+          { title: '管理者', href: '/' },
+          { title: 'アカウント管理', href: '/page' },
+        ]}
+      />
+    </PageLayout>
   );
 };
 

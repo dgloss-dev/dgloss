@@ -4,11 +4,13 @@ import { Logo } from '../../atoms/logo';
 interface HeaderProps {
   activeRole?: 'admin' | 'operator'; // need update to the real roles
   onRoleChange?: (role: 'admin' | 'operator') => void;
+  t: any;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   activeRole = 'admin', 
-  onRoleChange 
+  onRoleChange,
+  t
 }) => {
     
   const handleRoleClick = (role: 'admin' | 'operator') => {
@@ -16,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
       onRoleChange(role);
     }
   };
-  const managementText = activeRole === 'admin' ? '管理メニュー' : 'オペレーターメニュー';
+  const managementText = activeRole === 'admin' ? t('sidebar.adminMenu') : t('sidebar.operatorMenu');
 
   return (
     <div className="flex flex-col items-center justify-center w-full  pt-4 px-4 ">
@@ -30,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
               : 'bg-primary-dark text-primary-light hover:bg-accent'
           }`}
         >
-          管理者
+          {t('sidebar.admin')}
         </div>
         <div
           onClick={() => handleRoleClick('operator')}
@@ -40,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
               : 'bg-primary-dark text-primary-light hover:bg-accent'
           }`}
         >
-          オペレーター
+           {t('sidebar.operator')}
         </div>
       </div>
       <div className="flex flex-col items-start w-full ">

@@ -1,20 +1,17 @@
 import React from 'react';
 import '../styles/globals.css';
-import { Inter, Noto_Sans_JP } from 'next/font/google';
 import localFont from 'next/font/local';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { AntdConfigProvider } from '../providers/antdConfigProvider';
-import { AppSidebar } from '@workspace/ui/components/organisms/sidebar/appSidebar';
-
-
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+import { AppSidebar } from '@workspace/ui/components/organisms/sidebar';
 
 const sfPro = localFont({
   src: '../../public/fonts/SF-Pro-Text-Regular.otf',
   variable: '--font-sf-pro',
   display: 'swap',
 });
-
-
 
 export const metadata = {
   title: 'Dgloss',
@@ -27,20 +24,22 @@ export const viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const messages = await getMessages();
+  const locale = await getLocale();
   return (
-    <html lang="ja">
-      <body
-        className={`font-sf-pro antialiased  ${sfPro.variable} bg-background`}
-      >
+    <html lang={locale}>
+      <body className={`font-sf-pro antialiased  ${sfPro.variable} bg-background`}>
         <AntdRegistry>
           <AntdConfigProvider>
-            <section className="flex items-start w-full">
-              <aside className=" w-full !max-w-[246px] !overflow-hidden">
-                <AppSidebar />
-              </aside>
-              <div className="w-full layout-width h-[99vh] !overflow-y-auto">{children}</div>
-            </section>
+            <NextIntlClientProvider messages={messages}>
+              <section className="flex items-start w-full">
+                <aside className=" w-full !max-w-[246px] !overflow-hidden">
+                  <AppSidebar />
+                </aside>
+                <div className="w-full layout-width bg-primary h-[99vh] !overflow-y-auto">{children}</div>
+              </section>
+            </NextIntlClientProvider>
           </AntdConfigProvider>
         </AntdRegistry>
       </body>

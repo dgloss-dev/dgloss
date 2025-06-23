@@ -43,6 +43,7 @@ type Prop<T extends object> = {
   expandedRowKeys?: React.Key[];
   onExpand?: (expanded: boolean, record: T) => void;
   onExpandedRowsChange?: (expandedKeys: readonly React.Key[]) => void;
+  t: any;
 };
 
 // Type guard for pagination
@@ -191,10 +192,10 @@ export const Table = <T extends object>(props: Prop<T>) => {
           }}
           sticky
           locale={{
-            emptyText: props.emptyText ?? 'コンテンツはありません',
-            triggerAsc: 'クリックして昇順に並び替え',
-            triggerDesc: 'クリックして降順に並び替え',
-            cancelSort: '並び替えをキャンセル',
+            emptyText: props.emptyText ?? props.t('table.emptyText'),
+            triggerAsc: props.t('table.triggerAsc'),
+            triggerDesc: props.t('table.triggerDesc'),
+            cancelSort: props.t('table.cancelSort'),
           }}
           rowClassName={(record, index) => {
             const baseClass = 'hover:bg-gray-50';
@@ -226,6 +227,7 @@ export const Table = <T extends object>(props: Prop<T>) => {
             pageSize={pageSize}
             total={total}
             onPageChange={handlePageChange}
+            t={props.t}
           />
         )}
       </div>

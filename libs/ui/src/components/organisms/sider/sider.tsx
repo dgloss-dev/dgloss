@@ -39,9 +39,9 @@ export const Sider: React.FC<SiderProps> = ({
       Menu: {
         itemHoverBg: 'var(--color-accent)',
         itemHoverColor: 'var(--color-primary-light)',
-        itemSelectedBg: 'var(--color-primary-20)',
-        itemSelectedColor: 'var(--color-primary-dark)',
-        itemActiveBg: 'var(--color-primary-20)',
+        itemSelectedBg: 'var(--color-accent)',
+        itemSelectedColor: 'var(--color-primary-light)',
+        itemActiveBg: 'var(--color-accent)',
         fontSize: 14,
         fontWeightStrong: 700,
         itemColor: 'var(--color-primary-light)',

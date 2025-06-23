@@ -1,0 +1,32 @@
+{
+  "headers": {
+    "accountList": "アカウント一覧"
+  },
+  "buttons": {
+    "add": "新規登録",
+    "seated": "着座中",
+    "away": "離席中",
+    "faq": "FAQ"
+  },
+  "table": {
+    "emptyText": "コンテンツはありません",
+    "triggerAsc": "クリックして昇順に並び替え",
+    "triggerDesc": "クリックして降順に並び替え",
+    "cancelSort": "並び替えをキャンセル",
+    "listCount": "リスト件数",
+    "listCount.10": "10件",
+    "listCount.20": "20件",
+    "listCount.50": "50件",
+    "listCount.100": "100件"
+  },
+  "sidebar": {
+    "home": "ホーム",
+    "accountManagement": "アカウント管理",
+    "projectManagement": "プロジェクト管理",
+    "adminMenu": "管理メニュー",
+    "operatorMenu": "オペレーターメニュー",
+    "admin": "管理者",
+    "operator": "オペレーター",
+    "logout": "ログアウト"
+  }
+}

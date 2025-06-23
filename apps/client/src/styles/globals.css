@@ -6,7 +6,8 @@
   --color-primary-dark: #433e3a;
   --color-secondary: #f5f5f5;
   --color-base: #000000e0;
-  --color-base-80: #00000073 --color-base-light: #000000a6;
+  --color-base-80: #00000073;
+  --color-base-light: #000000a6;
   --color-base-dark: #000000;
   --color-accent: #eb6101;
   --color-neutral: #888a89;
@@ -20,6 +21,7 @@
 }
 
 @theme {
+  /* colors */
   --color-primary: #f8f9fb;
   --color-primary-light: #ffffff --color-primary-dark: #433e3a;
   --color-secondary: #f5f5f5;
@@ -36,6 +38,13 @@
   --color-warning-light: #ff4d4f;
   --color-overlay: #00000040;
 
+  /* shadows */
+  --shadow-primary: 0px 2px 0px 0px #0591ff1a;
+  --shadow-primary-outline: 0px 2px 0px 0px #00000005;
+  --shadow-secondary: 0px 2px 0px 0px #ff26060f;
+  --shadow-warning: 0px 2px 0px 0px #ff26060f;
+
+  /* fonts */
   --font-sf-pro: 'SF Pro Text', sans-serif;
 }
 
@@ -107,16 +116,16 @@ textarea {
   background-color: var(--color-accent) !important;
   color: var(--color-primary-light) !important;
   font-weight: 700 !important;
-  @apply font-sans;
+  @apply font-sf-pro;
 }
 
 /* Selected/Active state */
 .custom_menu .ant-menu-item-selected,
 .custom_menu .ant-menu-item-active {
-  background-color: var(--color-primary-20) !important;
-  color: var(--color-primary-dark) !important;
+  background-color: var(--color-accent) !important;
+  color: var(--color-primary-light) !important;
   font-weight: 700 !important;
-  @apply font-sans;
+  @apply font-sf-pro;
 }
 
 /* Override default ant-design styles */

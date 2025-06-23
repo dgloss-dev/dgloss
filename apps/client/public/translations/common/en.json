@@ -1,0 +1,32 @@
+{
+  "headers": {
+    "accountList": "Account List"
+  },
+  "buttons": {
+    "add": "Add",
+    "seated": "Seated",
+    "away": "Away",
+    "faq": "FAQ"
+  },
+  "table": {
+    "emptyText": "No content",
+    "triggerAsc": "Click to sort in ascending order",
+    "triggerDesc": "Click to sort in descending order",
+    "cancelSort": "Cancel sorting",
+    "listCount": "count",
+    "listCount.10": "10 items",
+    "listCount.20": "20 items",
+    "listCount.50": "50 items",
+    "listCount.100": "100 items"
+  },
+  "sidebar": {
+    "home": "Home",
+    "accountManagement": "Account Management",
+    "projectManagement": "Project Management",
+    "adminMenu": "Admin Menu",
+    "operatorMenu": "Operator Menu",
+    "admin": "Admin",
+    "operator": "Operator",
+    "logout": "Logout"
+  }
+}

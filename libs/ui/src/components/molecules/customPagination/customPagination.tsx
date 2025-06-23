@@ -8,6 +8,7 @@ export type CustomPaginationProps = {
   total: number;
   onPageChange: (page: number, pageSize: number) => void;
   pageSizeOptions?: (string | number)[];
+  t: any;
 };
 
 export const CustomPagination: React.FC<CustomPaginationProps> = ({
@@ -16,6 +17,7 @@ export const CustomPagination: React.FC<CustomPaginationProps> = ({
   total,
   onPageChange,
   pageSizeOptions,
+  t,
 }) => {
   return (
     <div className="flex items-center justify-between w-full ">
@@ -31,7 +33,7 @@ export const CustomPagination: React.FC<CustomPaginationProps> = ({
         showQuickJumper={false}
       />
       <div className="flex items-center gap-2">
-          <label className=' text-nowrap text-sm text-[#000000]'>リスト件数</label>
+        <label className=" text-nowrap text-sm text-[#000000]">{t('table.listCount')}</label>
         <Select
           value={pageSize}
           onChange={(value) => onPageChange(1, Number(value))}
@@ -43,10 +45,10 @@ export const CustomPagination: React.FC<CustomPaginationProps> = ({
                   value: Number(size),
                 }))
               : [
-                  { label: '10件', value: 10 },
-                  { label: '20件', value: 20 },
-                  { label: '50件', value: 50 },
-                  { label: '100件', value: 100 },
+                  { label: `${t('table.listCount.10')}`, value: 10 },
+                  { label: `${t('table.listCount.20')}`, value: 20 },
+                  { label: `${t('table.listCount.50')}`, value: 50 },
+                  { label: `${t('table.listCount.100')}`, value: 100 },
                 ]
           }
         />

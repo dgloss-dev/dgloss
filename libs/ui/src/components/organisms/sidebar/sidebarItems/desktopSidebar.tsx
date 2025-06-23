@@ -8,6 +8,7 @@ import { ROUTES } from '@client/constants/routes.constant';
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Header } from '@workspace/ui/components/organisms/header';
 import { Footer } from '@workspace/ui/components/organisms/footer';
+import { useTranslations } from 'next-intl';
 
 type MenuItem = {
   key: string;
@@ -33,7 +34,7 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
   const pathname = usePathname();
   const router = useRouter();
   const [role, setRole] = React.useState<'admin' | 'operator'>(isAdmin ? 'admin' : 'operator');
-
+  const t = useTranslations('common');
   const selectedKey = '/';
 
   const createMenuList = (items: MenuItem[], isChild = false): ListItem[] => {
@@ -57,7 +58,7 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
             className={`flex items-center w-full ${isChild ? 'justify-end' : 'justify-between'}`}
           >
             <h3
-              className={`!text-[16px] ${item.children && item.children.length > 0 ? '!ml-0' : ''}`}
+              className={`!text-[16px] !text-primary-light ${item.children && item.children.length > 0 ? '!ml-0' : ''}`}
             >
               {item.label}
             </h3>
@@ -105,43 +106,42 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
       {
         key: ROUTES.MAIN,
         icon: 'home',
-        label: `ホーム`,
+        label: t('sidebar.home'),
         show: !isAdmin,
       },
       {
-        key: ROUTES.PUBLIC_PDD,
+        key: ROUTES.ADMIN_ACCOUNT_MANAGEMENT,
         icon: 'users',
-        label: `アカウント管理`,
+        label: t('sidebar.accountManagement'),
         show: !isAdmin,
         children: [
           {
             key: ROUTES.ADMIN_ACCOUNT_MANAGEMENT,
             icon: 'users',
-            label: `アカウント管理`,
+            label: t('sidebar.accountManagement'),
           },
           {
             key: ROUTES.ADD_EVALUATION_ITEM,
             icon: 'users',
-            label: `アカウント管理`,
+            label: t('sidebar.accountManagement'),
           },
           {
             key: ROUTES.ADD_USER_PDD,
             icon: 'users',
-            label: `アカウント管理`,
+            label: t('sidebar.accountManagement'),
           },
         ],
       },
       {
         key: ROUTES.COMPARE_RESULTS,
         icon: 'briefCase',
-        label: `プロジェクト管理`,
+        label: t('sidebar.projectManagement'),
         show: !isAdmin,
       },
     ];
 
     const filteredMenuItems = menuItems.filter((item) => item.show !== false);
     const selectedKey = getSelectedMenuKey(pathname);
-
     return {
       selectedKeys: [selectedKey],
       openKeys: filteredMenuItems?.map((item) => item.key),
@@ -159,10 +159,10 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
   return (
     <div className="hidden h-screen  !max-w-[246px] md:flex flex-col items-start justify-between  ">
       <Sider
-        header={<Header activeRole={role} onRoleChange={setRole} />}
+        header={<Header t={t} activeRole={role} onRoleChange={setRole} />}
         menuProps={useCreateMenuProps(pathname, handleMenuClick, isAdmin)}
         theme="light"
-        footer={<Footer />}
+        footer={<Footer t={t} />}
         className="custom_sider "
         style={{
           background: '#433e3a',

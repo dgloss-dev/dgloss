@@ -1,69 +1,49 @@
-import React from 'react';
-import { Button, ButtonVariant } from '../../atoms/button';
-import { Icon } from '../../atoms/icon/icon';
-import { iconMap } from '@workspace/ui/icons/iconMap';
-import { ImageIcon } from '../../atoms/icon/imageIcon';
-
-export type OperatorStatus = 'seated' | 'away' // need to update according to real types;
-
+'use client';
+import { Breadcrumb } from '../../atoms/breadcrumb';
+import { Button } from '../../atoms/button';
+import { ImageIcon } from '../../atoms/icon';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 interface PageHeaderProps {
-  status: OperatorStatus;
-  onStatusChange: (status: OperatorStatus) => void;
-  onFaqClick: () => void;
-  className?: string;
+  titleKey: string;
+  buttonLabelKey: string;
+  addRoute: string;
+  breadcrumbItems: {
+    title: string;
+    href: string;
+  }[];
 }
 
-export const PageHeader: React.FC<PageHeaderProps> = ({
-  status,
-  onStatusChange,
-  onFaqClick,
-  className,
-}) => {
-  const sharedButtonClasses = '!w-full !max-w-[96px] !text-[14px] !font-bold rounded-[6px]';
-
-  const getStatusButtonProps = (
-    type: OperatorStatus,
-    iconName: keyof typeof iconMap,
-    label: string,
-    roundedClass: string,
-  ) => {
-    const isActive = status === type;
-    return {
-      variant: (isActive ? 'primary' : 'primary-outline') as ButtonVariant,
-      icon: (
-        <Icon
-          name={iconName}
-          size={16}
-          className={`${isActive ? '!text-white' : '!text-overlay'} mt-1`}
-        />
-      ),
-      label,
-      onClick: () => onStatusChange(type),
-      customClass: [
-        sharedButtonClasses,
-        roundedClass,
-        '!border',
-        type === 'away' && '!border-dust',
-        isActive ? '!text-white' : '!text-overlay',
-      ]
-        .filter(Boolean)
-        .join(' '),
-    };
+export const PageHeader = ({
+  titleKey = 'アカウント一覧',
+  buttonLabelKey = 'label',
+  breadcrumbItems,
+  addRoute,
+}: PageHeaderProps) => {
+  const t = useTranslations('common');
+  const router = useRouter();
+  const title = t(`headers.${titleKey}`);
+  const buttonLabel = t(`buttons.${buttonLabelKey}`);
+  const handleAdd = () => {
+    router.push(addRoute);
   };
-
   return (
-    <div className={`flex items-center justify-end w-full gap-x-[10px] ${className || ''}`}>
-      <div className="flex items-center">
-        <Button {...getStatusButtonProps('seated', 'Seated', '着座中', '!rounded-r-none')} />
-        <Button {...getStatusButtonProps('away', 'Prohibited', '離席中', '!rounded-l-none')} />
+    <section className="w-full flex items-center justify-between h-20">
+      <div className="flex flex-col items-start w-full ">
+        <Breadcrumb items={breadcrumbItems} />
+        <h1 className="text-2xl font-sf-pro font-bold text-base">{title}</h1>
       </div>
-      <Button
-        variant="primary-outline"
-        icon={<ImageIcon className="!max-w-none" path="header/faq.svg" />}
-        label="FAQ"
-        onClick={onFaqClick}
-        className="w-[80px]"
-      />
-    </div>
+      {buttonLabel && (
+        <div className="flex items-center justify-center gap-2">
+          <Button
+            icon={<ImageIcon path="actions/add.svg" alt="add" />}
+            variant="primary"
+            label={buttonLabel}
+            className="!w-[108px]"
+            onClick={handleAdd}
+          />
+        </div>
+      )}
+    </section>
   );
 };
