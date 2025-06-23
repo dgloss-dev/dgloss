@@ -4,10 +4,11 @@ import { Button } from '../../atoms/button';
 import { ImageIcon } from '../../atoms/icon';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useAppStore } from '@client/store/app.store';
 interface PageHeaderProps {
   titleKey: string;
   buttonLabelKey: string;
-  addRoute: string;
+  modalKey: string;
   breadcrumbItems: {
     title: string;
     href: string;
@@ -18,14 +19,15 @@ export const PageHeader = ({
   titleKey = 'アカウント一覧',
   buttonLabelKey = 'label',
   breadcrumbItems,
-  addRoute,
+  modalKey,
 }: PageHeaderProps) => {
   const t = useTranslations('common');
-  const router = useRouter();
   const title = t(`headers.${titleKey}`);
   const buttonLabel = t(`buttons.${buttonLabelKey}`);
+  const { setOpenModalAction } = useAppStore();
+
   const handleAdd = () => {
-    router.push(addRoute);
+    setOpenModalAction(modalKey, true);
   };
   return (
     <section className="w-full flex items-center justify-between h-20">

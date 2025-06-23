@@ -4,6 +4,7 @@ import AntModal from 'antd/es/modal';
 import ConfigProvider from 'antd/es/config-provider';
 import { Button } from '@workspace/ui/components/atoms/button';
 import { ImageIcon } from '../../atoms/icon';
+import { useTranslations } from 'next-intl';
 
 interface ModalProps {
   open: boolean;
@@ -52,14 +53,24 @@ export const Modal: React.FC<ModalProps> & {
   hideCancelButton = false,
   ...props
 }) => {
-  const customFooter = ({ onOk, onCancel }: { onOk?: () => void; onCancel?: () => void }) => {
+  const customFooter = ({
+    onOk,
+    onCancel,
+    t,
+  }: {
+    onOk?: () => void;
+    onCancel?: () => void;
+    t: any;
+  }) => {
+    const cancelText = t('buttons.cancel');
+    const okText = t('buttons.submit');
     return (
       <div className="flex items-center gap-x-2 justify-center w-full">
         {!hideCancelButton && (
           <Button
             type="block"
             variant="primary-outline"
-            label={cancelText ? cancelText : 'cancel'}
+            label={cancelText}
             onClick={onCancel}
             className="!w-full !max-w-[128px]"
           />
@@ -68,7 +79,7 @@ export const Modal: React.FC<ModalProps> & {
         <Button
           type="block"
           variant="warning"
-          label={okText ? okText : 'submit'}
+          label={okText}
           onClick={onOk}
           loading={props.buttonLoading}
           className="!w-full !max-w-[128px]"
@@ -76,7 +87,7 @@ export const Modal: React.FC<ModalProps> & {
       </div>
     );
   };
-
+  const t = useTranslations('common');
   return (
     <ConfigProvider
       theme={{
@@ -115,10 +126,10 @@ export const Modal: React.FC<ModalProps> & {
         }
         {...props}
         style={{ borderRadius: '1rem', ...style }}
-        okText={okText ? okText : 'submit'}
-        cancelText={cancelText ? cancelText : 'cancel'}
+        okText={okText ? okText : t('buttons.submit')}
+        cancelText={cancelText ? cancelText : t('buttons.cancel')}
         width={800}
-        footer={showFooter ? customFooter({ onOk, onCancel }) : <></>}
+        footer={showFooter ? customFooter({ onOk, onCancel, t }) : <></>}
         okType="danger"
       >
         {props.children}

@@ -45,10 +45,10 @@ export const CustomPagination: React.FC<CustomPaginationProps> = ({
                   value: Number(size),
                 }))
               : [
-                  { label: `${t('table.listCount.10')}`, value: 10 },
-                  { label: `${t('table.listCount.20')}`, value: 20 },
-                  { label: `${t('table.listCount.50')}`, value: 50 },
-                  { label: `${t('table.listCount.100')}`, value: 100 },
+                  { label: `${t('table.listCount10')}`, value: 10 },
+                  { label: `${t('table.listCount20')}`, value: 20 },
+                  { label: `${t('table.listCount50')}`, value: 50 },
+                  { label: `${t('table.listCount100')}`, value: 100 },
                 ]
           }
         />

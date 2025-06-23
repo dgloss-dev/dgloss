@@ -1,7 +1,6 @@
 import { PageHeader } from '@workspace/ui/components/organisms/pageHeader';
 import { PageLayout } from './_components/common/pageLayout';
-import { ROUTES } from '@client/constants';
-import { TableActionBar } from '@workspace/ui/components/organisms/table';
+import { FormModal } from '@workspace/ui/components/organisms/formModal';
 
 const Page = async () => {
   return (
@@ -9,12 +8,13 @@ const Page = async () => {
       <PageHeader
         titleKey="accountList"
         buttonLabelKey="add"
-        addRoute={ROUTES.ADD_USER}
+        modalKey={'add-user'}
         breadcrumbItems={[
           { title: '管理者', href: '/' },
           { title: 'アカウント管理', href: '/page' },
         ]}
       />
+      <FormModal modalKey={'add-user'} formComponent={<h1>test</h1>} title="アカウント管理" />
     </PageLayout>
   );
 };

@@ -6,7 +6,9 @@
     "add": "Add",
     "seated": "Seated",
     "away": "Away",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "cancel": "Cancel",
+    "submit": "Submit"
   },
   "table": {
     "emptyText": "No content",
@@ -14,10 +16,10 @@
     "triggerDesc": "Click to sort in descending order",
     "cancelSort": "Cancel sorting",
     "listCount": "count",
-    "listCount.10": "10 items",
-    "listCount.20": "20 items",
-    "listCount.50": "50 items",
-    "listCount.100": "100 items"
+    "listCount10": "10 items",
+    "listCount20": "20 items",
+    "listCount50": "50 items",
+    "listCount100": "100 items"
   },
   "sidebar": {
     "home": "Home",
