@@ -83,7 +83,7 @@ export const Menu: React.FC<MenuProps> = ({ items, mode = 'inline', expandIcon, 
       style={{
         width: props.width,
       }}
-      className='!px-4 py-[14px] !w-full !max-w-[246px]'
+      className='!px-4 py-4 !w-full !max-w-[246px]'
     >
       <AntMenu
         mode={mode}

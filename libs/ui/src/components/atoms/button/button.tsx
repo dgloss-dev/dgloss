@@ -59,12 +59,12 @@ const getButtonClasses = (type: ButtonType, variant: ButtonVariant, size: Button
   };
 
   const variantClasses: Record<ButtonVariant, string> = {
-    primary: `!bg-success !text-primary-light hover:!bg-success/80 ${heightClasses[size]} ${fontSize}`,
-    'primary-outline': `!bg-primary-light !text-base hover:!bg-primary-light/80 !border-[1px] !border-dust ${heightClasses[size]} ${fontSize}`,
-    secondary: `!bg-neutral !text-primary-light hover:!bg-neutral/80 ${heightClasses[size]} ${fontSize}`,
-    tertiary: `!bg-base-10 !text-base hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
-    quaternary: `!bg-transparent !text-base-dark hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
-    warning: `!bg-warning !text-primary-light  hover:!bg-warning/80 ${heightClasses[size]} ${fontSize}`,
+    primary: `!bg-success disabled:!bg-success/50 !text-primary-light hover:!bg-success/80 ${heightClasses[size]} ${fontSize}`,
+    'primary-outline': `!bg-primary-light disabled:!bg-primary-light/50 !text-base hover:!bg-primary-light/80 !border-[1px] !border-dust ${heightClasses[size]} ${fontSize}`,
+    secondary: `!bg-neutral disabled:!bg-neutral/50  !text-primary-light hover:!bg-neutral/80 ${heightClasses[size]} ${fontSize}`,
+    tertiary: `!bg-base-10 disabled:!bg-base-10/50 !text-base hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
+    quaternary: `!bg-transparent disabled:!bg-transparent/50 !text-base-dark hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
+    warning: `!bg-warning disabled:!bg-warning/50 !text-primary-light  hover:!bg-warning/80 ${heightClasses[size]} ${fontSize}`,
   };
 
   const typeClasses: Record<ButtonType, string> = {

@@ -33,13 +33,8 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
   const pathname = usePathname();
   const router = useRouter();
   const [role, setRole] = React.useState<'admin' | 'operator'>(isAdmin ? 'admin' : 'operator');
-  // Simulate selected key from pathname (customize as needed)
-  const selectedKey = '/';
 
-  // Footer: user info and logout
-  const footer = (
-    <div className="flex items-center justify-between w-full px-4 text-white text-sm"></div>
-  );
+  const selectedKey = '/';
 
   const createMenuList = (items: MenuItem[], isChild = false): ListItem[] => {
     return items
@@ -118,6 +113,23 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
         icon: 'users',
         label: `アカウント管理`,
         show: !isAdmin,
+        children: [
+          {
+            key: ROUTES.ADMIN_ACCOUNT_MANAGEMENT,
+            icon: 'users',
+            label: `アカウント管理`,
+          },
+          {
+            key: ROUTES.ADD_EVALUATION_ITEM,
+            icon: 'users',
+            label: `アカウント管理`,
+          },
+          {
+            key: ROUTES.ADD_USER_PDD,
+            icon: 'users',
+            label: `アカウント管理`,
+          },
+        ],
       },
       {
         key: ROUTES.COMPARE_RESULTS,
@@ -140,8 +152,8 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
   };
 
   const handleMenuClick = ({ key }: { key: string }) => {
-    // TODO: Implement navigation logic
-    // router.push(...)
+    console.log('key', key);
+    router.push(key);
   };
 
   return (

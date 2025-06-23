@@ -80,7 +80,7 @@ export const Input: React.FC<InputProps> = (props) => {
         )}
 
         <Component
-          className={`${props.className} !font-normal no-border-input border !h-[32px] border-solid border-black`}
+          className={`${props.className}  !font-normal no-border-input border !h-[32px] border-solid border-black`}
           size={props.size}
           defaultValue={props.defaultValue}
           disabled={props.disabled}

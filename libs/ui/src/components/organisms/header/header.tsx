@@ -2,7 +2,7 @@ import React from 'react';
 import { Logo } from '../../atoms/logo';
 
 interface HeaderProps {
-  activeRole?: 'admin' | 'operator';
+  activeRole?: 'admin' | 'operator'; // need update to the real roles
   onRoleChange?: (role: 'admin' | 'operator') => void;
 }
 
@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   const managementText = activeRole === 'admin' ? '管理メニュー' : 'オペレーターメニュー';
 
   return (
-    <div className="flex flex-col items-center justify-center w-full  pt-4 px-4 mb-2">
+    <div className="flex flex-col items-center justify-center w-full  pt-4 px-4 ">
       <Logo />  
       <div className="flex items-center border border-dust rounded-sm w-full h-full mt-6 mb-5">
         <div

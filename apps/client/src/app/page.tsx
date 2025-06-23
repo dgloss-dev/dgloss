@@ -1,11 +1,10 @@
 'use client';
-import { Logo } from '@workspace/ui/components/atoms/logo';
+import { TableActionBar } from '@workspace/ui/components/organisms/table';
 
 const Page = () => {
   return (
-    <section className=" w-full h-full bg-primary ">
-      <Logo />
-      <h1 className="text-2xl font-bold font-sf-pro-bold">Hello World</h1>
+    <section className=" w-full h-full bg-primary   ">
+      <div className="py-10 px-4"></div>
     </section>
   );
 };

@@ -1,12 +1,15 @@
+'use client';
 import React from 'react';
 import AntModal from 'antd/es/modal';
 import ConfigProvider from 'antd/es/config-provider';
+import { Button } from '@workspace/ui/components/atoms/button';
+import { ImageIcon } from '../../atoms/icon';
 
 interface ModalProps {
   open: boolean;
   closeIcon?: React.ReactNode;
   title?: React.ReactNode;
-  onCancel: () => void;
+  onCancel?: () => void;
   onOk?: () => void;
   footer?: React.ReactNode;
   okText?: string;
@@ -24,6 +27,10 @@ interface ModalProps {
   maskClosable?: boolean;
   children: React.ReactNode;
   className?: string;
+  okType?: 'info' | 'success' | 'error' | 'warning' | 'confirm';
+  buttonLoading?: boolean;
+  showFooter?: boolean;
+  hideCancelButton?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> & {
@@ -32,13 +39,63 @@ export const Modal: React.FC<ModalProps> & {
   error: typeof AntModal.error;
   warning: typeof AntModal.warning;
   confirm: typeof AntModal.confirm;
-} = ({ open, title, onCancel, onOk, centered = true, style, ...props }) => {
+} = ({
+  open,
+  title,
+  onCancel,
+  onOk,
+  centered = true,
+  style,
+  okText,
+  cancelText,
+  showFooter = true,
+  hideCancelButton = false,
+  ...props
+}) => {
+  const customFooter = ({ onOk, onCancel }: { onOk?: () => void; onCancel?: () => void }) => {
+    return (
+      <div className="flex items-center gap-x-2 justify-center w-full">
+        {!hideCancelButton && (
+          <Button
+            type="block"
+            variant="primary-outline"
+            label={cancelText ? cancelText : 'cancel'}
+            onClick={onCancel}
+            className="!w-full !max-w-[128px]"
+          />
+        )}
+
+        <Button
+          type="block"
+          variant="warning"
+          label={okText ? okText : 'submit'}
+          onClick={onOk}
+          loading={props.buttonLoading}
+          className="!w-full !max-w-[128px]"
+        />
+      </div>
+    );
+  };
+
   return (
     <ConfigProvider
       theme={{
-        token: {
-          screenXSMax: 480,
-          screenSMMin: 480,
+        components: {
+          Modal: {
+            boxShadow: '0px 4px 12px 0px #00000026',
+            borderRadius: 4,
+            titleColor: 'var(--color-base)',
+            titleFontSize: 20,
+            fontWeightStrong: 700,
+            fontFamily: 'var(--font-sf-pro)',
+            padding: 24,
+            paddingLG: 24,
+            paddingMD: 24,
+            paddingSM: 24,
+            paddingXS: 24,
+            paddingXXS: 24,
+            titleLineHeight: 2,
+          },
         },
       }}
     >
@@ -48,8 +105,21 @@ export const Modal: React.FC<ModalProps> & {
         onCancel={onCancel}
         onOk={onOk}
         centered={centered}
+        className={props.className}
+        closeIcon={
+          <ImageIcon
+            path="actions/close.svg"
+            size={18}
+            className="!max-w-none  hover:bg-none !mt-3"
+          />
+        }
         {...props}
         style={{ borderRadius: '1rem', ...style }}
+        okText={okText ? okText : 'submit'}
+        cancelText={cancelText ? cancelText : 'cancel'}
+        width={800}
+        footer={showFooter ? customFooter({ onOk, onCancel }) : <></>}
+        okType="danger"
       >
         {props.children}
       </AntModal>

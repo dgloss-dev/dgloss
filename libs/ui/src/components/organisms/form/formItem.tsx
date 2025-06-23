@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form } from 'antd';
+import { ConfigProvider, Form } from 'antd';
 import { Rule } from 'antd/es/form';
 import dayjs from 'dayjs';
 
@@ -36,13 +36,31 @@ export const FormItem: React.FC<FormItemProps> = ({
   ...props
 }) => {
   return (
-    <Item
-      getValueFromEvent={getValueFromEvent}
-      className={`${fullWidth ? ' flex-1' : ''} ${className}`}
-      colon={colon}
-      {...props}
+    <ConfigProvider
+      theme={{
+        components: {
+          Form: {
+            labelColor: 'var(--color-base)',
+            labelFontSize: 14,
+            fontFamily: 'var(--font-sf-pro)',
+            fontSize: 14,
+            fontWeightStrong: 600,
+            labelHeight: 48,
+            labelRequiredMarkColor: 'var(--color-warning-default)',
+          },
+        },
+      }}
     >
-      {props.children}
-    </Item>
+      <Item
+        getValueFromEvent={getValueFromEvent}
+        className={`${fullWidth ? ' flex-1 !text-sm' : ''} ${className}`}
+        colon={colon}
+        {...props}
+      >
+        <div className=" border !w-full border-dust px-4 py-2 h-12">
+          {props.children}
+        </div>
+      </Item>
+    </ConfigProvider>
   );
 };

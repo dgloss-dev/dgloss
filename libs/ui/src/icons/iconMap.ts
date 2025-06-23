@@ -16,4 +16,7 @@ export const iconMap = {
   Square: () => import('react-icons/ri').then((m) => ({ default: m.RiCheckboxBlankFill })),
   Edit: () => import('react-icons/bi').then((m) => ({ default: m.BiSolidEditAlt })),
   CircleCheck: () => import('react-icons/fa').then((m) => ({ default: m.FaRegCheckCircle })),
+  Prohibited: () => import('react-icons/pi').then((m) => ({ default: m.PiProhibitBold })),
+  Seated: () => import('react-icons/pi').then((m) => ({ default: m.PiOfficeChairFill })),
+  Delete: () => import('react-icons/fa').then((m) => ({ default: m.FaTrash })),
 };
