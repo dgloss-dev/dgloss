@@ -57,8 +57,7 @@ export class CognitoUserPool {
   private initialize() {
     this.createUserPool();
     this.createAppClient();
-    this.createOperatorsGroup();
-    this.createSupervisorsGroup();
+    this.createGroups();
     // this.createTriggers();
   }
 
@@ -115,14 +114,11 @@ export class CognitoUserPool {
     });
   }
 
-  private createOperatorsGroup() {
+  private createGroups() {
     new CfnUserPoolGroup(this.stack, this.props.operatorGroupName, {
       groupName: this.props.operatorGroupName,
       userPoolId: this.userPool.userPoolId,
     });
-  }
-
-  private createSupervisorsGroup() {
     new CfnUserPoolGroup(this.stack, this.props.supervisorGroupName, {
       groupName: this.props.supervisorGroupName,
       userPoolId: this.userPool.userPoolId,
