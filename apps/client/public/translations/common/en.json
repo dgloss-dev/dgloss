@@ -8,7 +8,9 @@
     "away": "Away",
     "faq": "FAQ",
     "cancel": "Cancel",
-    "submit": "Submit"
+    "submit": "Submit",
+    "delete": "Delete",
+    "forceLogout": "Force Logout"
   },
   "table": {
     "emptyText": "No content",
@@ -19,7 +21,9 @@
     "listCount10": "10 items",
     "listCount20": "20 items",
     "listCount50": "50 items",
-    "listCount100": "100 items"
+    "listCount100": "100 items",
+    "selected": "Selected",
+    "items": "items"
   },
   "sidebar": {
     "home": "Home",

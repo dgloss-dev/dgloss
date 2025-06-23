@@ -7,7 +7,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { AppSidebar } from '@workspace/ui/components/organisms/sidebar';
 
-const sfPro = localFont({
+const SFPro = localFont({
   src: '../../public/fonts/SF-Pro-Text-Regular.otf',
   variable: '--font-sf-pro',
   display: 'swap',
@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getLocale();
   return (
     <html lang={locale}>
-      <body className={`font-sf-pro antialiased  ${sfPro.variable} bg-background`}>
+      <body className={`font-sf-pro antialiased  ${SFPro.variable} bg-background`}>
         <AntdRegistry>
           <AntdConfigProvider>
             <NextIntlClientProvider messages={messages}>
@@ -37,7 +37,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <aside className=" w-full !max-w-[246px] !overflow-hidden">
                   <AppSidebar />
                 </aside>
-                <div className="w-full layout-width bg-primary h-[99vh] !overflow-y-auto">{children}</div>
+                <div className="w-full layout-width bg-primary h-[99vh] !overflow-y-auto">
+                  {children}
+                </div>
               </section>
             </NextIntlClientProvider>
           </AntdConfigProvider>

@@ -1,6 +1,8 @@
-import React, { Suspense } from 'react';
+'use client';
+import React from 'react';
 import { Button } from '../../atoms/button/button';
 import { ImageIcon } from '../../atoms/icon';
+import { useTranslations } from 'next-intl';
 
 interface TableActionBarProps {
   selectedCount: number;
@@ -21,26 +23,28 @@ export const TableActionBar: React.FC<TableActionBarProps> = ({
   disableForceLogout = false,
   disableDelete = false,
   activeActions = {
-    forceLogout: false,
-    delete: false,
+    forceLogout: true,
+    delete: true,
   },
 }) => {
+  const t = useTranslations('common');
   return (
     <div className="flex items-center gap-2  w-full">
-      <span className="text-base  whitespace-nowrap">選択中{selectedCount}件を</span>
+      <span className="text-base  whitespace-nowrap">
+        {t('table.selected')} {selectedCount} {t('table.items')}
+      </span>
       <div className="flex !gap-x-2 w-full">
-        <Suspense fallback={null}>
-          {activeActions.forceLogout && (
-            <Button
-              variant="secondary"
-              disabled={disableForceLogout || selectedCount === 0}
-              icon={<ImageIcon path="header/disabled.svg" size={16} className="!max-w-none" />}
-              onClick={onForceLogout}
-            >
-              強制ログオフ
-            </Button>
-          )}
-        </Suspense>
+        {activeActions.forceLogout && (
+          <Button
+            variant="secondary"
+            disabled={disableForceLogout || selectedCount === 0}
+            icon={<ImageIcon path="header/disabled.svg" size={16} className="!max-w-none" />}
+            onClick={onForceLogout}
+          >
+            {t('buttons.forceLogout')}
+          </Button>
+        )}
+
         {activeActions.delete && (
           <Button
             variant="warning"
@@ -48,7 +52,7 @@ export const TableActionBar: React.FC<TableActionBarProps> = ({
             icon={<ImageIcon path="actions/delete.svg" size={16} className="!max-w-none" />}
             onClick={onDelete}
           >
-            削除
+            {t('buttons.delete')}
           </Button>
         )}
       </div>
