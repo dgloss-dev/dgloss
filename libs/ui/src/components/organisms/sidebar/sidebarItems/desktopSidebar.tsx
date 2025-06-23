@@ -94,7 +94,7 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
         ROUTES.VALUATION_BASIS,
         ROUTES.CRITERIA,
       ];
-
+// routes need to update
       const matchedRoute = menuItems
         .sort((a, b) => b.length - a.length)
         .find((route) => normalizedPath.startsWith(route));
@@ -116,17 +116,17 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
         show: !isAdmin,
         children: [
           {
-            key: ROUTES.ADMIN_ACCOUNT_MANAGEMENT,
-            icon: 'users',
-            label: t('sidebar.accountManagement'),
-          },
-          {
-            key: ROUTES.ADD_EVALUATION_ITEM,
+            key: ROUTES.ADD_CRITERIA,
             icon: 'users',
             label: t('sidebar.accountManagement'),
           },
           {
             key: ROUTES.ADD_USER_PDD,
+            icon: 'users',
+            label: t('sidebar.accountManagement'),
+          },
+          {
+            key: ROUTES.FAQ,
             icon: 'users',
             label: t('sidebar.accountManagement'),
           },
