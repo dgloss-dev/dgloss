@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { CallListsController } from '../controllers/callLists.controller';
-import { ValidateQueryParams, ValidateRequest } from '../common/middleware';
+import { ValidateQueryParams, ValidateRequest, Authenticate } from '../common/middleware';
 import { createCallListDtoSchema, filterCallListDtoSchema } from '@workspace/types/dto/callList';
 
 export default class CallListRoutes {
@@ -26,6 +26,6 @@ export default class CallListRoutes {
       this.callListsController.getAllCallLists,
     );
 
-    this.router.get('/:id/details', this.callListsController.getCallListDetails);
+    this.router.get('/:id/details', Authenticate(), this.callListsController.getCallListDetails);
   }
 }
