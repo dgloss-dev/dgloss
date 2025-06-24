@@ -129,7 +129,7 @@ export const Modal: React.FC<ModalProps> & {
         okText={okText ? okText : t('buttons.submit')}
         cancelText={cancelText ? cancelText : t('buttons.cancel')}
         width={800}
-        footer={showFooter ? customFooter({ onOk, onCancel, t }) : <></>}
+        footer={showFooter ? customFooter({ onOk, onCancel, t }) : null}
         okType="danger"
       >
         {props.children}
