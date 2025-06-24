@@ -1,6 +1,7 @@
-import { CallerPhone } from '../callerPhone';
+import { ICallerPhone } from '../callerPhone';
 
 export interface ICaller {
+  id?: number;
   callListId?: number;
   name: string;
   ordinalNum?: number;
@@ -11,5 +12,5 @@ export interface ICaller {
   callPermission?: boolean;
   url?: string;
   memo?: string;
-  phones?: CallerPhone[];
+  phones?: ICallerPhone[];
 }

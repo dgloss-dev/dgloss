@@ -5,6 +5,7 @@ import {
   createCallListDtoSchema,
   filterCallListDtoSchema,
   deleteCallListDtoSchema,
+  updateCallListDtoSchema,
 } from '@workspace/types/dto/callList';
 
 export default class CallListRoutes {
@@ -34,6 +35,13 @@ export default class CallListRoutes {
       '/',
       ValidateRequest(deleteCallListDtoSchema),
       this.callListsController.bulkDeleteCallLists,
+    );
+
+    // PATCH /call-lists - Update call list
+    this.router.patch(
+      '/:id',
+      ValidateRequest(updateCallListDtoSchema),
+      this.callListsController.updateCallList,
     );
   }
 }

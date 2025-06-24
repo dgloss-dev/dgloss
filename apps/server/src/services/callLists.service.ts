@@ -1,34 +1,37 @@
 import { CallListsDao } from '../dao/callLists.dao';
-import { CreateCallListDto, FilterCallListDto } from '@workspace/types/dto/callList';
+import {
+  CreateCallListDto,
+  FilterCallListDto,
+  DeleteCallListDto,
+  UpdateCallListDto,
+} from '@workspace/types/dto/callList';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
 import { ThrowError } from '../utils/error.utils';
-import { CallList } from '../models';
-import { UtilsService } from './utils.service';
-import { AppConfig } from '../config';
-import { parse } from 'csv-parse/sync';
-import Ajv from 'ajv';
-import ajvFormats from 'ajv-formats';
-import {
-  CreateCallerDto,
-  createCallerDtoSchema,
-} from '@workspace/types/dto/caller/createCaller.dto';
+import { Caller, CallerPhone, CallList } from '../models';
+import { CreateCallerDto } from '@workspace/types/dto/caller/createCaller.dto';
 import { SQLLoader } from '../loaders';
-import { validateCallerRecord } from '../utils/caller.utils';
+import { CallerDao } from '../dao/caller.dao';
+import { CALLER_PHONE_SLOT } from '@workspace/types/enums/callerPhone';
+import { CallerPhoneDao } from '../dao/callerPhone.dao';
+import { CallerUtils } from '../utils/caller.utils';
+import { CreationAttributes } from 'sequelize';
 
 export class CallListsService {
   public static instance: CallListsService;
   private callListsDao: CallListsDao;
+  private callerDao: CallerDao;
   private sqlLoader: SQLLoader;
-  private utilsService: UtilsService;
-  private ajv: Ajv;
+
+  private callerPhoneDao: CallerPhoneDao;
+  private callerUtils: CallerUtils;
 
   private constructor() {
     this.callListsDao = CallListsDao.getInstance();
-    this.utilsService = UtilsService.getInstance();
+    this.callerDao = CallerDao.getInstance();
     this.sqlLoader = SQLLoader.getInstance();
-    this.ajv = new Ajv();
-    ajvFormats(this.ajv);
+    this.callerPhoneDao = CallerPhoneDao.getInstance();
+    this.callerUtils = CallerUtils.getInstance();
   }
 
   public static getInstance = (): CallListsService => {
@@ -49,37 +52,18 @@ export class CallListsService {
       let records: CreateCallerDto[] = [];
 
       if (objectKey) {
-        const s3CsvData = await this.utilsService.getStreamFromS3(
-          objectKey,
-          AppConfig.PROJECT_BUCKET,
-        );
-
-        const csvData = s3CsvData.toString('utf-8');
-        records = parse(csvData, {
-          columns: true,
-          skip_empty_lines: true,
-          trim: true,
-        });
-
-        const validationErrors: string[] = [];
-        records.forEach((record: any, index: number) => {
-          const validation = validateCallerRecord(createCallerDtoSchema, record, this.ajv);
-          if (!validation.isValid) {
-            validationErrors.push(`Record ${index + 1}: ${validation.errors}`);
-          }
-        });
-
-        if (validationErrors.length > 0) {
-          throw new Error(`Invalid caller records found:\n${validationErrors.join('\n')}`);
-        }
+        records = await this.callerUtils.processCallerCsv(objectKey);
       }
 
       const callers = records.map((record) => {
         const { targetId, phoneNumberOne, phoneNumberTwo, phoneNumberThree, ...rest } = record;
         const phones = [];
-        if (phoneNumberOne) phones.push({ phoneNumber: phoneNumberOne });
-        if (phoneNumberTwo) phones.push({ phoneNumber: phoneNumberTwo });
-        if (phoneNumberThree) phones.push({ phoneNumber: phoneNumberThree });
+        if (phoneNumberOne)
+          phones.push({ phoneNumber: phoneNumberOne, slot: CALLER_PHONE_SLOT.FIRST });
+        if (phoneNumberTwo)
+          phones.push({ phoneNumber: phoneNumberTwo, slot: CALLER_PHONE_SLOT.SECOND });
+        if (phoneNumberThree)
+          phones.push({ phoneNumber: phoneNumberThree, slot: CALLER_PHONE_SLOT.THIRD });
         return { ...rest, phones };
       });
 
@@ -110,6 +94,118 @@ export class CallListsService {
       const callLists = await this.callListsDao.filterCallLists(filters);
       return callLists;
     } catch (error) {
+      throw ThrowError(error);
+    }
+  }
+
+  public async bulkDeleteCallLists(data: DeleteCallListDto): Promise<number> {
+    logger.info('CallListsService - bulkDeleteCallLists()');
+
+    const sequelize = this.sqlLoader.getSequelizeInstance();
+    const transaction = await sequelize.transaction();
+
+    try {
+      const deletedCount = await this.callListsDao.bulkDeleteCallLists(data.ids, transaction);
+      await transaction.commit();
+      return deletedCount;
+    } catch (error) {
+      await transaction.rollback();
+      throw ThrowError(error);
+    }
+  }
+
+  public async updateCallList(id: number, callListData: UpdateCallListDto): Promise<ICallList> {
+    logger.info('CallListsService - updateCallList()');
+
+    const sequelize = this.sqlLoader.getSequelizeInstance();
+    const transaction = await sequelize.transaction();
+
+    try {
+      const { objectKey } = callListData;
+      if (objectKey) {
+        const records = await this.callerUtils.processCallerCsv(objectKey);
+
+        const existingCallers = await this.callerDao.findByCallListId(id, transaction);
+        const existingCallerMap = new Map(existingCallers.map((c) => [c.id.toString(), c]));
+
+        // Prepare data for bulk update and creation of callers
+        const callersToUpdate: CreationAttributes<Caller>[] = [];
+
+        // Prepare data for bulk creation of new callers along with creation of phones
+        const callersWithPhonesToCreate: CreationAttributes<Caller>[] = [];
+
+        // Prepare data for bulk update or creation of phones using callerId and slot
+        const phonesToUpdateOrCreateByCallerIdAndSlot: CreationAttributes<CallerPhone>[] = [];
+
+        for (const record of records) {
+          const targetId = record.targetId?.toString().trim();
+          const { phoneNumberOne, phoneNumberTwo, phoneNumberThree, ...callerData } = record;
+
+          // Prepare phone data
+          const phones = [];
+          if (phoneNumberOne)
+            phones.push({ phoneNumber: phoneNumberOne, slot: CALLER_PHONE_SLOT.FIRST });
+          if (phoneNumberTwo)
+            phones.push({ phoneNumber: phoneNumberTwo, slot: CALLER_PHONE_SLOT.SECOND });
+          if (phoneNumberThree)
+            phones.push({ phoneNumber: phoneNumberThree, slot: CALLER_PHONE_SLOT.THIRD });
+
+          // Case 1: Existing caller (valid targetId)
+          if (targetId && existingCallerMap.has(targetId)) {
+            const callerId = parseInt(targetId, 10);
+            callersToUpdate.push({
+              id: callerId,
+              callListId: id,
+              ...callerData,
+            });
+
+            for (const phone of phones) {
+              // If phoneNumber is present,
+              // update or create the phone record for the respective callerId and slot
+              if (phone.phoneNumber) {
+                phonesToUpdateOrCreateByCallerIdAndSlot.push({
+                  phoneNumber: phone.phoneNumber,
+                  slot: phone.slot,
+                  callerId,
+                });
+              }
+            }
+          }
+          // Case 2: New caller (no targetId)
+          else if (!targetId) {
+            callersWithPhonesToCreate.push({
+              ...callerData,
+              callListId: id,
+              phones,
+            });
+          }
+        }
+
+        if (callersToUpdate.length > 0) {
+          await this.callerDao.createOrUpdateBulk(callersToUpdate, transaction);
+        }
+
+        if (callersWithPhonesToCreate.length > 0) {
+          await this.callerDao.bulkCreateWithPhones(callersWithPhonesToCreate, id, transaction);
+        }
+
+        // Update existing phones
+        if (phonesToUpdateOrCreateByCallerIdAndSlot.length > 0) {
+          await this.callerPhoneDao.upsertPhones(
+            phonesToUpdateOrCreateByCallerIdAndSlot,
+            transaction,
+          );
+        }
+      }
+
+      // finally update the callList
+      const callList = await this.callListsDao.updateCallListById(id, callListData, transaction);
+
+      await transaction.commit();
+
+      return callList;
+    } catch (error) {
+      await transaction.rollback();
       throw ThrowError(error);
     }
   }
