@@ -3,6 +3,7 @@ import { Caller, CallerPhone, CallList } from '../models';
 import { logger } from '../utils/winston.utils';
 import { ICallList } from '@workspace/types/interfaces/callList';
 import { Op, Transaction, literal } from 'sequelize';
+import { ERRORS } from '../common/constants';
 
 export class CallListsDao {
   private static instance: CallListsDao;
@@ -104,6 +105,32 @@ export class CallListsDao {
       return deletedCount;
     } catch (error) {
       logger.error('[CallListsDao]: Error in bulk deleting call lists');
+      throw error;
+    }
+  }
+
+  async updateCallListById(
+    id: number,
+    data: Partial<ICallList>,
+    transaction?: Transaction,
+  ): Promise<CallList> {
+    logger.info('CallListsDao - updateCallListById()');
+    try {
+      const [updatedCount, [updatedCallList]] = await CallList.update(data, {
+        where: { id },
+        returning: true,
+        transaction,
+      });
+
+      if (updatedCount === 0) {
+        logger.error(`Call list for ${id} if not found`);
+        throw new Error(ERRORS.CALL_LIST_NOT_FOUND.key);
+      }
+
+      logger.info(`Call list ${id} updated successfully`);
+      return updatedCallList;
+    } catch (error) {
+      logger.error('[CallListsDao]: Error in updating call list');
       throw error;
     }
   }
