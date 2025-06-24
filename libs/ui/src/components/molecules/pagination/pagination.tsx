@@ -22,7 +22,7 @@ export const Pagination = (props: PaginationType) => {
             itemActiveBg: '#ffff', // Background color of active item
             itemActiveBgDisabled: '#00000040', // Background of disabled active item
             itemActiveColorDisabled: "#00000040", // Text color of disabled active item
-            itemBg: 'undefined', // Background color of Pagination item
+            itemBg: 'transparent', // Background color of Pagination item
             itemInputBg: '#ffffff', // Background color of input
             itemLinkBg: '#ffffff', // Background color of Pagination item link
             itemSize: 32, // Size of Pagination item

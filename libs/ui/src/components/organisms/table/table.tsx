@@ -157,7 +157,7 @@ export const Table = <T extends object>(props: Prop<T>) => {
             colorText: 'var(--color-base-dark)',
             headerSplitColor: '#f0f0f0',
             paddingContentVerticalLG: 16,
-            bodySortBg: 'undefined',
+            bodySortBg: 'transparent',
             headerSortActiveBg: 'var(--color-dust)',
           },
         },
