@@ -67,12 +67,18 @@ export class CallListsService {
         return { ...rest, phones };
       });
 
+      const aiCallSlots = callListData.callTimeSlots?.map((slot) => ({
+        startTime: new Date(slot.startTime),
+        endTime: new Date(slot.endTime),
+      }));
+
       const data: ICallList = {
         ...baseCallListData,
         callers: callers.map((record) => ({
           ...record,
           callListId: undefined,
         })),
+        aiCallSlots: aiCallSlots || [],
       };
 
       const createdCallList = await this.callListsDao.createCallList(data, transaction);

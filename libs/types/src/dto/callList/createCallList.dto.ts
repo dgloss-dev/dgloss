@@ -1,4 +1,5 @@
 import { CALL_STATUS } from '../../enums/callList';
+import { CreateCallTimeSlotDto, createCallTimeSlotDtoSchema } from './createCallTimeSlot.dto';
 
 export const createCallListDtoSchema = {
   type: 'object',
@@ -13,6 +14,10 @@ export const createCallListDtoSchema = {
     isCallPossible: { type: 'boolean' },
     description: { type: 'string' },
     remarks: { type: 'string' },
+    callTimeSlots: {
+      type: 'array',
+      items: createCallTimeSlotDtoSchema,
+    },
     objectKey: { type: 'string' },
   },
   additionalProperties: false,
@@ -30,5 +35,6 @@ export interface CreateCallListDto {
   isCallPossible?: boolean;
   description?: string;
   remarks?: string;
+  callTimeSlots?: CreateCallTimeSlotDto[];
   objectKey?: string;
 }
