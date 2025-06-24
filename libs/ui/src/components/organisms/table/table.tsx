@@ -135,6 +135,7 @@ export const Table = <T extends object>(props: Prop<T>) => {
       theme={{
         token: {
           colorPrimary: 'var(--color-base-80)',
+          colorBgContainer: '#f8f9fb',
           fontSize: 16,
         },
         components: {
