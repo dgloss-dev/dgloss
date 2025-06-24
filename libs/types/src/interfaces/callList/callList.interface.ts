@@ -1,5 +1,6 @@
 import { CALL_STATUS } from '../../enums/callList';
 import { ICaller } from '../caller';
+import { IAiCallSlot } from '../aiCallSlot';
 
 export interface ICallList {
   name: string;
@@ -11,4 +12,5 @@ export interface ICallList {
   aiState?: boolean;
   isCallPossible?: boolean;
   callers?: ICaller[];
+  aiCallSlots?: IAiCallSlot[];
 }
