@@ -1,4 +1,5 @@
 import { CALL_STATUS } from '../../enums/callList';
+import { UpdateAICallSlotDto, updateAICallSlotDtoSchema } from '../aiCallSlot';
 
 export const updateCallListDtoSchema = {
   type: 'object',
@@ -13,6 +14,10 @@ export const updateCallListDtoSchema = {
     isCallPossible: { type: 'boolean' },
     description: { type: 'string' },
     remarks: { type: 'string' },
+    aiCallSlots: {
+      type: 'array',
+      items: updateAICallSlotDtoSchema,
+    },
     objectKey: { type: 'string' },
   },
   additionalProperties: false,
@@ -29,5 +34,6 @@ export interface UpdateCallListDto {
   isCallPossible?: boolean;
   description?: string;
   remarks?: string;
+  aiCallSlots?: UpdateAICallSlotDto[];
   objectKey?: string;
 }

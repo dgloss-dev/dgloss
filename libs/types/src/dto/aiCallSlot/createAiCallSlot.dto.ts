@@ -1,4 +1,4 @@
-export const createCallTimeSlotDtoSchema = {
+export const createAICallSlotDtoSchema = {
   type: 'object',
   properties: {
     startTime: { type: 'string' },
@@ -8,7 +8,7 @@ export const createCallTimeSlotDtoSchema = {
   required: ['startTime', 'endTime'],
 };
 
-export interface CreateCallTimeSlotDto {
+export interface CreateAICallSlotDto {
   startTime: string;
   endTime: string;
 }
