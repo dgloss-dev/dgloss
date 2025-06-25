@@ -1,0 +1,5 @@
+export enum CALLER_PHONE_SLOT {
+  FIRST = 'FIRST',
+  SECOND = 'SECOND',
+  THIRD = 'THIRD',
+}
