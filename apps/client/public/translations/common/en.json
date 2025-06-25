@@ -1,6 +1,7 @@
 {
   "headers": {
-    "accountList": "Account List"
+    "accountList": "Account List",
+    "callList": "Call List"
   },
   "buttons": {
     "add": "Add",
@@ -41,5 +42,9 @@
     "callHistory": "Call History",
     "setting": "Setting",
     "inquiry": "Inquiry"
+  },
+  "breadcrumb": {
+    "manager": "Manager",
+    "callList": "Call List"
   }
 }

@@ -68,3 +68,18 @@ export const httpDelete = (url: string) => {
   }
   return axiosInstance.delete(url, config);
 };
+
+export const httpDeleteWithData = <T>(url: string, data: T) => {
+  const token = Cookies.get(COOKIE_STORAGE_KEYS.ACCESS_TOKEN);
+
+  const config: Record<string, any> = {
+    data: data,
+  };
+
+  if (token) {
+    config.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  return axiosInstance.delete(url, config);
+};

@@ -29,7 +29,7 @@ export const TableActionBar: React.FC<TableActionBarProps> = ({
 }) => {
   const t = useTranslations('common');
   return (
-    <div className="flex items-center gap-2  w-full">
+    <div className="flex items-center gap-2 pt-[26px] pb-4  w-full">
       <span className="text-base  whitespace-nowrap">
         {t('table.selected')} {selectedCount} {t('table.items')}
       </span>

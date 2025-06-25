@@ -77,8 +77,8 @@ export const Table = <T extends object>(props: Prop<T>) => {
   );
   const total =
     isPaginationObject(otherProps.pagination) && otherProps.pagination.total !== undefined
-      ? otherProps.pagination.total
-      : otherProps.dataSource.length;
+      ? otherProps?.pagination?.total
+      : otherProps?.dataSource?.length;
 
   const handlePageChange = (page: number, size: number) => {
     setCurrent(page);

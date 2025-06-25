@@ -7,14 +7,13 @@ import { ImageIcon } from '@workspace/ui/components/atoms/icon/imageIcon';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { OPERATOR_STATE } from '@workspace/types/enums/operatorStatus/operatorState.enum';
+import { ROUTES } from '@client/constants/routes.constant';
 
 interface TopPageHeaderProps {
-  status: OPERATOR_STATE;
   className?: string;
-  faqRoute: string;
 }
 
-export const TopPageHeader: React.FC<TopPageHeaderProps> = ({ status, className, faqRoute }) => {
+export const TopPageHeader: React.FC<TopPageHeaderProps> = ({ className }) => {
   const sharedButtonClasses = '!w-full !max-w-[96px] !text-[14px] !font-bold rounded-[6px]';
   const router = useRouter();
   const t = useTranslations('common');
@@ -22,7 +21,7 @@ export const TopPageHeader: React.FC<TopPageHeaderProps> = ({ status, className,
     console.log(type);
   };
   const handleFaqClick = () => {
-    router.push(faqRoute);
+    router.push(ROUTES.FAQ);
   };
 
   const getStatusButtonProps = (
@@ -31,7 +30,7 @@ export const TopPageHeader: React.FC<TopPageHeaderProps> = ({ status, className,
     label: string,
     roundedClass: string,
   ) => {
-    const isActive = status === type;
+    const isActive = OPERATOR_STATE.SEATED === type;
 
     return {
       variant: (isActive ? 'primary' : 'primary-outline') as ButtonVariant,

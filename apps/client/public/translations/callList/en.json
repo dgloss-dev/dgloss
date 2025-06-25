@@ -1,0 +1,20 @@
+{
+  "table": {
+    "selected": "Selected",
+    "items": "Items",
+    "listId": "List ID",
+    "callListName": "Call List Name",
+    "targetCount": "Target Count",
+    "aiOperationCount": "AI Operation Count",
+    "aiCallAvailability": "AI Call Availability",
+    "status": "Status",
+    "updatedAt": "Updated At",
+    "edit": "Edit",
+    "target": "Target",
+    "aiCallPossible": "AI Call Possible",
+    "aiCalling": "AI Calling",
+    "aiWaiting": "AI Waiting",
+    "aiStopped": "AI Stopped",
+    "aiCallNotPossible": "AI Call Not Possible"
+  }
+}

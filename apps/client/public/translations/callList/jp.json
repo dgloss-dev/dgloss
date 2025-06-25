@@ -1,0 +1,20 @@
+{
+  "table": {
+    "selected": "選択された",
+    "items": "項目",
+    "listId": "リストID",
+    "callListName": "コールリスト名",
+    "targetCount": "ターゲット数",
+    "aiOperationCount": "AI稼働数",
+    "aiCallAvailability": "AIコール可否",
+    "status": "ステータス",
+    "updatedAt": "更新日時",
+    "edit": "編集",
+    "target": "ターゲット",
+    "aiCallPossible": "AIコール可能",
+    "aiCalling": "AIコール中",
+    "aiWaiting": "AI待機中",
+    "aiStopped": "AI停止中",
+    "aiCallNotPossible": "AIコール不可"
+  }
+}

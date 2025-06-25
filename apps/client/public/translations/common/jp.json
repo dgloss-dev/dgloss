@@ -1,6 +1,7 @@
 {
   "headers": {
-    "accountList": "アカウント一覧"
+    "accountList": "アカウント一覧",
+    "callList": "コールリスト一覧"
   },
   "buttons": {
     "add": "新規登録",
@@ -41,5 +42,9 @@
     "callHistory": "通話履歴",
     "setting": "設定",
     "inquiry": "問い合わせ"
+  },
+  "breadcrumb": {
+    "manager": "管理者",
+    "callList": "コールリスト管理"
   }
 }
