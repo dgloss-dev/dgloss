@@ -30,19 +30,26 @@ export type CheckboxProps = SingleProps | GroupProps;
 export const Checkbox: React.FC<CheckboxProps> = ({ type = 'single', ...props }: CheckboxProps) => {
   const themeConfig = {
     token: {
-      colorPrimary: '#007aff',
+      colorPrimary: '#1677ff',
+      colorText: '#000000e0',
     },
     components: {
       Checkbox: {
-        checkColor: '#3f51b5',
-        checkBg: '#3f51b5',
-        checkBorderColor: '#3f51b5',
+        checkColor: 'var(--color-success)',
+        checkBg: 'var(--color-success)',
+        checkBorderColor: 'var(--color-success)',
         controlInteractiveSize: 20,
-        controlOutline: '#007aff',
+        controlHoverColor: 'var(--color-success)',
+        hoverActiveColor: 'var(--color-success)',
+        controlActiveColor: 'var(--color-success)',
+        fontWeight: 400,
+        fontSize: 14,
         lineWidth: 2,
         borderRadiusSM: 6,
         lineWidthBold: 2,
         lineWidthFocus: 2,
+        height: 16,
+        width: 16,
       },
     },
   };

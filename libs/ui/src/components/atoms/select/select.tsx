@@ -76,22 +76,6 @@ export const Select: React.FC<SelectProps> = ({
       };
       const handleCompositionEnd = (event: CompositionEvent) => {
         setComposing(false);
-        // const composedValue = event.data;
-        // if (composedValue && onChange && mode === 'tags') {
-        //   if (
-        //     Array.isArray(props.value) &&
-        //     composedValue &&
-        //     (props.value as string[])?.includes(composedValue)
-        //   ) {
-        //     setSearchValue('');
-        //     return;
-        //   }
-        //   const newValue = Array.isArray(props.value)
-        //     ? [...props.value, composedValue]
-        //     : [composedValue];
-        //   onChange(newValue, { value: composedValue, label: composedValue });
-        //   setSearchValue('');
-        // }
       };
       const node = selectRef?.current?.nativeElement;
       if (node) {
@@ -141,41 +125,60 @@ export const Select: React.FC<SelectProps> = ({
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#007aff',
+          colorPrimary: '#ff69b4',
           controlOutlineWidth: 2,
+          colorBgContainer: 'var(--color-primary-light)',
           borderRadius: 6,
+          colorBorder: 'var(--color-dust)',
         },
         components: {
           Select: {
-            clearBg: '#ffffff',
-            optionPadding: '5px 12px',
+            activeBorderColor: 'var(--color-dust)',
+            hoverBorderColor: 'var(--color-dust)',
+            optionActiveBg: 'var(--color-primary-light)',
+            controlHeight: 32,
+            controlHeightSM: 32,
+            controlHeightLG: 32,
+            colorIcon: 'var(--color-dust)',
+            paddingContentHorizontalLG: 12,
+            paddingContentHorizontal: 12,
+            paddingContentHorizontalSM: 12,
+            controlHeightXS: 32,
           },
         },
       }}
     >
-      {props.label && (
-        <label htmlFor={props.id} className="block mb-4 text-sm font-semibold text-text-secondary">
-          {props.label}
-        </label>
-      )}
-      <AntSelect
-        ref={selectRef}
-        allowClear={allowClear}
-        autoClearSearchValue={autoClearSearchValue}
-        filterOption={filterOption}
-        listHeight={listHeight}
-        searchValue={searchValue}
-        placement={placement}
-        variant={type}
-        mode={mode}
-        onChange={handleChange}
-        onSearch={handleSearch}
-        onInputKeyDown={handleKeyDown}
-        {...props}
-        className={`${fullWidth ? 'w-full' : ''} ${
-          mode === 'tags' ? 'ant-select-tags' : ''
-        }  no-outline ${props.className}`}
-      />
+      <div className="flex flex-col w-full">
+        {props.label && (
+          <label
+            htmlFor={props.id}
+            className="mb-1 text-sm text-nowrap font-semibold text-base-light"
+          >
+            {props.label}
+          </label>
+        )}
+        <AntSelect
+          style={{
+            height: 32,
+          }}
+          ref={selectRef}
+          allowClear={allowClear}
+          autoClearSearchValue={autoClearSearchValue}
+          filterOption={filterOption}
+          listHeight={listHeight}
+          searchValue={searchValue}
+          placement={placement}
+          variant={type}
+          mode={mode}
+          onChange={handleChange}
+          onSearch={handleSearch}
+          onInputKeyDown={handleKeyDown}
+          {...props}
+          className={` !h-[32px] ${fullWidth ? 'w-full' : ''} ${
+            mode === 'tags' ? 'ant-select-tags' : ''
+          }  no-outline ${props.className}`}
+        />
+      </div>
     </ConfigProvider>
   );
 };

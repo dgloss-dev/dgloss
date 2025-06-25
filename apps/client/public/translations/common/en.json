@@ -1,0 +1,45 @@
+{
+  "headers": {
+    "accountList": "Account List"
+  },
+  "buttons": {
+    "add": "Add",
+    "seated": "Seated",
+    "away": "Away",
+    "faq": "FAQ",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "delete": "Delete",
+    "forceLogout": "Force Logout"
+  },
+  "table": {
+    "emptyText": "No content",
+    "triggerAsc": "Click to sort in ascending order",
+    "triggerDesc": "Click to sort in descending order",
+    "cancelSort": "Cancel sorting",
+    "listCount": "count",
+    "listCount10": "10 items",
+    "listCount20": "20 items",
+    "listCount50": "50 items",
+    "listCount100": "100 items",
+    "selected": "Selected",
+    "items": "items"
+  },
+  "sidebar": {
+    "home": "Home",
+    "accountManagement": "Account Management",
+    "projectManagement": "Project Management",
+    "adminMenu": "Admin Menu",
+    "operatorMenu": "Operator Menu",
+    "admin": "Admin",
+    "operator": "Operator",
+    "logout": "Logout",
+    "callListManagement": "Call List Management",
+    "callList": "Call List",
+    "myList": "My List",
+    "taskManagement": "Task Management",
+    "callHistory": "Call History",
+    "setting": "Setting",
+    "inquiry": "Inquiry"
+  }
+}
