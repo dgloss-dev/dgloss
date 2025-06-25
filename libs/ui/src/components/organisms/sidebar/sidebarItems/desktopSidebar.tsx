@@ -9,6 +9,7 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Header } from '@workspace/ui/components/organisms/header';
 import { Footer } from '@workspace/ui/components/organisms/footer';
 import { useTranslations } from 'next-intl';
+import { USER_ROLE } from '@workspace/types/enums/user';
 
 type MenuItem = {
   key: string;
@@ -33,7 +34,9 @@ type SidebarProps = {
 export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
-  const [role, setRole] = React.useState<'admin' | 'operator'>(isAdmin ? 'admin' : 'operator');
+  const [role, setRole] = React.useState<USER_ROLE>(
+    isAdmin ? USER_ROLE.SUPERVISOR : USER_ROLE.OPERATOR,
+  );
   const t = useTranslations('common');
   const selectedKey = '/';
 
@@ -55,7 +58,7 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
           ),
         label: (
           <div
-            className={`flex items-center w-full ${isChild ? 'justify-end' : 'justify-between'}`}
+            className={`flex items-center w-full ${isChild ? '' : 'justify-between'}`}
           >
             <h3
               className={`!text-[16px] !text-primary-light ${item.children && item.children.length > 0 ? '!ml-0' : ''}`}
@@ -73,28 +76,21 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
   const useCreateMenuProps = (
     pathname: string,
     handleMenuClick: ({ key }: { key: string }) => void,
-    isAdmin?: boolean,
+    role: USER_ROLE,
   ) => {
     const getSelectedMenuKey = (path: string) => {
       const normalizedPath = path.replace(/\/$/, '');
 
       const menuItems = [
-        ROUTES.USER_PDD,
-        ROUTES.PUBLIC_PDD,
-        ROUTES.OVERVIEW_USER_PDDS,
-        ROUTES.ADMIN_ACCOUNT_MANAGEMENT,
+        ROUTES.ACCOUNT_MANAGEMENT,
+        ROUTES.CALL_LIST,
+        ROUTES.MY_LIST,
+        ROUTES.TASK_MANAGEMENT,
         ROUTES.PROFILE,
-        ROUTES.ONGOING,
-        ROUTES.METHODOLOGIES,
-        ROUTES.USER_PUBLIC_PDD,
-        ROUTES.NOTICES,
-        ROUTES.RATING_CATEGORY,
-        ROUTES.CONDITIONS,
-        ROUTES.EVALUATION_ITEMS,
-        ROUTES.VALUATION_BASIS,
-        ROUTES.CRITERIA,
+        ROUTES.CALL_HISTORY,
+        ROUTES.SETTING,
+        ROUTES.INQUIRY,
       ];
-// routes need to update
       const matchedRoute = menuItems
         .sort((a, b) => b.length - a.length)
         .find((route) => normalizedPath.startsWith(route));
@@ -102,49 +98,78 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
       return matchedRoute || normalizedPath;
     };
 
-    const menuItems: MenuItem[] = [
+    // Define menu items for each role
+    const adminMenuItems: MenuItem[] = [
       {
-        key: ROUTES.MAIN,
+        key: ROUTES.HOME,
         icon: 'home',
         label: t('sidebar.home'),
-        show: !isAdmin,
       },
       {
-        key: ROUTES.ADMIN_ACCOUNT_MANAGEMENT,
+        key: ROUTES.ACCOUNT_MANAGEMENT,
         icon: 'users',
         label: t('sidebar.accountManagement'),
-        show: !isAdmin,
-        children: [
-          {
-            key: ROUTES.ADD_CRITERIA,
-            icon: 'users',
-            label: t('sidebar.accountManagement'),
-          },
-          {
-            key: ROUTES.ADD_USER_PDD,
-            icon: 'users',
-            label: t('sidebar.accountManagement'),
-          },
-          {
-            key: ROUTES.FAQ,
-            icon: 'users',
-            label: t('sidebar.accountManagement'),
-          },
-        ],
       },
       {
-        key: ROUTES.COMPARE_RESULTS,
-        icon: 'briefCase',
-        label: t('sidebar.projectManagement'),
-        show: !isAdmin,
+        key: ROUTES.CALL_LIST,
+        icon: 'callList',
+        label: t('sidebar.callListManagement'),
       },
     ];
 
-    const filteredMenuItems = menuItems.filter((item) => item.show !== false);
+    const operatorMenuItems: MenuItem[] = [
+      {
+        key: ROUTES.HOME,
+        icon: 'home',
+        label: t('sidebar.home'),
+      },
+      {
+        key: ROUTES.CALL_LIST_MANAGEMENT,
+        icon: 'callList',
+        label: t('sidebar.callListManagement'),
+        children: [
+          {
+            key: ROUTES.CALL_LIST,
+            icon: 'list',
+            label: t('sidebar.callList'),
+          },
+          {
+            key: ROUTES.MY_LIST,
+            icon: 'myList',
+            label: t('sidebar.myList'),
+          },
+        ],
+      },
+
+      {
+        key: ROUTES.TASK_MANAGEMENT,
+        icon: 'task',
+        label: t('sidebar.taskManagement'),
+      },
+      {
+        key: ROUTES.CALL_HISTORY,
+        icon: 'callHistory',
+        label: t('sidebar.callHistory'),
+      },
+      {
+        key: ROUTES.SETTING,
+        icon: 'setting',
+        label: t('sidebar.setting'),
+      },
+      {
+        key: ROUTES.INQUIRY,
+        icon: 'inquiry',
+        label: t('sidebar.inquiry'),
+      },
+    ];
+
+    // Choose menu based on role
+    const menuItems = role === USER_ROLE.SUPERVISOR ? adminMenuItems : operatorMenuItems;
+
     const selectedKey = getSelectedMenuKey(pathname);
     return {
       selectedKeys: [selectedKey],
-      openKeys: filteredMenuItems?.map((item) => item.key),
+      openKeys: menuItems?.map((item) => item.key),
       items: createMenuList(menuItems, false),
       onClick: handleMenuClick,
       mode: 'inline' as const,
@@ -160,7 +185,7 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
     <div className="hidden h-screen  !max-w-[246px] md:flex flex-col items-start justify-between  ">
       <Sider
         header={<Header t={t} activeRole={role} onRoleChange={setRole} />}
-        menuProps={useCreateMenuProps(pathname, handleMenuClick, isAdmin)}
+        menuProps={useCreateMenuProps(pathname, handleMenuClick, role)}
         theme="light"
         footer={<Footer t={t} />}
         className="custom_sider "

@@ -33,6 +33,13 @@
     "operatorMenu": "Operator Menu",
     "admin": "Admin",
     "operator": "Operator",
-    "logout": "Logout"
+    "logout": "Logout",
+    "callListManagement": "Call List Management",
+    "callList": "Call List",
+    "myList": "My List",
+    "taskManagement": "Task Management",
+    "callHistory": "Call History",
+    "setting": "Setting",
+    "inquiry": "Inquiry"
   }
 }

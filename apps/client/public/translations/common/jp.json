@@ -33,6 +33,13 @@
     "operatorMenu": "オペレーターメニュー",
     "admin": "管理者",
     "operator": "オペレーター",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "callListManagement": "コールリスト管理",
+    "callList": "コールリスト",
+    "myList": "マイリスト",
+    "taskManagement": "タスク管理",
+    "callHistory": "通話履歴",
+    "setting": "設定",
+    "inquiry": "問い合わせ"
   }
 }

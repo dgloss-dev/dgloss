@@ -1,8 +1,11 @@
 import { PageHeader } from '@workspace/ui/components/organisms/pageHeader';
 import { PageLayout } from './_components/common/pageLayout';
 import { FormModal } from '@workspace/ui/components/organisms/formModal';
+import { useTranslations } from 'next-intl';
+import { TableComponent } from './_components/common/table';
 
-const Page = async () => {
+const Page = () => {
+  const t = useTranslations();
   return (
     <PageLayout>
       <PageHeader
@@ -14,7 +17,8 @@ const Page = async () => {
           { title: 'アカウント管理', href: '/page' },
         ]}
       />
-      <FormModal modalKey={'add-user'} formComponent={<h1>test</h1>} title="アカウント管理" />
+      <FormModal modalKey={'add-user'} formComponent={<div>hello</div>} title="アカウント管理" />
+      <TableComponent />
     </PageLayout>
   );
 };
