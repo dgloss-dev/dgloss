@@ -1,5 +1,5 @@
 'use client';
-import { Modal } from '../../molecules/modal';
+import { Modal } from '@workspace/ui/components/molecules/modal';
 import { useAppStore } from '@client/store/app.store';
 
 interface FormModalProps {

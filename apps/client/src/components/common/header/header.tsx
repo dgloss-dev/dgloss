@@ -1,5 +1,5 @@
 import React from 'react';
-import { Logo } from '../../atoms/logo';
+import { Logo } from '@workspace/ui/components/atoms/logo';
 import { USER_ROLE } from '@workspace/types/enums/user';
 
 interface HeaderProps {

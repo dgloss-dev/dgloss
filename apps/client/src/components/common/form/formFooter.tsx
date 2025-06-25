@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../../atoms/button';
+import { Button } from '@workspace/ui/components/atoms/button';
 
 type formFooterType = {
   edit?: boolean;

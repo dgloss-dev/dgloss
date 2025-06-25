@@ -5,8 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Sider } from '@workspace/ui/components/organisms/sider';
 import { FallbackImage } from '@workspace/ui/components/atoms/fallbackImage';
 import { ROUTES } from '@client/constants/routes.constant';
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Header } from '@workspace/ui/components/organisms/header';
+import { Header } from '@client/components/common/header/header';
 import { Footer } from '@workspace/ui/components/organisms/footer';
 import { useTranslations } from 'next-intl';
 import { USER_ROLE } from '@workspace/types/enums/user';
@@ -57,9 +56,7 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
             />
           ),
         label: (
-          <div
-            className={`flex items-center w-full ${isChild ? '' : 'justify-between'}`}
-          >
+          <div className={`flex items-center w-full ${isChild ? '' : 'justify-between'}`}>
             <h3
               className={`!text-[16px] !text-primary-light ${item.children && item.children.length > 0 ? '!ml-0' : ''}`}
             >
@@ -177,7 +174,6 @@ export const DesktopSidebar = ({ isAdmin = true, username = '佐藤敬子' }: Si
   };
 
   const handleMenuClick = ({ key }: { key: string }) => {
-    console.log('key', key);
     router.push(key);
   };
 

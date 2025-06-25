@@ -1,4 +1,4 @@
-import { IUser } from '@workspace/types';
+import { IUser } from '@workspace/types/interfaces/user';
 import { create } from 'zustand';
 
 type State = {

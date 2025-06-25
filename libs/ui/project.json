@@ -7,7 +7,7 @@
   "// targets": "to see all targets run: nx show project ui --web",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nx/js:tsc",
       "options": {
         "outputPath": "dist/libs/ui",
         "main": "libs/ui/src/index.ts",

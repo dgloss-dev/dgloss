@@ -1,10 +1,9 @@
 'use client';
-import { Breadcrumb } from '../../atoms/breadcrumb';
-import { Button } from '../../atoms/button';
-import { ImageIcon } from '../../atoms/icon';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useAppStore } from '@client/store/app.store';
+import { Breadcrumb } from '@workspace/ui/components/atoms/breadcrumb';
+import { Button } from '@workspace/ui/components/atoms/button';
+import { ImageIcon } from '@workspace/ui/components/atoms/icon';
+import { useTranslations } from 'next-intl';
 interface PageHeaderProps {
   titleKey: string;
   buttonLabelKey: string;
@@ -25,7 +24,6 @@ export const PageHeader = ({
   const title = t(`headers.${titleKey}`);
   const buttonLabel = t(`buttons.${buttonLabelKey}`);
   const { setOpenModalAction } = useAppStore();
-
   const handleAdd = () => {
     setOpenModalAction(modalKey, true);
   };

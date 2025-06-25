@@ -5,7 +5,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { AntdConfigProvider } from '../providers/antdConfigProvider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { AppSidebar } from '@workspace/ui/components/organisms/sidebar';
+import { AppSidebar } from '@client/components/common/sidebar/appSidebar';
 
 const SFPro = localFont({
   src: '../../public/fonts/SF-Pro-Text-Regular.otf',
