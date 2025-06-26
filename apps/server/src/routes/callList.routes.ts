@@ -31,7 +31,7 @@ export default class CallListRoutes {
       this.callListsController.getAllCallLists,
     );
 
-    this.router.get('/:id/details', Authenticate(), this.callListsController.getCallListDetails);
+    this.router.get('/:id', Authenticate(), this.callListsController.getCallListDetails); 
 
     this.router.delete(
       '/',
