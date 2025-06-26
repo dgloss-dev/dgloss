@@ -107,6 +107,16 @@ export class CallListsService {
     }
   }
 
+  public async getCallListDetails(id: number): Promise<CallList | null> {
+    logger.info('CallListsService - getCallListDetails()');
+    try {
+      const callListDetails = await this.callListsDao.getCallListDetails(id);
+      return callListDetails;
+    } catch (error) {
+      throw ThrowError(error);
+    }
+  }
+
   public async bulkDeleteCallLists(data: DeleteCallListDto): Promise<number> {
     logger.info('CallListsService - bulkDeleteCallLists()');
 

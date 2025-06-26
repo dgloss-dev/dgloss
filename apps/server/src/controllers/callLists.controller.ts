@@ -49,6 +49,22 @@ export class CallListsController {
     }
   };
 
+  getCallListDetails = async (req: Request, res: Response) => {
+    logger.info('CallListsController - getCallListDetails()');
+    try {
+      const id = parseInt(req.params?.id, 10);
+      const callListDetails = await this.callListsService.getCallListDetails(id);
+
+      if (!callListDetails) {
+        return cbError(res, HTTPSTATUS.NOT_FOUND, ERRORS.NOT_FOUND, null);
+      }
+
+      return cb(HTTPSTATUS.OK, res, callListDetails);
+    } catch (error) {
+      return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.GET_FAILED, error);
+    }
+  };
+
   bulkDeleteCallLists = async (req: Request, res: Response) => {
     logger.info('CallListsController - bulkDeleteCallLists()');
 
