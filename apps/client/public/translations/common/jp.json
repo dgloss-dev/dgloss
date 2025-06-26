@@ -11,7 +11,8 @@
     "cancel": "キャンセル",
     "submit": "登録",
     "delete": "削除",
-    "forceLogout": "強制停止"
+    "forceLogout": "強制停止",
+    "warning": "削除"
   },
   "table": {
     "emptyText": "コンテンツはありません",
@@ -46,5 +47,12 @@
   "breadcrumb": {
     "manager": "管理者",
     "callList": "コールリスト管理"
+  },
+  "form": {
+    "call_list_register": "コールリスト登録"
+  },
+  "deleteModal": {
+    "delete_call_list": "アカウント削除",
+    "delete_call_list_description": "選択した000件のリストを削除してよろしいですか"
   }
 }

@@ -12,6 +12,7 @@ import { IPagination } from '@workspace/types/dto/common';
 import { useAppStore } from '@client/store/app.store';
 import { Message } from '@workspace/ui/components/atoms/message';
 import { useTranslations } from 'next-intl';
+import { CallListFilter } from '@client/app/call-list/_components/callListFilter';
 
 // Generic interface for table data
 interface TableData<T> {
@@ -65,6 +66,8 @@ interface CommonTableProps<T extends object> {
   // Row selection
   rowSelectionType?: 'checkbox' | 'radio';
   onRowSelect?: (selectedRowKeys: React.Key[], selectedRows: T[]) => void;
+  selectedRows?: T[];
+  setSelectedRows?: (selectedRows: T[]) => void;
 
   // Row actions
   onRow?: any;
@@ -98,7 +101,12 @@ interface CommonTableProps<T extends object> {
   // URL management
   updateUrlOnChange?: boolean;
   urlParamPrefix?: string;
-}
+
+  // Filter component
+  filterComponent?: React.ReactNode;
+  filters?: Record<string, any>;
+  setFilters?: (filters: Record<string, any>) => void;
+  }
 
 export const CommonTable = <T extends object>({
   // Data and state management
@@ -159,13 +167,18 @@ export const CommonTable = <T extends object>({
   // URL management
   updateUrlOnChange = true,
   urlParamPrefix = '',
+  selectedRows,
+  setSelectedRows,
+  filterComponent,
+  filters,
+  setFilters,
 }: CommonTableProps<T>) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('common');
   // Store hooks
 
-  const { isLoading: globalLoading, setIsLoadingAction } = useAppStore();
+  const { isLoading: globalLoading, setIsLoadingAction, setOpenModalAction } = useAppStore();
 
   // Local state
   const [pagination, setPagination] = useState({
@@ -182,7 +195,7 @@ export const CommonTable = <T extends object>({
     order: parseInt(searchParams.get('order') || defaultSortOrder.toString(), 10) as 1 | -1,
   });
 
-  const [filters, setFilters] = useState<Record<string, any>>({});
+ 
 
   // Computed loading state
   const isLoading = externalLoading !== undefined ? externalLoading : globalLoading;
@@ -248,7 +261,7 @@ export const CommonTable = <T extends object>({
     } else {
       fetchData(pagination.current, pagination.pageSize, sortConfig.field, sortConfig.order);
     }
-  }, []);
+  }, [filters]);
 
   // Update URL when pagination or sorting changes
   const updateUrl = useCallback(
@@ -310,7 +323,7 @@ export const CommonTable = <T extends object>({
     // Update local state
     setPagination(newPaginationState);
     setSortConfig(newSortConfig);
-    setFilters(newFilters);
+    setFilters?.(newFilters);
 
     // Update URL
     updateUrl(newPaginationState, newSortConfig);
@@ -345,7 +358,7 @@ export const CommonTable = <T extends object>({
   });
 
   const onRowSelect = (selectedRowKeys: React.Key[], selectedRows: T[]) => {
-    console.log(selectedRowKeys, selectedRows);
+    setSelectedRows?.(selectedRows);
   };
 
   // Row selection configuration
@@ -359,7 +372,16 @@ export const CommonTable = <T extends object>({
 
   return (
     <div className="w-full">
-      <TableActionBar selectedCount={0} onForceLogout={() => {}} onDelete={() => {}} />
+      <div className="flex  items-center justify-between w-full">
+        <TableActionBar
+          selectedCount={selectedRows?.length || 0}
+          onForceLogout={() => {}}
+          onDelete={() => {
+            setOpenModalAction('deleteModal', true);
+          }}
+        />
+        {filterComponent && filterComponent}
+      </div>
       <Table<T>
         rowKey={rowKey}
         dataSource={tableData}

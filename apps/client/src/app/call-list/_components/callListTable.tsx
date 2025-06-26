@@ -4,12 +4,21 @@ import { useTranslations } from 'next-intl';
 import { ColumnsType } from '@workspace/ui/components/organisms/table';
 import { CommonTable } from '@client/components/common/commonTable/commonTable';
 import { ICallList } from '@workspace/types/interfaces/callList';
-import { FilterCallListDto } from '@workspace/types/dto/callList';
-import { getAllCallListsClient } from '@client/services/callList.client.services';
+import {
+  bulkDeleteCallListsClient,
+  getAllCallListsClient,
+} from '@client/services/callList.client.services';
 import { CALL_STATUS } from '@workspace/types/enums/callList';
 import { Button } from '@workspace/ui/components/atoms/button';
 import { ImageIcon } from '@workspace/ui/components/atoms/icon';
 import { Tag } from '@workspace/ui/components/atoms/tag';
+import { formatDateWithTime } from '@client/utils/date.utils';
+import { getCallStatusType } from '@client/utils/getStatus.utils';
+import { getCallStatusLabel } from '@client/utils/getStatus.utils';
+import { useAppStore } from '@client/store/app.store';
+import { CallListForm } from './callListForm';
+import { DeleteModal } from '@client/components/common/modal/deleteModal';
+import { CallListFilter } from './callListFilter';
 
 interface CallListTableProps {
   className?: string;
@@ -23,56 +32,12 @@ export const CallListTable: React.FC<CallListTableProps> = ({
   initialCount,
 }) => {
   const t = useTranslations('common');
-
-  // State for table data
   const [tableData, setTableData] = useState<ICallList[]>([]);
   const [count, setCount] = useState(0);
   const callListTexts = useTranslations('callList');
-
-  // Fetch function for the CommonTable
-
-  // Get status badge type
-  const getStatusType = (status: CALL_STATUS) => {
-    switch (status) {
-      case CALL_STATUS.ON_CALL:
-        return 'active';
-      case CALL_STATUS.CALL_SUSPENDED:
-        return 'pause';
-      case CALL_STATUS.MANUAL_STOP:
-        return 'inActive';
-      case CALL_STATUS.COMPLETED:
-        return 'inActive';
-      default:
-        return 'inActive';
-    }
-  };
-
-  // Get status display text
-  const getStatusText = (status: CALL_STATUS) => {
-    switch (status) {
-      case CALL_STATUS.ON_CALL:
-        return callListTexts('table.aiCalling');
-      case CALL_STATUS.CALL_SUSPENDED:
-        return callListTexts('table.aiStopped');
-      case CALL_STATUS.MANUAL_STOP:
-        return callListTexts('table.aiStopped');
-      case CALL_STATUS.COMPLETED:
-        return callListTexts('table.aiStopped');
-      default:
-        return status;
-    }
-  };
-
-  // Format date helper
-  const formatDate = (date: Date) => {
-    return date?.toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-  };
-
-  // Table columns configuration
+  const { setOpenModalAction } = useAppStore();
+  const [selectedRows, setSelectedRows] = useState<ICallList[]>([]);
+  const { filterValues, setFilterValues } = useAppStore();
   const columns: ColumnsType<ICallList> = [
     {
       title: callListTexts('table.listId'),
@@ -80,7 +45,6 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       key: 'id',
       width: 128,
       sorter: true,
-      render: (id: number) => <span className="text-gray-900">{id}</span>,
     },
     {
       title: callListTexts('table.callListName'),
@@ -88,7 +52,6 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       key: 'name',
       width: 453,
       sorter: true,
-      render: (text: string) => <span className="font-medium text-gray-900">{text}</span>,
     },
     {
       title: callListTexts('table.targetCount'),
@@ -96,9 +59,6 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       key: 'callersCount',
       width: 146,
       sorter: true,
-      render: (callersCount: number) => (
-        <span className="text-gray-600">{Number(callersCount)}</span>
-      ),
     },
     {
       title: callListTexts('table.aiOperationCount'),
@@ -106,13 +66,12 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       key: 'noAi',
       width: 120,
       sorter: true,
-      render: (noAi: number) => <span className="text-gray-600">{noAi}</span>,
     },
     {
       title: callListTexts('table.aiCallAvailability'),
       dataIndex: 'isCallPossible',
       key: 'isCallPossible',
-      width: 120,
+      width: 180,
       sorter: true,
       render: (isCallPossible: boolean) => (
         <Tag type={isCallPossible ? 'active' : 'inActive'}>
@@ -129,26 +88,26 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       width: 150,
       sorter: true,
       render: (status: CALL_STATUS) => (
-        <Tag type={getStatusType(status)}>{getStatusText(status)}</Tag>
+        <Tag type={getCallStatusType(status)}>{getCallStatusLabel(status, callListTexts)}</Tag>
       ),
     },
     {
       title: callListTexts('table.updatedAt'),
       dataIndex: 'updatedAt',
       key: 'updatedAt',
-      width: 150,
+      width: 200,
       sorter: true,
       render: (date: string) => (
-        <span className="text-gray-600">{date ? formatDate(new Date(date)) : ' - '}</span>
+        <span className="text-base">{date ? formatDateWithTime(new Date(date)) : ' - '}</span>
       ),
     },
     {
       title: '',
       key: 'actions',
-
+      width: 245,
       fixed: 'right',
       render: (_, record: ICallList) => (
-        <div className="flex items-center gap-2 w-full">
+        <div className="flex items-center justify-center gap-2 !w-full !z-[80]">
           <Button
             variant="primary-outline"
             size="small"
@@ -168,16 +127,30 @@ export const CallListTable: React.FC<CallListTableProps> = ({
     },
   ];
 
-  // Action handlers
   const handleEdit = (record: ICallList) => {
     // TODO: Implement edit functionality
-    console.log('Edit call list:', record);
+    setOpenModalAction('callList', true);
   };
 
   const handleTarget = (record: ICallList) => {
-    // TODO: Implement target functionality
     console.log('Target call list:', record);
   };
+
+  const DeleteModalColumns = [
+    {
+      title: callListTexts('table.listId'),
+      dataIndex: 'id',
+      key: 'id',
+      width: 128,
+    },
+    {
+      title: callListTexts('table.callListName'),
+      dataIndex: 'name',
+      key: 'name',
+      width: 453,
+      sorter: true,
+    },
+  ];
 
   return (
     <div className={className}>
@@ -201,6 +174,19 @@ export const CallListTable: React.FC<CallListTableProps> = ({
         scroll={{ x: 1200 }}
         updateUrlOnChange={true}
         urlParamPrefix="callList_"
+        setSelectedRows={setSelectedRows}
+        selectedRows={selectedRows}
+        filterComponent={<CallListFilter />}
+        filters={filterValues}
+        setFilters={setFilterValues}
+      />
+      <DeleteModal
+        onClose={() => setOpenModalAction('deleteModal', false)}
+        onDelete={bulkDeleteCallListsClient}
+        deletedIDs={selectedRows?.map((row: any) => Number(row?.id))}
+        titleKey="delete_call_list"
+        columns={DeleteModalColumns}
+        data={selectedRows}
       />
     </div>
   );

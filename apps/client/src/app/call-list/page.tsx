@@ -2,6 +2,8 @@ import React, { Suspense } from 'react';
 import { CallListPageHeader } from './_components/callListPageHeader';
 import { CallListTable } from './_components/callListTable';
 import { getServerAllCallLists } from '@client/services/callList.server.services';
+import { FormModal } from '@client/components/common/form';
+import { CallListForm } from './_components/callListForm';
 
 const CallListManagementPage = async () => {
   let data;
@@ -20,6 +22,11 @@ const CallListManagementPage = async () => {
     <Suspense fallback={<></>}>
       <CallListPageHeader />
       <CallListTable initialData={data?.rows} initialCount={data?.count} />
+      <FormModal
+        modalKey="callList"
+        formComponent={<CallListForm />}
+        titleKey={'call_list_register'}
+      ></FormModal>
     </Suspense>
   );
 };

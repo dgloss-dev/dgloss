@@ -20,7 +20,7 @@ interface ModalProps {
   centered?: boolean;
   loading?: boolean;
   style?: React.CSSProperties;
-  width?: number;
+  width?: number | string;
   afterClose?: () => void;
   wrapClassName?: string;
   destroyOnClose?: boolean;
@@ -32,6 +32,7 @@ interface ModalProps {
   buttonLoading?: boolean;
   showFooter?: boolean;
   hideCancelButton?: boolean;
+  modalType?: 'primary' | 'primary-outline' | 'warning';
 }
 
 export const Modal: React.FC<ModalProps> & {
@@ -51,19 +52,22 @@ export const Modal: React.FC<ModalProps> & {
   cancelText,
   showFooter = true,
   hideCancelButton = false,
+  modalType = 'warning',
   ...props
 }) => {
   const customFooter = ({
     onOk,
     onCancel,
     t,
+    type = 'warning',
   }: {
     onOk?: () => void;
     onCancel?: () => void;
     t: any;
+    type: 'primary' | 'primary-outline' | 'warning';
   }) => {
     const cancelText = t('buttons.cancel');
-    const okText = t('buttons.submit');
+    const okText = t(`buttons.${type}`);
     return (
       <div className="flex items-center gap-x-2 justify-center w-full">
         {!hideCancelButton && (
@@ -78,7 +82,7 @@ export const Modal: React.FC<ModalProps> & {
 
         <Button
           type="block"
-          variant="warning"
+          variant={type}
           label={okText}
           onClick={onOk}
           loading={props.buttonLoading}
@@ -128,8 +132,8 @@ export const Modal: React.FC<ModalProps> & {
         style={{ borderRadius: '1rem', ...style }}
         okText={okText ? okText : t('buttons.submit')}
         cancelText={cancelText ? cancelText : t('buttons.cancel')}
-        width={800}
-        footer={showFooter ? customFooter({ onOk, onCancel, t }) : null}
+        width={props.width ? props.width : '70%'}
+        footer={showFooter ? customFooter({ onOk, onCancel, t, type: modalType }) : null}
         okType="danger"
       >
         {props.children}

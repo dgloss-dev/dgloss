@@ -157,7 +157,7 @@ textarea {
 /* ------------------- Custom styles for Ant Design Form Items ----------------------------------------------------------------------- */
 
 .custom_ant_form .ant-form-item .ant-form-item-label > label {
-  @apply !w-[192px] !px-4  !border !border-dust !text-sm !font-[600] !font-sf-pro !text-base !bg-secondary;
+  @apply !w-[192px] !px-4  !border !border-dust !text-sm !font-[600] !font-sf-pro !text-base !h-full !bg-secondary;
 }
 .custom_form .ant-form-item .ant-form-item-explain-error {
   margin-bottom: 12px !important;

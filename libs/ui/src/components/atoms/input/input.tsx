@@ -16,7 +16,7 @@ export interface InputProps {
   allowClear?: boolean;
   maxLength?: number;
   showCount?: boolean;
-  value?: string;
+  value?: string | number;
   placeholder?: string;
   name?: string;
   label?: string;
@@ -24,6 +24,7 @@ export interface InputProps {
   className?: string;
   type?: string;
   errorMessage?: string;
+  min?: number;
   theme?: {
     token?: {
       [key: string]: any;
@@ -98,6 +99,7 @@ export const Input: React.FC<InputProps> = (props) => {
           name={props.name}
           type={props.type}
           inputMode={props.inputMode}
+          min={props.min}
         />
 
         {props.suffixLabel && (

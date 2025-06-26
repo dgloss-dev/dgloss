@@ -45,7 +45,6 @@ export const FormItem: React.FC<FormItemProps> = ({
             fontFamily: 'var(--font-sf-pro)',
             fontSize: 14,
             fontWeightStrong: 600,
-            labelHeight: 48,
             labelRequiredMarkColor: 'var(--color-warning-default)',
           },
         },
@@ -57,7 +56,7 @@ export const FormItem: React.FC<FormItemProps> = ({
         colon={colon}
         {...props}
       >
-        <div className=" border !w-full border-dust px-4 py-2 h-12">
+        <div className=" border !w-full border-dust px-4 py-2 min-h-12">
           {props.children}
         </div>
       </Item>

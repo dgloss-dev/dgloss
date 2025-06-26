@@ -55,7 +55,10 @@ const bulkDeleteCallListsClient = async (
   data: DeleteCallListDto,
 ): Promise<{ deletedCount: number }> => {
   try {
-    const response = await httpDeleteWithData(URL, data);
+    const payload = {
+      ids: data,
+    };
+    const response = await httpDeleteWithData(URL, payload);
     const responseData = response?.data;
     return responseData;
   } catch (error: any) {
