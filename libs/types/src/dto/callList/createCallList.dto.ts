@@ -1,5 +1,5 @@
 import { CALL_STATUS } from '../../enums/callList';
-import { CreateCallTimeSlotDto, createCallTimeSlotDtoSchema } from './createCallTimeSlot.dto';
+import { CreateAICallSlotDto, createAICallSlotDtoSchema } from '../aiCallSlot/createAiCallSlot.dto';
 
 export const createCallListDtoSchema = {
   type: 'object',
@@ -14,9 +14,9 @@ export const createCallListDtoSchema = {
     isCallPossible: { type: 'boolean' },
     description: { type: 'string' },
     remarks: { type: 'string' },
-    callTimeSlots: {
+    aiCallSlots: {
       type: 'array',
-      items: createCallTimeSlotDtoSchema,
+      items: createAICallSlotDtoSchema,
     },
     objectKey: { type: 'string' },
   },
@@ -35,6 +35,6 @@ export interface CreateCallListDto {
   isCallPossible?: boolean;
   description?: string;
   remarks?: string;
-  callTimeSlots?: CreateCallTimeSlotDto[];
+  aiCallSlots?: CreateAICallSlotDto[];
   objectKey?: string;
 }
