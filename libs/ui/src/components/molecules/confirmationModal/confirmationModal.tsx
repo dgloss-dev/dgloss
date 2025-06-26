@@ -85,7 +85,7 @@ export const ConfirmationModal: React.FC<IConfirmationModalProps> = ({
             <Col>
               <Button
                 className="!rounded-xl !max-w-[130px] !bg-secondary"
-                variant="danger"
+                variant="warning"
                 type="block"
                 label={okBtnLabel}
                 onClick={onSuccess}

@@ -125,4 +125,8 @@ export const ERRORS = {
     key: 'INVALID_PASSWORD_RESET_CODE',
     message: 'The provided password reset code is invalid',
   },
+  CALL_LIST_NOT_FOUND: {
+    key: 'CALL_LIST_NOT_FOUND',
+    message: 'The call list was not found',
+  },
 };

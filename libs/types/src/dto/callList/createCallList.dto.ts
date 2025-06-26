@@ -1,4 +1,5 @@
 import { CALL_STATUS } from '../../enums/callList';
+import { CreateAICallSlotDto, createAICallSlotDtoSchema } from '../aiCallSlot/createAiCallSlot.dto';
 
 export const createCallListDtoSchema = {
   type: 'object',
@@ -13,6 +14,11 @@ export const createCallListDtoSchema = {
     isCallPossible: { type: 'boolean' },
     description: { type: 'string' },
     remarks: { type: 'string' },
+    aiCallSlots: {
+      type: 'array',
+      items: createAICallSlotDtoSchema,
+    },
+    objectKey: { type: 'string' },
   },
   additionalProperties: false,
   required: ['name', 'createdBy', 'callStatus', 'voiceDataGroupId'],
@@ -29,4 +35,6 @@ export interface CreateCallListDto {
   isCallPossible?: boolean;
   description?: string;
   remarks?: string;
+  aiCallSlots?: CreateAICallSlotDto[];
+  objectKey?: string;
 }

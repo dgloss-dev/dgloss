@@ -8,11 +8,11 @@ interface IconProps {
   className?: string;
 }
 
-const IconFallback = ({ size = 24 }: { size?: number }) => (
+const IconFallback = ({ size = 16 }: { size?: number }) => (
   <div className="animate-pulse bg-gray-200 rounded-sm" style={{ width: size, height: size }} />
 );
 
-export const Icon = ({ name, size = 24, color, className }: IconProps) => {
+export const Icon = ({ name, size = 16, color, className }: IconProps) => {
   const IconComponent = lazy(iconMap[name]);
 
   return (

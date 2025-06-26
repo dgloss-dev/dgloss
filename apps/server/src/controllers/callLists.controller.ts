@@ -1,4 +1,9 @@
-import { CreateCallListDto, FilterCallListDto } from '@workspace/types/dto/callList';
+import {
+  CreateCallListDto,
+  FilterCallListDto,
+  DeleteCallListDto,
+  UpdateCallListDto,
+} from '@workspace/types/dto/callList';
 import { CallListsService } from '../services/callLists.service';
 import { logger } from '../utils/winston.utils';
 import { cb, cbError } from '../common/handler';
@@ -57,6 +62,34 @@ export class CallListsController {
       return cb(HTTPSTATUS.OK, res, callListDetails);
     } catch (error) {
       return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.GET_FAILED, error);
+    }
+  };
+
+  bulkDeleteCallLists = async (req: Request, res: Response) => {
+    logger.info('CallListsController - bulkDeleteCallLists()');
+
+    try {
+      const data: DeleteCallListDto = req.body;
+      const deletedCount = await this.callListsService.bulkDeleteCallLists(data);
+      return cb(HTTPSTATUS.OK, res, { deletedCount });
+    } catch (error: any) {
+      return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.DELETE_FAILED, error);
+    }
+  };
+
+  updateCallList = async (req: Request, res: Response) => {
+    logger.info('CallListsController - updateCallList()');
+
+    try {
+      const id = parseInt(req.params?.id, 10);
+      const callListData: UpdateCallListDto = req.body;
+      const result = await this.callListsService.updateCallList(id, callListData);
+      return cb(HTTPSTATUS.OK, res, result);
+    } catch (error) {
+      if (error.message === ERRORS.CALL_LIST_NOT_FOUND.key) {
+        return cbError(res, HTTPSTATUS.NOT_FOUND, ERRORS.CALL_LIST_NOT_FOUND, null);
+      }
+      return cbError(res, HTTPSTATUS.INTERNAL_SERVER_ERROR, ERRORS.UPDATE_FAILED, error);
     }
   };
 }

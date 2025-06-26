@@ -1,12 +1,13 @@
-import React from 'react';
-import { Button } from '@workspace/ui/components/atoms/button';
+import { PageLayout } from '@client/components/common/pageLayout';
+import { useTranslations } from 'next-intl';
 
-const Page = async () => {
+const Page = () => {
+  const t = useTranslations();
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1>DGLOSS</h1>
-      <Button>Click me</Button>
-    </div>
+    <PageLayout>
+      <h1> DGLOSS</h1>
+    </PageLayout>
   );
 };
 
