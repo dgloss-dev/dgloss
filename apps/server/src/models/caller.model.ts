@@ -117,6 +117,9 @@ export class Caller extends Model {
   @BelongsTo(() => CallList)
   callList: CallList;
 
+  @BelongsTo(() => User, 'personInCharge')
+  personInChargeUser: User;
+
   @HasMany(() => MyCallList)
   myCallLists: MyCallList[];
 

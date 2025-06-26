@@ -16,11 +16,13 @@ import { CALLER_PHONE_SLOT } from '@workspace/types/enums/callerPhone';
 import { CallerPhoneDao } from '../dao/callerPhone.dao';
 import { CallerUtils } from '../utils/caller.utils';
 import { CreationAttributes } from 'sequelize';
+import { AiCallSlotDao } from '../dao/aiCallSlot.dao';
 
 export class CallListsService {
   public static instance: CallListsService;
   private callListsDao: CallListsDao;
   private callerDao: CallerDao;
+  private aiCallSlotDao: AiCallSlotDao;
   private sqlLoader: SQLLoader;
 
   private callerPhoneDao: CallerPhoneDao;
@@ -31,6 +33,7 @@ export class CallListsService {
     this.callerDao = CallerDao.getInstance();
     this.sqlLoader = SQLLoader.getInstance();
     this.callerPhoneDao = CallerPhoneDao.getInstance();
+    this.aiCallSlotDao = AiCallSlotDao.getInstance();
     this.callerUtils = CallerUtils.getInstance();
   }
 
@@ -67,7 +70,7 @@ export class CallListsService {
         return { ...rest, phones };
       });
 
-      const aiCallSlots = callListData.callTimeSlots?.map((slot) => ({
+      const aiCallSlots = callListData.aiCallSlots?.map((slot) => ({
         startTime: new Date(slot.startTime),
         endTime: new Date(slot.endTime),
       }));
@@ -104,6 +107,16 @@ export class CallListsService {
     }
   }
 
+  public async getCallListDetails(id: number): Promise<CallList | null> {
+    logger.info('CallListsService - getCallListDetails()');
+    try {
+      const callListDetails = await this.callListsDao.getCallListDetails(id);
+      return callListDetails;
+    } catch (error) {
+      throw ThrowError(error);
+    }
+  }
+
   public async bulkDeleteCallLists(data: DeleteCallListDto): Promise<number> {
     logger.info('CallListsService - bulkDeleteCallLists()');
 
@@ -127,7 +140,7 @@ export class CallListsService {
     const transaction = await sequelize.transaction();
 
     try {
-      const { objectKey } = callListData;
+      const { objectKey, aiCallSlots, ...baseCallListData } = callListData;
       if (objectKey) {
         const records = await this.callerUtils.processCallerCsv(objectKey);
 
@@ -204,8 +217,21 @@ export class CallListsService {
         }
       }
 
-      // finally update the callList
-      const callList = await this.callListsDao.updateCallListById(id, callListData, transaction);
+      const aiCallSlotsToUpdate =
+        aiCallSlots?.map((slot) => ({
+          ...slot,
+          startTime: new Date(slot.startTime),
+          endTime: new Date(slot.endTime),
+          callListId: id,
+        })) || [];
+
+      await this.aiCallSlotDao.upsertAiCallSlots(aiCallSlotsToUpdate, transaction);
+
+      const callList = await this.callListsDao.updateCallListById(
+        id,
+        baseCallListData,
+        transaction,
+      );
 
       await transaction.commit();
 
