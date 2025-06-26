@@ -1,4 +1,5 @@
 import { PageHeader } from '@client/components/common/header';
+import { MODAL_KEY } from '@client/constants/modalKey.constant';
 import { ROUTES } from '@client/constants/routes.constant';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -24,7 +25,7 @@ export const CallListPageHeader = () => {
       <PageHeader
         titleKey="callList"
         buttonLabelKey="add"
-        modalKey="callList"
+        modalKey={MODAL_KEY.CALL_LIST}
         breadcrumbItems={breadcrumbItems}
       />
     </>

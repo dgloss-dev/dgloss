@@ -8,9 +8,15 @@ interface FormModalProps {
   onCancel?: () => void;
   formComponent: React.ReactNode;
   titleKey: string;
+  record?: any;
 }
 
-export const FormModal = ({ modalKey, onCancel, formComponent, titleKey }: FormModalProps) => {
+export const FormModal = ({
+  modalKey,
+  onCancel,
+  formComponent,
+  titleKey,
+}: FormModalProps) => {
   const { openModals, setOpenModalAction } = useAppStore();
   const handleCancel = () => {
     setOpenModalAction(modalKey, false);

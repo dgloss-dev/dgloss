@@ -19,6 +19,8 @@ import { useAppStore } from '@client/store/app.store';
 import { CallListForm } from './callListForm';
 import { DeleteModal } from '@client/components/common/modal/deleteModal';
 import { CallListFilter } from './callListFilter';
+import { MODAL_KEY } from '@client/constants/modalKey.constant';
+import { FormModal } from '@client/components/common/form/formModal';
 
 interface CallListTableProps {
   className?: string;
@@ -38,6 +40,7 @@ export const CallListTable: React.FC<CallListTableProps> = ({
   const { setOpenModalAction } = useAppStore();
   const [selectedRows, setSelectedRows] = useState<ICallList[]>([]);
   const { filterValues, setFilterValues } = useAppStore();
+  const [record, setRecord] = useState<ICallList | undefined>(undefined);
   const columns: ColumnsType<ICallList> = [
     {
       title: callListTexts('table.listId'),
@@ -128,8 +131,8 @@ export const CallListTable: React.FC<CallListTableProps> = ({
   ];
 
   const handleEdit = (record: ICallList) => {
-    // TODO: Implement edit functionality
-    setOpenModalAction('callList', true);
+    setRecord(record);
+    setOpenModalAction(MODAL_KEY.CALL_LIST, true);
   };
 
   const handleTarget = (record: ICallList) => {
@@ -181,12 +184,21 @@ export const CallListTable: React.FC<CallListTableProps> = ({
         setFilters={setFilterValues}
       />
       <DeleteModal
-        onClose={() => setOpenModalAction('deleteModal', false)}
+        onClose={() => setOpenModalAction(MODAL_KEY.DELETE_MODAL, false)}
         onDelete={bulkDeleteCallListsClient}
         deletedIDs={selectedRows?.map((row: any) => Number(row?.id))}
         titleKey="delete_call_list"
         columns={DeleteModalColumns}
         data={selectedRows}
+      />
+      <FormModal
+        modalKey={MODAL_KEY.CALL_LIST}
+        formComponent={<CallListForm record={record} />}
+        titleKey={'call_list_register'}
+        onCancel={() => {
+          setRecord(undefined);
+          setOpenModalAction(MODAL_KEY.CALL_LIST, false);
+        }}
       />
     </div>
   );

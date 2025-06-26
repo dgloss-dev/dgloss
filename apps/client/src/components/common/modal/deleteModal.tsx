@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 import { Table } from '@workspace/ui/components/organisms/table';
 import { ColumnsType } from 'antd/es/table';
+import { MODAL_KEY } from '@client/constants/modalKey.constant';
 
 interface DeleteModalProps {
   onClose: () => void;
@@ -24,13 +25,13 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   const { setOpenModalAction, openModals } = useAppStore();
 
   const handleCancel = () => {
-    setOpenModalAction('deleteModal', false);
+    setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
   };
   const t = useTranslations('common');
   const title = t(`deleteModal.${titleKey}`);
   const handleDelete = async () => {
     await onDelete(deletedIDs);
-    setOpenModalAction('deleteModal', false);
+    setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
   };
 
   return (

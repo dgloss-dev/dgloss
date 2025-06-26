@@ -12,7 +12,7 @@ import { IPagination } from '@workspace/types/dto/common';
 import { useAppStore } from '@client/store/app.store';
 import { Message } from '@workspace/ui/components/atoms/message';
 import { useTranslations } from 'next-intl';
-import { CallListFilter } from '@client/app/call-list/_components/callListFilter';
+import { MODAL_KEY } from '@client/constants/modalKey.constant';
 
 // Generic interface for table data
 interface TableData<T> {
@@ -377,7 +377,7 @@ export const CommonTable = <T extends object>({
           selectedCount={selectedRows?.length || 0}
           onForceLogout={() => {}}
           onDelete={() => {
-            setOpenModalAction('deleteModal', true);
+            setOpenModalAction(MODAL_KEY.DELETE_MODAL, true);
           }}
         />
         {filterComponent && filterComponent}

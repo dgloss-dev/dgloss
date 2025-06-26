@@ -43,6 +43,7 @@ export const FormFooter = (props: formFooterType) => {
         disabled={disabled}
         loading={loading}
         className="!w-full !max-w-[128px]"
+        htmlType="submit"
       />
     </div>
   );
