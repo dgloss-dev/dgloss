@@ -51,6 +51,9 @@ const themeConfig = {
     Checkbox: {
       checkColor: 'var(--color-success)',
       checkBg: 'var(--color-success)',
+      colorPrimary: 'var(--color-success)',
+      colorPrimaryHover: 'var(--color-success)',
+      colorPrimaryActive: 'var(--color-success)',
       checkBorderColor: 'var(--color-success)',
       controlInteractiveSize: 20,
       controlHoverColor: 'var(--color-success)',

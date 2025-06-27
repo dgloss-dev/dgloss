@@ -118,6 +118,7 @@ export const Modal: React.FC<ModalProps> & {
         open={open}
         title={title}
         onCancel={onCancel}
+        onClose={onCancel}
         onOk={onOk}
         centered={centered}
         className={props.className}

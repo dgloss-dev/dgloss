@@ -21,6 +21,7 @@ import { DeleteModal } from '@client/components/common/modal/deleteModal';
 import { CallListFilter } from './callListFilter';
 import { MODAL_KEY } from '@client/constants/modalKey.constant';
 import { FormModal } from '@client/components/common/form/formModal';
+import { useCallListStore } from '@client/store/callListStore';
 
 interface CallListTableProps {
   className?: string;
@@ -34,11 +35,17 @@ export const CallListTable: React.FC<CallListTableProps> = ({
   initialCount,
 }) => {
   const t = useTranslations('common');
-  const [tableData, setTableData] = useState<ICallList[]>([]);
-  const [count, setCount] = useState(0);
+
   const callListTexts = useTranslations('callList');
   const { setOpenModalAction } = useAppStore();
-  const [selectedRows, setSelectedRows] = useState<ICallList[]>([]);
+  const {
+    selectedRows,
+    setSelectedRows,
+    setCallListData,
+    setCallListCount,
+    callListData,
+    callListCount,
+  } = useCallListStore();
   const { filterValues, setFilterValues } = useAppStore();
   const [record, setRecord] = useState<ICallList | undefined>(undefined);
   const columns: ColumnsType<ICallList> = [
@@ -91,7 +98,23 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       width: 150,
       sorter: true,
       render: (status: CALL_STATUS) => (
-        <Tag type={getCallStatusType(status)}>{getCallStatusLabel(status, callListTexts)}</Tag>
+        <Tag
+          icon={
+            <ImageIcon
+              path={
+                status === CALL_STATUS.ON_CALL
+                  ? 'status/callActive.svg'
+                  : status === CALL_STATUS.CALL_SUSPENDED
+                    ? 'status/callPaused.svg'
+                    : 'status/callInactive.svg'
+              }
+              size={12}
+            />
+          }
+          type={getCallStatusType(status)}
+        >
+          {getCallStatusLabel(status, callListTexts)}
+        </Tag>
       ),
     },
     {
@@ -110,7 +133,7 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       width: 245,
       fixed: 'right',
       render: (_, record: ICallList) => (
-        <div className="flex items-center justify-center gap-2 !w-full !z-[80]">
+        <div className="flex items-center justify-center gap-2 !w-full">
           <Button
             variant="primary-outline"
             size="small"
@@ -144,24 +167,21 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       title: callListTexts('table.listId'),
       dataIndex: 'id',
       key: 'id',
-      width: 128,
     },
     {
       title: callListTexts('table.callListName'),
       dataIndex: 'name',
       key: 'name',
-      width: 453,
-      sorter: true,
     },
   ];
 
   return (
     <div className={className}>
       <CommonTable<ICallList>
-        tableData={tableData}
-        count={count}
-        setTableData={setTableData}
-        setTableCount={setCount}
+        tableData={callListData}
+        count={callListCount}
+        setTableData={setCallListData}
+        setTableCount={setCallListCount}
         onFetch={getAllCallListsClient}
         columns={columns}
         rowKey="id"
@@ -170,10 +190,6 @@ export const CallListTable: React.FC<CallListTableProps> = ({
         initialData={initialData}
         defaultPageSize={10}
         pageSizeOptions={[10, 20, 50, 100]}
-        onRow={(record: ICallList) => ({
-          onClick: () => handleEdit(record),
-          className: 'cursor-pointer',
-        })}
         scroll={{ x: 1200 }}
         updateUrlOnChange={true}
         urlParamPrefix="callList_"
@@ -190,6 +206,7 @@ export const CallListTable: React.FC<CallListTableProps> = ({
         titleKey="delete_call_list"
         columns={DeleteModalColumns}
         data={selectedRows}
+        setSelectedRows={setSelectedRows}
       />
       <FormModal
         modalKey={MODAL_KEY.CALL_LIST}
@@ -197,7 +214,6 @@ export const CallListTable: React.FC<CallListTableProps> = ({
         titleKey={'call_list_register'}
         onCancel={() => {
           setRecord(undefined);
-          setOpenModalAction(MODAL_KEY.CALL_LIST, false);
         }}
       />
     </div>

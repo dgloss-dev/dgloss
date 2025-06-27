@@ -5,6 +5,7 @@ import React from 'react';
 import { Table } from '@workspace/ui/components/organisms/table';
 import { ColumnsType } from 'antd/es/table';
 import { MODAL_KEY } from '@client/constants/modalKey.constant';
+import { ShowNotification } from '../notification/showNotification';
 
 interface DeleteModalProps {
   onClose: () => void;
@@ -13,6 +14,7 @@ interface DeleteModalProps {
   titleKey: string;
   columns: ColumnsType<any>;
   data: any[];
+  setSelectedRows: (selectedRows: any[]) => void;
 }
 
 export const DeleteModal: React.FC<DeleteModalProps> = ({
@@ -21,8 +23,16 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   titleKey,
   columns,
   data,
+  setSelectedRows,
 }) => {
-  const { setOpenModalAction, openModals } = useAppStore();
+  const {
+    setOpenModalAction,
+    openModals,
+    setRefreshAction,
+    refresh,
+    setIsLoadingAction,
+    isLoading,
+  } = useAppStore();
 
   const handleCancel = () => {
     setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
@@ -30,8 +40,25 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   const t = useTranslations('common');
   const title = t(`deleteModal.${titleKey}`);
   const handleDelete = async () => {
-    await onDelete(deletedIDs);
-    setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
+    try {
+      setIsLoadingAction(true);
+      await onDelete(deletedIDs);
+      setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
+      setSelectedRows([]);
+      setRefreshAction(!refresh);
+      ShowNotification({
+        titleKey: 'call_list_deleted',
+        descriptionKey: 'call_list_deleted_description',
+      });
+    } catch (error) {
+      console.error('Error deleting data:', error);
+      ShowNotification({
+        titleKey: 'call_list_delete_error',
+        descriptionKey: 'call_list_delete_error_description',
+      });
+    } finally {
+      setIsLoadingAction(false);
+    }
   };
 
   return (
@@ -42,6 +69,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
       title={title}
       width="40%"
       okText={t('buttons.delete')}
+      loading={isLoading}
     >
       <p className="!pb-4">{t(`deleteModal.${titleKey}_description`)}</p>
       <Table
@@ -51,7 +79,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
         columns={columns}
         dataSource={data}
         rowKey="id"
-        className="!custom-table"
+        className="delete_table"
       />
     </Modal>
   );

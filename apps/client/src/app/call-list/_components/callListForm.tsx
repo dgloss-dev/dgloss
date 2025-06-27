@@ -23,6 +23,36 @@ import { MODAL_KEY } from '@client/constants/modalKey.constant';
 import { useAppStore } from '@client/store/app.store';
 import { ROUTES } from '@client/constants/routes.constant';
 import { ICallList } from '@workspace/types/interfaces/callList';
+import {
+  BasicInput,
+  BasicNumberInput,
+  TextAreaInput,
+  ToggleSwitch,
+} from '@client/components/common/form/commonFormItems';
+import { uploadToS3 } from '@client/services/utils.service';
+import { ShowNotification } from '@client/components/common/notification/showNotification';
+
+interface OperatorInputProps {
+  idx: number;
+  value: number;
+  onChange: (idx: number, value: number) => void;
+  onRemove: (idx: number) => void;
+  canRemove: boolean;
+  options: { label: string; value: number }[];
+}
+
+interface TimeSlot {
+  startTime: string;
+  endTime: string;
+}
+
+interface TimeSlotInputProps {
+  idx: number;
+  slot: TimeSlot;
+  onChange: (idx: number, key: keyof TimeSlot, value: string) => void;
+  onRemove: (idx: number) => void;
+  canRemove: boolean;
+}
 
 const operatorOptions = [
   { label: '山田太郎', value: 1 },
@@ -30,27 +60,27 @@ const operatorOptions = [
 ];
 
 const weekdayOptions = [
-  { label: '月', value: 'mon' },
-  { label: '火', value: 'tue' },
-  { label: '水', value: 'wed' },
-  { label: '木', value: 'thu' },
-  { label: '金', value: 'fri' },
-  { label: '土', value: 'sat' },
-  { label: '日', value: 'sun' },
+  { id: 'mon', label: '月', value: 'mon' },
+  { id: 'tue', label: '火', value: 'tue' },
+  { id: 'wed', label: '水', value: 'wed' },
+  { id: 'thu', label: '木', value: 'thu' },
+  { id: 'fri', label: '金', value: 'fri' },
+  { id: 'sat', label: '土', value: 'sat' },
+  { id: 'sun', label: '日', value: 'sun' },
 ];
 
 export const CallListForm = ({ record }: { record?: any }) => {
   const [form] = useForm();
   const t = useTranslations('callList');
-  const { setOpenModalAction } = useAppStore();
-
+  const { setOpenModalAction, setRefreshAction, refresh } = useAppStore();
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [fileUploadLoading, setFileUploadLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const [formState, setFormState] = useState({
     timeSlots: [{ startTime: '09:00', endTime: '18:00' }],
     voiceDataFile: null as File | null,
     operators: [operatorOptions[0]?.value ?? 0],
-    selectedWeekdays: [] as string[],
+    weekdays: [] as string[],
   });
 
   const updateFormState = <K extends keyof typeof formState>(
@@ -62,6 +92,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
 
   useEffect(() => {
     if (record) {
+      const weekdays = record.weekdays || [];
       form.setFieldsValue({
         id: record.id,
         name: record.name,
@@ -71,9 +102,12 @@ export const CallListForm = ({ record }: { record?: any }) => {
         aiState: record.aiState,
         isCallPossible: record.isCallPossible,
         timeSlots: record.aiCallSlots,
+        weekdays: Array.isArray(weekdays) ? weekdays : [],
       });
+    } else {
+      clearAllValues();
     }
-  }, [record]);
+  }, [record, form]);
 
   const handleTimeSlot = (type: 'add' | 'remove', idx?: number) => {
     if (type === 'add') {
@@ -95,12 +129,6 @@ export const CallListForm = ({ record }: { record?: any }) => {
     updateFormState('timeSlots', updatedSlots);
   };
 
-  const handleVoiceDataUpload = (info: any) => {
-    if (info.file.status === 'done' || info.file.status === 'uploading') {
-      updateFormState('voiceDataFile', info.file.originFileObj);
-    }
-  };
-
   const handleOperatorChange = (idx: number, value: number) => {
     const updated = [...formState.operators];
     updated[idx] = value;
@@ -118,8 +146,9 @@ export const CallListForm = ({ record }: { record?: any }) => {
     }
   };
 
-  const handleWeekdaysChange = (checkedValues: string[]) => {
-    updateFormState('selectedWeekdays', checkedValues);
+  const handleWeekdaysChange = (selectedWeekdays: string[]) => {
+    updateFormState('weekdays', selectedWeekdays);
+    form.setFieldValue('weekdays', selectedWeekdays);
   };
 
   const clearAllValues = () => {
@@ -128,11 +157,18 @@ export const CallListForm = ({ record }: { record?: any }) => {
       timeSlots: [{ startTime: '09:00', endTime: '18:00' }],
       voiceDataFile: null as File | null,
       operators: [operatorOptions[0]?.value ?? 0],
-      selectedWeekdays: [] as string[],
+      weekdays: [],
     });
   };
 
   const handleSubmit = async (values: CreateCallListDto) => {
+    let objectKey = '';
+    if (file) {
+      const filedata = file;
+      const fileName = `${Date.now()}.csv`;
+      objectKey = fileName;
+      await uploadToS3(filedata, fileName, 'call-list-callers/');
+    }
     const payload: CreateCallListDto = {
       name: values.name,
       createdBy: values.createdBy || 1,
@@ -144,7 +180,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
       isCallPossible: values.isCallPossible,
       description: values.description,
       remarks: values.remarks,
-      objectKey: values.objectKey,
+      objectKey: objectKey,
       aiCallSlots: formState.timeSlots.map((slot) => ({
         startTime: slot.startTime,
         endTime: slot.endTime,
@@ -153,11 +189,28 @@ export const CallListForm = ({ record }: { record?: any }) => {
 
     try {
       setLoading(true);
-      await createCallListClient(payload);
+      if (record) {
+        await updateCallListClient(record.id, payload);
+        ShowNotification({
+          titleKey: 'call_list_updated',
+          descriptionKey: 'call_list_updated_description',
+        });
+      } else {
+        await createCallListClient(payload);
+        ShowNotification({
+          titleKey: 'call_list_created',
+          descriptionKey: 'call_list_created_description',
+        }); 
+      }
       setOpenModalAction(MODAL_KEY.CALL_LIST, false);
       clearAllValues();
+      setRefreshAction(!refresh);
     } catch (error) {
       console.error('Error submitting call list:', error);
+      ShowNotification({
+        titleKey: 'call_list_error',
+        descriptionKey: 'call_list_submit_error_description',
+      });
     } finally {
       setLoading(false);
     }
@@ -169,109 +222,182 @@ export const CallListForm = ({ record }: { record?: any }) => {
     });
   };
 
+  const OperatorInput: React.FC<OperatorInputProps> = ({
+    idx,
+    value,
+    onChange,
+    onRemove,
+    canRemove,
+    options,
+  }) => (
+    <div className="flex items-center mb-2">
+      <Select
+        id={`operator-select-${idx}`}
+        options={options}
+        value={value}
+        onChange={(v) => onChange(idx, v as number)}
+        placeholder={t('form.operatorsPlaceholder')}
+        className="min-w-[200px]"
+      />
+      {canRemove && (
+        <div className="cursor-pointer" onClick={() => onRemove(idx)}>
+          <ImageIcon path="actions/remove.svg" className="!ml-2" />
+        </div>
+      )}
+    </div>
+  );
+
+  const TimeSlotInput: React.FC<TimeSlotInputProps> = ({
+    idx,
+    slot,
+    onChange,
+    onRemove,
+    canRemove,
+  }) => (
+    <div className="flex items-center gap-2 mb-2">
+      <Input
+        type="time"
+        className="w-[100px]"
+        value={slot.startTime}
+        onChange={(e) => onChange(idx, 'startTime', e.target.value)}
+      />
+      <span>〜</span>
+      <Input
+        type="time"
+        className="w-[100px]"
+        value={slot.endTime}
+        onChange={(e) => onChange(idx, 'endTime', e.target.value)}
+      />
+      {canRemove && (
+        <div className="cursor-pointer" onClick={() => onRemove(idx)}>
+          <ImageIcon path="actions/remove.svg" className="!ml-2" />
+        </div>
+      )}
+    </div>
+  );
+
+  const handleFileUpload = async (info: any) => {
+    try {
+      setFileUploadLoading(true);
+      const file = info.file.originFileObj;
+      setFile(file);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFileUploadLoading(false);
+    }
+  };
+
   return (
     <>
-      <Form layout="vertical" form={form} className="flex items-start w-full custom_ant_form">
-        <div className="w-full flex flex-col h-full">
-          <FormItem layout="horizontal" name="id" label={t('form.listId')}>
-            <Input disabled placeholder={t('form.listIdPlaceholder')} />
-          </FormItem>
-          <FormItem name="name" label={t('form.listName')} layout="horizontal">
-            <Input placeholder={t('form.listNamePlaceholder')} />
-          </FormItem>
-          <FormItem layout="horizontal" name="objectKey" label={t('form.voiceData')}>
-            <Upload accept=".csv" showUploadList={false} onChange={handleVoiceDataUpload}>
+      <Form
+        layout="vertical"
+        form={form}
+        className="flex items-start w-full custom_ant_form !h-full"
+      >
+        {/* Left column */}
+        <div className="w-full flex flex-col !h-">
+          <BasicInput
+            label={t('form.listId')}
+            name="id"
+            placeholder={t('form.listIdPlaceholder')}
+            disabled
+          />
+          <BasicInput
+            label={t('form.listName')}
+            name="name"
+            placeholder={t('form.listNamePlaceholder')}
+          />
+
+          <FormItem name="objectKey" label={t('form.voiceData')} layout="horizontal">
+            <Upload accept=".csv" showUploadList={false} onChange={handleFileUpload}>
               <Button icon={<ImageIcon path="actions/upload.svg" />} variant="primary-outline">
                 {t('form.fileUpload')}
               </Button>
             </Upload>
           </FormItem>
-          <FormItem layout="horizontal" label={t('form.operators')}>
+
+          <FormItem name="operators" label={t('form.operators')} layout="horizontal">
             {formState.operators.map((op, idx) => (
-              <div key={idx} className="flex items-center mb-2">
-                <Select
-                  id={`operator-select-${idx}`}
-                  options={operatorOptions}
-                  value={op}
-                  onChange={(value) => handleOperatorChange(idx, value as number)}
-                  placeholder={t('form.operatorsPlaceholder')}
-                  className="min-w-[200px]"
-                />
-                {formState.operators.length > 1 && idx !== 0 && (
-                  <div className="cursor-pointer" onClick={() => handleOperator('remove', idx)}>
-                    <ImageIcon path="actions/remove.svg" className="!ml-2" />
-                  </div>
-                )}
-              </div>
+              <OperatorInput
+                key={idx}
+                idx={idx}
+                value={op}
+                onChange={handleOperatorChange}
+                onRemove={() => handleOperator('remove', idx)}
+                canRemove={formState.operators.length > 1 && idx !== 0}
+                options={operatorOptions}
+              />
             ))}
             <Button variant="primary-outline" onClick={() => handleOperator('add')}>
               {t('form.addOperator')}
             </Button>
           </FormItem>
-          <FormItem layout="horizontal" name="noAi" label={t('form.aiOperationCount')}>
-            <Input
-              className="!max-w-20"
-              type="number"
-              min={0}
-              placeholder={t('form.aiOperationCountPlaceholder')}
-            />
-          </FormItem>
-          <FormItem
+
+          <BasicNumberInput
+            name="noAi"
+            label={t('form.aiOperationCount')}
+            placeholder={t('form.aiOperationCountPlaceholder')}
+            className="!max-w-20"
+          />
+
+          <ToggleSwitch
             name="aiState"
             label={t('form.aiCallUsage')}
-            valuePropName="checked"
-            layout="horizontal"
-          >
-            <Switch onChange={(checked) => form.setFieldValue('aiState', checked)} />
-          </FormItem>
-          <FormItem
+            onChange={(checked) => form.setFieldValue('aiState', checked)}
+          />
+
+          <ToggleSwitch
             name="isCallPossible"
             label={t('form.aiCallStart')}
-            valuePropName="checked"
-            layout="horizontal"
-          >
-            <Switch onChange={(checked) => form.setFieldValue('isCallPossible', checked)} />
-          </FormItem>
+            onChange={(checked) => form.setFieldValue('isCallPossible', checked)}
+          />
+
           <FormItem name="timeSlots" label={t('form.aiCallTimeSlots')} layout="horizontal">
             {formState.timeSlots.map((slot, idx) => (
-              <div key={idx} className="flex items-center gap-2 mb-2">
-                <Input
-                  type="time"
-                  className="w-[100px]"
-                  value={slot.startTime}
-                  onChange={(e) => handleTimeChange(idx, 'startTime', e.target.value)}
-                />
-                <span>〜</span>
-                <Input
-                  type="time"
-                  className="w-[100px]"
-                  value={slot.endTime}
-                  onChange={(e) => handleTimeChange(idx, 'endTime', e.target.value)}
-                />
-                {formState.timeSlots.length > 1 && idx !== 0 && (
-                  <div className="cursor-pointer" onClick={() => handleTimeSlot('remove', idx)}>
-                    <ImageIcon path="actions/remove.svg" className="!ml-2" />
-                  </div>
-                )}
-              </div>
+              <TimeSlotInput
+                key={idx}
+                idx={idx}
+                slot={slot}
+                onChange={handleTimeChange}
+                onRemove={() => handleTimeSlot('remove', idx)}
+                canRemove={formState.timeSlots.length > 1 && idx !== 0}
+              />
             ))}
             <Button variant="primary-outline" onClick={() => handleTimeSlot('add')} size="small">
               {t('form.addTimeSlot')}
             </Button>
           </FormItem>
-          <FormItem layout="horizontal" name="weekdays" label={t('form.aiCallWeekdays')}>
-            <Checkbox type="group" options={weekdayOptions} onChange={handleWeekdaysChange} />
+
+          <FormItem label={t('form.aiCallTimeSlots')} layout="horizontal">
+            <Checkbox
+              type="group"
+              options={weekdayOptions}
+              value={formState.weekdays}
+              onChange={handleWeekdaysChange}
+              id="weekdays"
+            />
           </FormItem>
         </div>
-        <div className="w-full flex flex-col h-full">
-          <FormItem layout="horizontal" name="description" label={t('form.description')}>
-            <TextArea rows={11} placeholder={t('form.descriptionPlaceholder')} />
-          </FormItem>
-          <FormItem name="remarks" layout="horizontal" label={t('form.remarks')}>
-            <TextArea rows={10} placeholder={t('form.remarksPlaceholder')} />
-          </FormItem>
+
+        {/* Right column */}
+        <div className="w-full flex flex-col ">
+          <TextAreaInput
+            name="description"
+            label={t('form.description')}
+            rows={10}
+            placeholder={t('form.descriptionPlaceholder')}
+          />
+          <TextAreaInput
+            name="remarks"
+            label={t('form.remarks')}
+            rows={12}
+            placeholder={t('form.remarksPlaceholder')}
+            className="!h-full"
+          />
         </div>
       </Form>
+
       <FormFooter
         onCancel={() => {
           setOpenModalAction(MODAL_KEY.CALL_LIST, false);

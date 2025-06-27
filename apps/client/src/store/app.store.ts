@@ -7,18 +7,21 @@ type State = {
     [key: string]: boolean;
   };
   filterValues: Record<string, string | number>;
+  refresh: boolean;
 };
 type Action = {
   setIsLoadingAction: (isLoading: boolean) => void;
   resetAction: () => void;
   setOpenModalAction: (modalName: string, isOpen: boolean) => void;
   setFilterValues: (filterValues: Record<string, string | number>) => void;
+  setRefreshAction: (refresh: boolean) => void;
 };
 const initialState: State = {
   isLoading: true,
   loaderCount: 0,
   openModals: {},
   filterValues: {},
+  refresh: false,
 };
 
 export const useAppStore = create<State & Action>((set) => ({
@@ -43,5 +46,6 @@ export const useAppStore = create<State & Action>((set) => ({
         ...filterValues,
       },
     })),
+  setRefreshAction: (refresh: boolean) => set((state: State) => ({ refresh })),
   clearFilterValues: () => set((state: State) => ({ filterValues: {} })),
 }));

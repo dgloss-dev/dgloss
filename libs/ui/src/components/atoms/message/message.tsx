@@ -2,13 +2,10 @@
 
 import { message } from 'antd';
 import { MessageType } from 'antd/es/message/interface';
-import { IoIosInformationCircle } from 'react-icons/io';
-import { IoWarning } from 'react-icons/io5';
-import { MdClose } from 'react-icons/md';
 import { Icon, ImageIcon } from '../icon';
 import { iconMap } from '@workspace/ui/icons/iconMap';
 
-type CustomMessageType = 'normal' | 'information' | 'warning';
+export type CustomMessageType = 'normal' | 'information' | 'warning';
 
 interface MessageOptions {
   title: string;
@@ -87,3 +84,5 @@ export const Message = (type: CustomMessageType, options: MessageOptions): Messa
     className: 'custom-message-container',
   });
 };
+
+export { MessageType };

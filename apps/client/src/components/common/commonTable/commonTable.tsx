@@ -106,7 +106,7 @@ interface CommonTableProps<T extends object> {
   filterComponent?: React.ReactNode;
   filters?: Record<string, any>;
   setFilters?: (filters: Record<string, any>) => void;
-  }
+}
 
 export const CommonTable = <T extends object>({
   // Data and state management
@@ -178,7 +178,12 @@ export const CommonTable = <T extends object>({
   const t = useTranslations('common');
   // Store hooks
 
-  const { isLoading: globalLoading, setIsLoadingAction, setOpenModalAction } = useAppStore();
+  const {
+    isLoading: globalLoading,
+    setIsLoadingAction,
+    setOpenModalAction,
+    refresh,
+  } = useAppStore();
 
   // Local state
   const [pagination, setPagination] = useState({
@@ -194,8 +199,6 @@ export const CommonTable = <T extends object>({
     field: searchParams.get('sortBy') || defaultSortField,
     order: parseInt(searchParams.get('order') || defaultSortOrder.toString(), 10) as 1 | -1,
   });
-
- 
 
   // Computed loading state
   const isLoading = externalLoading !== undefined ? externalLoading : globalLoading;
@@ -261,7 +264,7 @@ export const CommonTable = <T extends object>({
     } else {
       fetchData(pagination.current, pagination.pageSize, sortConfig.field, sortConfig.order);
     }
-  }, [filters]);
+  }, [refresh]);
 
   // Update URL when pagination or sorting changes
   const updateUrl = useCallback(

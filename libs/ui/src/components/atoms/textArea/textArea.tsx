@@ -31,14 +31,24 @@ export const TextArea: React.FC<TextAreaProps> = (props) => {
     <ConfigProvider
       theme={{
         token: {
-          colorBgContainer: '#f4f4f7',
+          lineType: 'solid',
+          colorBgContainer: 'var(--color-primary-light)',
+          controlOutlineWidth: 1,
+          borderRadius: 6,
+          colorBorder: 'var(--color-dust)',
         },
         components: {
           Input: {
-            activeBg: '#f4f4f7',
-            activeBorderColor: '#1677ff',
-            hoverBg: '#f4f4f7',
-            hoverBorderColor: '#4096ff',
+            paddingBlock: 5,
+            paddingInline: 11,
+            activeBg: 'var(--color-primary-light)',
+            activeBorderColor: 'var(--color-dust)',
+            hoverBg: 'var(--color-primary-light)',
+            hoverBorderColor: 'var(--color-dust)',
+            controlHeight: 32,
+            controlHeightSM: 32,
+            controlHeightLG: 32,
+            controlHeightXS: 32,
           },
         },
       }}

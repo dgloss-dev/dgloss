@@ -25,6 +25,7 @@ export interface InputProps {
   type?: string;
   errorMessage?: string;
   min?: number;
+  max?: number;
   theme?: {
     token?: {
       [key: string]: any;
@@ -100,6 +101,7 @@ export const Input: React.FC<InputProps> = (props) => {
           type={props.type}
           inputMode={props.inputMode}
           min={props.min}
+          max={props.max}
         />
 
         {props.suffixLabel && (

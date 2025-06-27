@@ -4,6 +4,7 @@ import { Input } from '@workspace/ui/components/atoms/input';
 import { Select } from '@workspace/ui/components/atoms/select';
 import { Button } from '@workspace/ui/components/atoms/button';
 import { ImageIcon } from '@workspace/ui/components/atoms/icon';
+import { useAppStore } from '@client/store/app.store';
 
 // Filter type definitions
 export type FilterType = 'text' | 'select';
@@ -45,12 +46,15 @@ export const FilterList: React.FC<FilterListProps> = ({
   disabled = false,
 }) => {
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string | number>>({});
+  const { setRefreshAction, refresh } = useAppStore();
+  
   const handleChange = (key: string, value: string | number) => {
     setSelectedFilters({ ...selectedFilters, [key]: value });
   };
 
   const handleSearch = () => {
     setValues(selectedFilters);
+    setRefreshAction(!refresh);
   };
   return (
     <>

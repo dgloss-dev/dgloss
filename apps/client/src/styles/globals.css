@@ -183,3 +183,7 @@ button.ant-modal-close:hover {
   color: var(--color-base-80) !important;
 }
 
+
+.delete_table .ant-table-cell:not(.ant-table-thead .ant-table-cell) {
+  background-color: var(--color-primary-light) !important;
+}
