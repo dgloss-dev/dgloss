@@ -5,6 +5,7 @@ import { Select } from '@workspace/ui/components/atoms/select';
 import { Button } from '@workspace/ui/components/atoms/button';
 import { ImageIcon } from '@workspace/ui/components/atoms/icon';
 import { useAppStore } from '@client/store/app.store';
+import { useTranslations } from 'next-intl';
 
 // Filter type definitions
 export type FilterType = 'text' | 'select';
@@ -47,7 +48,8 @@ export const FilterList: React.FC<FilterListProps> = ({
 }) => {
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string | number>>({});
   const { setRefreshAction, refresh } = useAppStore();
-  
+  const t = useTranslations('common');
+
   const handleChange = (key: string, value: string | number) => {
     setSelectedFilters({ ...selectedFilters, [key]: value });
   };
@@ -68,7 +70,7 @@ export const FilterList: React.FC<FilterListProps> = ({
                 onChange={(e) => handleChange(filter.key, e.target.value)}
                 placeholder={filter.placeholder}
                 disabled={disabled}
-                label={filter.label}
+                label={t(`filters.${filter.label}`)}
               />
             ) : filter.type === 'select' && filter.options ? (
               <Select
@@ -87,7 +89,7 @@ export const FilterList: React.FC<FilterListProps> = ({
                 options={filter.options}
                 placeholder={filter.placeholder || '選択してください'}
                 disabled={disabled}
-                label={filter.label}
+                label={t(`filters.${filter.label}`)}
                 allowClear
               />
             ) : null}

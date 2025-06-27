@@ -5,7 +5,7 @@ import React from 'react';
 import { Table } from '@workspace/ui/components/organisms/table';
 import { ColumnsType } from 'antd/es/table';
 import { MODAL_KEY } from '@client/constants/modalKey.constant';
-import { ShowNotification } from '../notification/showNotification';
+import { useMessage } from '@workspace/ui/components/atoms/message';
 
 interface DeleteModalProps {
   onClose: () => void;
@@ -39,6 +39,8 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   };
   const t = useTranslations('common');
   const title = t(`deleteModal.${titleKey}`);
+
+  const message = useMessage();
   const handleDelete = async () => {
     try {
       setIsLoadingAction(true);
@@ -46,16 +48,10 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
       setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
       setSelectedRows([]);
       setRefreshAction(!refresh);
-      ShowNotification({
-        titleKey: 'call_list_deleted',
-        descriptionKey: 'call_list_deleted_description',
-      });
+      message.success(t(`descriptions.${titleKey}_description`));
     } catch (error) {
       console.error('Error deleting data:', error);
-      ShowNotification({
-        titleKey: 'call_list_delete_error',
-        descriptionKey: 'call_list_delete_error_description',
-      });
+      message.error(t(`descriptions.${titleKey}_error_description`));
     } finally {
       setIsLoadingAction(false);
     }
@@ -71,7 +67,9 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
       okText={t('buttons.delete')}
       loading={isLoading}
     >
-      <p className="!pb-4">{t(`deleteModal.${titleKey}_description`)}</p>
+      <p className="!pb-4">
+        {t(`deleteModal.selected`)} {deletedIDs?.length} {t(`deleteModal.confirm`)}
+      </p>
       <Table
         scroll={{ x: '100%', y: 'calc(100vh - 300px)' }}
         pagination={false}

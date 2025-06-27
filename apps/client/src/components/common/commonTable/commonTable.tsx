@@ -10,24 +10,20 @@ import {
 } from '@workspace/ui/components/organisms/table';
 import { IPagination } from '@workspace/types/dto/common';
 import { useAppStore } from '@client/store/app.store';
-import { Message } from '@workspace/ui/components/atoms/message';
 import { useTranslations } from 'next-intl';
 import { MODAL_KEY } from '@client/constants/modalKey.constant';
+import { useMessage } from '@workspace/ui/components/atoms/message';
 
-// Generic interface for table data
 interface TableData<T> {
   rows: T[];
   count: number;
 }
 
-// Generic interface for filter parameters
 interface FilterParams extends IPagination {
   [key: string]: any;
 }
 
-// Props interface for the CommonTable component
 interface CommonTableProps<T extends object> {
-  // Data and state management
   initialData?: T[];
   initialCount?: number;
   tableData: T[];
@@ -35,14 +31,11 @@ interface CommonTableProps<T extends object> {
   setTableData: (data: T[]) => void;
   setTableCount: (count: number) => void;
 
-  // Fetch function
   onFetch: (params: FilterParams) => Promise<TableData<T>>;
 
-  // Table configuration
   columns: ColumnsType<T>;
   rowKey: string | ((record: T) => string);
 
-  // Optional props
   className?: string;
   rowClassName?: string | ((record: T, index: number) => string);
   loading?: boolean;
@@ -54,25 +47,15 @@ interface CommonTableProps<T extends object> {
   rowHoverable?: boolean;
   highlightLastRow?: boolean;
   showSorterTooltip?: boolean;
-
-  // Pagination
   defaultPageSize?: number;
   pageSizeOptions?: number[];
-
-  // Sorting
   defaultSortField?: string;
   defaultSortOrder?: 1 | -1;
-
-  // Row selection
   rowSelectionType?: 'checkbox' | 'radio';
   onRowSelect?: (selectedRowKeys: React.Key[], selectedRows: T[]) => void;
   selectedRows?: T[];
   setSelectedRows?: (selectedRows: T[]) => void;
-
-  // Row actions
   onRow?: any;
-
-  // Expandable rows
   expandable?: {
     childrenColumnName?: string;
     indentSize?: number;
@@ -83,48 +66,31 @@ interface CommonTableProps<T extends object> {
     onExpand?: (expanded: boolean, record: T) => void;
     onExpandedRowsChange?: (expandedKeys: readonly React.Key[]) => void;
   };
-
-  // Scroll configuration
   scroll?: {
     scrollToFirstRowOnChange?: boolean;
     x?: true | number | string;
     y?: number | string;
   };
-
-  // Header and footer
   header?: React.ReactNode;
   footer?: React.ReactNode;
-
-  // Error handling
   onError?: (error: any) => void;
-
-  // URL management
   updateUrlOnChange?: boolean;
   urlParamPrefix?: string;
-
-  // Filter component
   filterComponent?: React.ReactNode;
   filters?: Record<string, any>;
   setFilters?: (filters: Record<string, any>) => void;
 }
 
 export const CommonTable = <T extends object>({
-  // Data and state management
   initialData = [],
   initialCount = 0,
   tableData,
   count,
   setTableData,
   setTableCount,
-
-  // Fetch function
   onFetch,
-
-  // Table configuration
   columns,
   rowKey,
-
-  // Optional props
   className = '',
   rowClassName,
   loading: externalLoading,
@@ -136,35 +102,17 @@ export const CommonTable = <T extends object>({
   rowHoverable = true,
   highlightLastRow = false,
   showSorterTooltip = true,
-
-  // Pagination
   defaultPageSize = 10,
   pageSizeOptions = [10, 20, 50, 100],
-
-  // Sorting
   defaultSortField = 'createdAt',
   defaultSortOrder = -1,
-
-  // Row selection
   rowSelectionType,
-
-  // Row actions
   onRow,
-
-  // Expandable rows
   expandable,
-
-  // Scroll configuration
   scroll = { x: 'max-content' },
-
-  // Header and footer
   header,
   footer,
-
-  // Error handling
   onError,
-
-  // URL management
   updateUrlOnChange = true,
   urlParamPrefix = '',
   selectedRows,
@@ -176,7 +124,6 @@ export const CommonTable = <T extends object>({
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('common');
-  // Store hooks
 
   const {
     isLoading: globalLoading,
@@ -185,12 +132,12 @@ export const CommonTable = <T extends object>({
     refresh,
   } = useAppStore();
 
-  // Local state
   const [pagination, setPagination] = useState({
     current: parseInt(searchParams.get('page') || '1', 10),
     pageSize: parseInt(searchParams.get('pageSize') || defaultPageSize.toString(), 10),
     total: initialCount,
   });
+  const message = useMessage();
 
   const [sortConfig, setSortConfig] = useState<{
     field: string;
@@ -200,10 +147,8 @@ export const CommonTable = <T extends object>({
     order: parseInt(searchParams.get('order') || defaultSortOrder.toString(), 10) as 1 | -1,
   });
 
-  // Computed loading state
   const isLoading = externalLoading !== undefined ? externalLoading : globalLoading;
 
-  // Fetch data function
   const fetchData = useCallback(
     async (
       page: number,
@@ -235,14 +180,7 @@ export const CommonTable = <T extends object>({
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);
-
-        // Show error notification
-        Message('warning', {
-          title: "t('errors.fetch_failed')",
-          description: "t('errors.fetch_failed_description')",
-        });
-
-        // Call custom error handler if provided
+        message.error(t('descriptions.fetch_failed'));
         if (onError) {
           onError(error);
         }
@@ -266,14 +204,12 @@ export const CommonTable = <T extends object>({
     }
   }, [refresh]);
 
-  // Update URL when pagination or sorting changes
   const updateUrl = useCallback(
     (newPagination: any, newSortConfig?: any) => {
       if (!updateUrlOnChange) return;
 
       const params = new URLSearchParams(searchParams);
 
-      // Update pagination params
       if (newPagination) {
         params.set(`${urlParamPrefix}page`, newPagination.current?.toString() || '1');
         params.set(
@@ -282,7 +218,6 @@ export const CommonTable = <T extends object>({
         );
       }
 
-      // Update sorting params
       if (newSortConfig) {
         params.set(`${urlParamPrefix}sortBy`, newSortConfig.field);
         params.set(`${urlParamPrefix}order`, newSortConfig.order.toString());
@@ -294,7 +229,6 @@ export const CommonTable = <T extends object>({
     [updateUrlOnChange, searchParams, urlParamPrefix, defaultPageSize, router],
   );
 
-  // Handle table change (pagination, sorting, filtering)
   const handleTableChange = (
     newPagination: any,
     newFilters: any,

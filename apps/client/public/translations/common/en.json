@@ -53,18 +53,27 @@
   },
   "deleteModal": {
     "delete_call_list": "Delete Call List",
-    "delete_call_list_description": "Are you sure you want to delete the selected 000 listings?"
+    "selected": "selected",
+    "confirm": "items you need to delete ? "
   },
   "titles": {
     "call_list_created": "Call List Created",
     "call_list_updated": "Call List Updated",
-    "call_list_deleted": "Call List Deleted"
+    "call_list_deleted": "Call List Deleted",
+    "call_list_delete_error": "Delete Error"
   },
   "descriptions": {
     "call_list_created_description": "Call List Created Successfully",
     "call_list_updated_description": "Call List Updated Successfully",
     "call_list_deleted_description": "Call List Deleted Successfully",
     "call_list_submit_error_description": "Call List Submission failed",
-    "call_list_delete_error_description": "Call List Deletion failed"
+    "call_list_delete_error_description": "Call List Deletion failed",
+    "fetch_failed": "Fetch Failed"
+  },
+  "filters": {
+    "listId": "List ID",
+    "listName": "List Name (Prefix Match)",
+    "aiCall": "AI Call Allowed",
+    "status": "Status"
   }
 }

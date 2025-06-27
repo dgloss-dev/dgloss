@@ -30,7 +30,7 @@ import {
   ToggleSwitch,
 } from '@client/components/common/form/commonFormItems';
 import { uploadToS3 } from '@client/services/utils.service';
-import { ShowNotification } from '@client/components/common/notification/showNotification';
+import { useMessage } from '@workspace/ui/components/atoms/message';
 
 interface OperatorInputProps {
   idx: number;
@@ -75,6 +75,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
   const { setOpenModalAction, setRefreshAction, refresh } = useAppStore();
   const [loading, setLoading] = useState(false);
   const [fileUploadLoading, setFileUploadLoading] = useState(false);
+  const message = useMessage();
   const [file, setFile] = useState<File | null>(null);
   const [formState, setFormState] = useState({
     timeSlots: [{ startTime: '09:00', endTime: '18:00' }],
@@ -191,26 +192,17 @@ export const CallListForm = ({ record }: { record?: any }) => {
       setLoading(true);
       if (record) {
         await updateCallListClient(record.id, payload);
-        ShowNotification({
-          titleKey: 'call_list_updated',
-          descriptionKey: 'call_list_updated_description',
-        });
+        message.success(t('descriptions.call_list_updated_description'));
       } else {
         await createCallListClient(payload);
-        ShowNotification({
-          titleKey: 'call_list_created',
-          descriptionKey: 'call_list_created_description',
-        }); 
+        message.success(t('descriptions.call_list_created_description'));
       }
       setOpenModalAction(MODAL_KEY.CALL_LIST, false);
       clearAllValues();
       setRefreshAction(!refresh);
     } catch (error) {
       console.error('Error submitting call list:', error);
-      ShowNotification({
-        titleKey: 'call_list_error',
-        descriptionKey: 'call_list_submit_error_description',
-      });
+      message.error(t('descriptions.call_list_submit_error_description'));
     } finally {
       setLoading(false);
     }

@@ -1,88 +1,76 @@
 'use client';
 
-import { message } from 'antd';
-import { MessageType } from 'antd/es/message/interface';
-import { Icon, ImageIcon } from '../icon';
-import { iconMap } from '@workspace/ui/icons/iconMap';
+import React from 'react';
+import { App } from 'antd';
+import { MessageType as AntMessageType } from 'antd/es/message/interface';
+import { Button } from '../button';
+import { ImageIcon } from '../icon';
 
-export type CustomMessageType = 'normal' | 'information' | 'warning';
+type MessageContent = string | React.ReactNode;
 
 interface MessageOptions {
-  title: string;
-  description?: string;
+  content: MessageContent;
   duration?: number;
   onClose?: () => void;
 }
 
-const MESSAGE_STYLES = {
-  normal: {
-    backgroundColor: 'var(--color-base-default)',
-    icon: 'InformationCircle' as keyof typeof iconMap,
-  },
-  information: {
-    backgroundColor: 'var(--color-success-default)',
-    icon: 'InformationCircle' as keyof typeof iconMap,
-  },
-  warning: {
-    backgroundColor: 'var(--color-warning-default)',
-    icon: 'Warning' as keyof typeof iconMap,
-  },
+type MessageType = 'success' | 'error' | 'info' | 'warning' | 'loading';
+
+export const useMessage = () => {
+  const { message } = App.useApp();
+
+  const showMessage = (type: MessageType, options: MessageOptions): AntMessageType => {
+    const { content, duration, onClose } = options;
+
+    switch (type) {
+      case 'success':
+        return message.success(content, duration, onClose);
+      case 'error':
+        return message.error(content, duration, onClose);
+      case 'info':
+        return message.info(content, duration, onClose);
+      case 'warning':
+        return message.warning(content, duration, onClose);
+      case 'loading':
+        return message.loading(content, duration, onClose);
+      default:
+        throw new Error('Invalid message type');
+    }
+  };
+
+  return {
+    success: (content: MessageContent, duration?: number, onClose?: () => void) =>
+      showMessage('success', { content, duration, onClose }),
+    error: (content: MessageContent, duration?: number, onClose?: () => void) =>
+      showMessage('error', { content, duration, onClose }),
+    info: (content: MessageContent, duration?: number, onClose?: () => void) =>
+      showMessage('info', { content, duration, onClose }),
+    warning: (content: MessageContent, duration?: number, onClose?: () => void) =>
+      showMessage('warning', { content, duration, onClose }),
+    loading: (content: MessageContent, duration?: number, onClose?: () => void) =>
+      showMessage('loading', { content, duration, onClose }),
+    destroy: message.destroy,
+  };
 };
 
-const CustomMessage = ({
-  type,
-  title,
-  description,
-  onClose,
-}: {
-  type: CustomMessageType;
-  title: string;
-  description: string;
+interface MessageContentProps {
+  children: React.ReactNode;
   onClose?: () => void;
-}) => {
-  const icon = MESSAGE_STYLES[type].icon;
+  icon?: React.ReactNode;
+}
 
-  return (
-    <div
-      className="flex items-start !gap-2 !w-[640px] !max-w-[640px] p-4 rounded shadow-[0px_4px_12px_0px_#00000026]"
-      style={{
-        backgroundColor: MESSAGE_STYLES[type].backgroundColor,
-      }}
-    >
-      <Icon size={24} name={icon} color="var(--color-base-10)" className=" mt-[0.5]" />
-
-      <div className="flex-grow text-base-10">
-        <div className="font-bold mb-[2px] text-left text-lg">{title}</div>
-        <div className="text-sm text-left font-normal ">{description}</div>
-      </div>
-      <button
+export const MessageContent: React.FC<MessageContentProps> = ({ children, onClose, icon }) => (
+  <>
+    {icon}
+    <span>{children}</span>
+    {onClose && (
+      <Button
+        size="small"
+        type="text"
         onClick={onClose}
-        className="text-white opacity-80 hover:opacity-100 transition-opacity"
-      >
-        <ImageIcon path="actions/delete.svg" size={16} />
-      </button>
-    </div>
-  );
-};
-
-export const Message = (type: CustomMessageType, options: MessageOptions): MessageType => {
-  const { title, description, duration = 3, onClose } = options;
-
-  return message.open({
-    content: (
-      <CustomMessage
-        type={type}
-        title={title}
-        description={description || ''}
-        onClose={() => {
-          message.destroy();
-          onClose?.();
-        }}
+        aria-label="Close"
+        icon={<ImageIcon path="actions/close.svg" size={16} />}
       />
-    ),
-    duration,
-    className: 'custom-message-container',
-  });
-};
-
-export { MessageType };
+    )}
+  </>
+);

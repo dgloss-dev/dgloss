@@ -1,5 +1,6 @@
 import React from 'react';
 import ConfigProvider from 'antd/es/config-provider';
+import App from 'antd/es/app';
 
 type Props = {
   children: React.ReactNode;
@@ -18,5 +19,9 @@ export const AntdConfigProvider = ({ children }: Props) => {
     },
   };
 
-  return <ConfigProvider theme={THEME}>{children}</ConfigProvider>;
+  return (
+    <ConfigProvider theme={THEME}>
+      <App>{children}</App>
+    </ConfigProvider>
+  );
 };
