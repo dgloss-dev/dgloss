@@ -12,7 +12,9 @@
     "submit": "登録",
     "delete": "削除",
     "forceLogout": "強制停止",
-    "warning": "削除"
+    "prohibited": "強制停止",
+    "warning": "削除",
+    "search": "検索"
   },
   "table": {
     "emptyText": "コンテンツはありません",
@@ -55,6 +57,11 @@
     "delete_call_list": "アカウント削除",
     "selected": "選択した",
     "confirm": "件のリストを削除してよろしいですか"
+  },
+  "prohibitedModal": {
+    "prohibited_call_list": "禁止コールリスト",
+    "selected": "選択した",
+    "confirm": "件のリストを禁止してよろしいですか"
   },
   "titles": {
     "call_list_created": "コールリスト作成",

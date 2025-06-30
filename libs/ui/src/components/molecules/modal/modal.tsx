@@ -67,7 +67,7 @@ export const Modal: React.FC<ModalProps> & {
     type: 'primary' | 'primary-outline' | 'warning';
   }) => {
     const cancelText = t('buttons.cancel');
-    const okText = t(`buttons.${type}`);
+    const defaultOkText = okText ? okText : t(`buttons.${type}`);
     return (
       <div className="flex items-center gap-x-2 justify-center w-full">
         {!hideCancelButton && (
@@ -83,7 +83,7 @@ export const Modal: React.FC<ModalProps> & {
         <Button
           type="block"
           variant={type}
-          label={okText}
+          label={defaultOkText}
           onClick={onOk}
           loading={props.buttonLoading}
           className="!w-full !max-w-[128px]"

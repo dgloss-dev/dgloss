@@ -312,7 +312,7 @@ export const CommonTable = <T extends object>({
       <div className="flex flex-col xl:flex-row items-center justify-between ">
         <TableActionBar
           selectedCount={selectedRows?.length || 0}
-          onForceLogout={() => {}}
+          onForceLogout={() => setOpenModalAction(MODAL_KEY.PROHIBITED_MODAL, true)}
           onDelete={() => {
             setOpenModalAction(MODAL_KEY.DELETE_MODAL, true);
           }}

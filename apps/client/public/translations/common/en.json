@@ -11,8 +11,10 @@
     "cancel": "Cancel",
     "submit": "Submit",
     "delete": "Delete",
+    "prohibited": "Prohibited",
     "forceLogout": "Force Logout",
-    "warning": "Delete"
+    "warning": "Delete",
+    "search": "Search"
   },
   "table": {
     "emptyText": "No content",
@@ -56,6 +58,11 @@
     "selected": "selected",
     "confirm": "items you need to delete ? "
   },
+  "prohibitedModal": {
+    "prohibited_call_list": "Prohibited Call List",
+    "selected": "selected",
+    "confirm": "items you need to prohibit ? "
+  },
   "titles": {
     "call_list_created": "Call List Created",
     "call_list_updated": "Call List Updated",
@@ -68,6 +75,8 @@
     "call_list_deleted_description": "Call List Deleted Successfully",
     "call_list_submit_error_description": "Call List Submission failed",
     "call_list_delete_error_description": "Call List Deletion failed",
+    "prohibited_call_list_description": "Call List Prohibited Successfully",
+    "prohibited_call_list_error_description": "Call List Prohibited failed",
     "fetch_failed": "Fetch Failed"
   },
   "filters": {

@@ -7,23 +7,26 @@ import { ColumnsType } from 'antd/es/table';
 import { MODAL_KEY } from '@client/constants/modalKey.constant';
 import { useMessage } from '@workspace/ui/components/atoms/message';
 
-interface DeleteModalProps {
+type ItemSelectionModalType = 'delete' | 'prohibited';
+interface ItemSelectionModal {
   onClose: () => void;
-  onDelete: (any: any) => void;
-  deletedIDs: any[];
+  apiFunc: (any: any) => void;
+  selectedIds: any[];
   titleKey: string;
   columns: ColumnsType<any>;
   data: any[];
   setSelectedRows: (selectedRows: any[]) => void;
+  type?: ItemSelectionModalType;
 }
 
-export const DeleteModal: React.FC<DeleteModalProps> = ({
-  onDelete,
-  deletedIDs,
+export const ItemSelectionModal: React.FC<ItemSelectionModal> = ({
+  apiFunc,
+  selectedIds,
   titleKey,
   columns,
   data,
   setSelectedRows,
+  type = 'delete' as ItemSelectionModalType,
 }) => {
   const {
     setOpenModalAction,
@@ -35,17 +38,23 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   } = useAppStore();
 
   const handleCancel = () => {
-    setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
+    setOpenModalAction(
+      type === 'delete' ? MODAL_KEY.DELETE_MODAL : MODAL_KEY.PROHIBITED_MODAL,
+      false,
+    );
   };
   const t = useTranslations('common');
-  const title = t(`deleteModal.${titleKey}`);
+  const title = type === 'delete' ? t(`deleteModal.${titleKey}`) : t(`prohibitedModal.${titleKey}`);
 
   const message = useMessage();
   const handleDelete = async () => {
     try {
       setIsLoadingAction(true);
-      await onDelete(deletedIDs);
-      setOpenModalAction(MODAL_KEY.DELETE_MODAL, false);
+      await apiFunc(selectedIds);
+      setOpenModalAction(
+        type === 'delete' ? MODAL_KEY.DELETE_MODAL : MODAL_KEY.PROHIBITED_MODAL,
+        false,
+      );
       setSelectedRows([]);
       setRefreshAction(!refresh);
       message.success(t(`descriptions.${titleKey}_description`));
@@ -59,16 +68,16 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
 
   return (
     <Modal
-      open={openModals['deleteModal']}
+      open={type === 'delete' ? openModals['deleteModal'] : openModals['prohibitedModal']}
       onCancel={handleCancel}
       onOk={handleDelete}
       title={title}
       width="40%"
-      okText={t('buttons.delete')}
+      okText={type === 'delete' ? t('buttons.delete') : t('buttons.prohibited')}
       loading={isLoading}
     >
       <p className="!pb-4">
-        {t(`deleteModal.selected`)} {deletedIDs?.length} {t(`deleteModal.confirm`)}
+        {t(`${type}Modal.selected`)} {selectedIds?.length} {t(`${type}Modal.confirm`)}
       </p>
       <Table
         scroll={{ x: '100%', y: 'calc(100vh - 300px)' }}

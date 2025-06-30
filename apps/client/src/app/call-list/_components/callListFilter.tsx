@@ -4,7 +4,6 @@ import { useAppStore } from '@client/store/app.store';
 
 export const CallListFilter = () => {
   const { filterValues, setFilterValues } = useAppStore();
-  
 
   const filterConfigs: FilterConfig[] = [
     {
@@ -46,7 +45,7 @@ export const CallListFilter = () => {
       filters={filterConfigs}
       values={filterValues}
       setValues={setFilterValues}
-      searchLabel="検索"
+      searchLabel="search"
     />
   );
 };

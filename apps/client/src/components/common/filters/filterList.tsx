@@ -107,7 +107,7 @@ export const FilterList: React.FC<FilterListProps> = ({
           <Button
             icon={<ImageIcon path="actions/search.svg" />}
             variant="primary-outline"
-            label={searchLabel}
+            label={t(`buttons.${searchLabel}`)}
             onClick={handleSearch}
           />
         </div>

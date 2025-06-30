@@ -17,7 +17,6 @@ import { getCallStatusType } from '@client/utils/getStatus.utils';
 import { getCallStatusLabel } from '@client/utils/getStatus.utils';
 import { useAppStore } from '@client/store/app.store';
 import { CallListForm } from './callListForm';
-import { DeleteModal } from '@client/components/common/modal/deleteModal';
 import { CallListFilter } from './callListFilter';
 import { MODAL_KEY } from '@client/constants/modalKey.constant';
 import { FormModal } from '@client/components/common/form/formModal';
@@ -25,6 +24,7 @@ import { useCallListStore } from '@client/store/callListStore';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@client/constants/routes.constant';
 import { useWindowSize } from '@workspace/ui/hooks/useWindowSize';
+import { ItemSelectionModal } from '@client/components/common/modal/itemSelectionModal';
 
 interface CallListTableProps {
   className?: string;
@@ -166,7 +166,7 @@ export const CallListTable: React.FC<CallListTableProps> = ({
     router.push(`${ROUTES.CALL_LIST}/${record?.id}`);
   };
 
-  const DeleteModalColumns = [
+  const selectedModalColumns = [
     {
       title: callListTexts('table.listId'),
       dataIndex: 'id',
@@ -203,14 +203,24 @@ export const CallListTable: React.FC<CallListTableProps> = ({
         filters={filterValues}
         setFilters={setFilterValues}
       />
-      <DeleteModal
+      <ItemSelectionModal
         onClose={() => setOpenModalAction(MODAL_KEY.DELETE_MODAL, false)}
-        onDelete={bulkDeleteCallListsClient}
-        deletedIDs={selectedRows?.map((row: any) => Number(row?.id))}
+        apiFunc={bulkDeleteCallListsClient}
+        selectedIds={selectedRows?.map((row: any) => Number(row?.id))}
         titleKey="delete_call_list"
-        columns={DeleteModalColumns}
+        columns={selectedModalColumns}
         data={selectedRows}
         setSelectedRows={setSelectedRows}
+      />
+      <ItemSelectionModal
+        onClose={() => setOpenModalAction(MODAL_KEY.PROHIBITED_MODAL, false)}
+        apiFunc={bulkDeleteCallListsClient}
+        selectedIds={selectedRows?.map((row: any) => Number(row?.id))}
+        titleKey="prohibited_call_list"
+        columns={selectedModalColumns}
+        data={selectedRows}
+        setSelectedRows={setSelectedRows}
+        type="prohibited"
       />
       <FormModal
         modalKey={MODAL_KEY.CALL_LIST}
