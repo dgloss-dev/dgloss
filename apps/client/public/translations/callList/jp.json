@@ -26,7 +26,7 @@
     "callStatus": "通話ステータス",
     "callStatusPlaceholder": "通話ステータスを選択してください",
     "callStatusRequired": "通話ステータスは必須です",
-    "voiceData": "ターゲットCSV",
+    "target_csv": "ターゲットCSV",
     "fileUpload": "ファイルアップロード",
     "telNum": "電話番号",
     "telNumPlaceholder": "電話番号を入力",
@@ -34,7 +34,7 @@
     "operatorsPlaceholder": "選択してください",
     "addOperator": "オペレーターを追加",
     "aiOperationCount": "AI稼働数",
-    "aiOperationCountPlaceholder": "AI稼働数",
+    "aiOperationCountPlaceholder": "0",
     "aiCallUsage": "AIコール利用",
     "aiCallStart": "AIコール開始",
     "aiCallTimeSlots": "AIコール時間帯",
@@ -44,6 +44,9 @@
     "description": "説明",
     "descriptionPlaceholder": "説明を入力",
     "remarks": "備考(管理者のみ閲覧可能)",
-    "remarksPlaceholder": "備考を入力"
+    "remarksPlaceholder": "備考を入力",
+    "emptySpace": "スペースで始まることはできません",
+    "mustBeGreaterThanZero": "0以上の数値を入力してください",
+    "cannotBeNegative": "負の数値は入力できません"
   }
 }

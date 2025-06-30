@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import {useTranslations } from 'next-intl';
 import { Form, FormItem, useForm } from '@workspace/ui/components/organisms/form';
 import { Input } from '@workspace/ui/components/atoms/input';
 import { TextArea } from '@workspace/ui/components/atoms/textArea';
@@ -31,6 +31,11 @@ import {
 } from '@client/components/common/form/commonFormItems';
 import { uploadToS3 } from '@client/services/utils.service';
 import { useMessage } from '@workspace/ui/components/atoms/message';
+import { REGEX } from '@client/constants/regex.constant';
+import { DatePicker } from '@workspace/ui/components/atoms/datepicker';
+import { useGetActiveLanguage } from '@client/hooks/useGetActiveLanguage.hook';
+import dayjs from 'dayjs';
+import { getDisabledTime } from '@client/utils/getDisabledTime';
 
 interface OperatorInputProps {
   idx: number;
@@ -39,6 +44,7 @@ interface OperatorInputProps {
   onRemove: (idx: number) => void;
   canRemove: boolean;
   options: { label: string; value: number }[];
+  disabled?: boolean;
 }
 
 interface TimeSlot {
@@ -52,6 +58,7 @@ interface TimeSlotInputProps {
   onChange: (idx: number, key: keyof TimeSlot, value: string) => void;
   onRemove: (idx: number) => void;
   canRemove: boolean;
+  disabled?: boolean;
 }
 
 const operatorOptions = [
@@ -83,7 +90,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
     operators: [operatorOptions[0]?.value ?? 0],
     weekdays: [] as string[],
   });
-
+  const { activeLocale } = useGetActiveLanguage();
   const updateFormState = <K extends keyof typeof formState>(
     key: K,
     value: (typeof formState)[K],
@@ -123,7 +130,6 @@ export const CallListForm = ({ record }: { record?: any }) => {
       );
     }
   };
-
   const handleTimeChange = (idx: number, type: 'startTime' | 'endTime', value: string) => {
     const updatedSlots = [...formState.timeSlots];
     updatedSlots[idx] = { ...updatedSlots[idx], [type]: value };
@@ -173,7 +179,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
     const payload: CreateCallListDto = {
       name: values.name,
       createdBy: values.createdBy || 1,
-      callStatus: CALL_STATUS.CALL_SUSPENDED,
+      callStatus: CALL_STATUS.MANUAL_STOP,
       voiceDataGroupId: 1,
       noAi: values.noAi,
       telNum: values.telNum,
@@ -182,7 +188,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
       description: values.description,
       remarks: values.remarks,
       objectKey: objectKey,
-      aiCallSlots: formState.timeSlots.map((slot) => ({
+      aiCallSlots: formState?.timeSlots?.map((slot) => ({
         startTime: slot.startTime,
         endTime: slot.endTime,
       })),
@@ -221,6 +227,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
     onRemove,
     canRemove,
     options,
+    disabled,
   }) => (
     <div className="flex items-center mb-2">
       <Select
@@ -230,6 +237,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
         onChange={(v) => onChange(idx, v as number)}
         placeholder={t('form.operatorsPlaceholder')}
         className="min-w-[200px]"
+        disabled={disabled}
       />
       {canRemove && (
         <div className="cursor-pointer" onClick={() => onRemove(idx)}>
@@ -245,24 +253,38 @@ export const CallListForm = ({ record }: { record?: any }) => {
     onChange,
     onRemove,
     canRemove,
+    disabled,
   }) => (
     <div className="flex items-center gap-2 mb-2">
-      <Input
-        type="time"
-        className="w-[100px]"
-        value={slot.startTime}
-        onChange={(e) => onChange(idx, 'startTime', e.target.value)}
+      <DatePicker
+        className="!max-w-[120px] xl:!max-w-[100px]"
+        onChange={(e) => onChange(idx, 'startTime', e?.format('HH:mm') ?? undefined)}
+        format="HH:mm"
+        mode="time"
+        activeLocale={activeLocale}
+        value={slot.startTime ? dayjs(slot.startTime, 'HH:mm') : undefined}
+        placeholder="09:00"
+        disabled={disabled}
+        disabledTime={() => getDisabledTime(dayjs(slot.endTime, 'HH:mm'), 'after')}
+        showTime
       />
       <span>〜</span>
-      <Input
-        type="time"
-        className="w-[100px]"
-        value={slot.endTime}
-        onChange={(e) => onChange(idx, 'endTime', e.target.value)}
+      <DatePicker
+        className="!max-w-[120px] xl:!max-w-[100px]"
+        onChange={(e) => onChange(idx, 'endTime', e?.format('HH:mm') ?? undefined)}
+        format="HH:mm"
+        mode="time"
+        activeLocale={activeLocale}
+        value={slot.endTime ? dayjs(slot.endTime, 'HH:mm') : undefined}
+        placeholder="18:00"
+        disabled={disabled}
+        disabledTime={() => getDisabledTime(dayjs(slot.startTime, 'HH:mm'), 'before')}
+        showTime
       />
+
       {canRemove && (
         <div className="cursor-pointer" onClick={() => onRemove(idx)}>
-          <ImageIcon path="actions/remove.svg" className="!ml-2" />
+          <ImageIcon path="actions/remove.svg" className="" />
         </div>
       )}
     </div>
@@ -285,7 +307,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
       <Form
         layout="vertical"
         form={form}
-        className="flex flex-col xl:!flex-row gap-y-4 items-start w-full custom_ant_form !h-full"
+        className="flex flex-col xl:!flex-row gap-y-4 items-start w-full custom_ant_form !h-full "
       >
         {/* Left column */}
         <div className="w-full flex flex-col !h-">
@@ -293,15 +315,29 @@ export const CallListForm = ({ record }: { record?: any }) => {
             label={t('form.listId')}
             name="id"
             placeholder={t('form.listIdPlaceholder')}
-            disabled
+            rules={[
+              {
+                pattern: REGEX.HALF_WIDTH_ALPHANUMERIC,
+                message: t('form.listIdPlaceholder'),
+              },
+            ]}
           />
           <BasicInput
             label={t('form.listName')}
             name="name"
             placeholder={t('form.listNamePlaceholder')}
+            rules={[
+              {
+                required: true,
+                message: t('form.listNameRequired'),
+              },
+              {
+                pattern: REGEX.EMPTY_SPACE,
+                message: t('form.emptySpace'),
+              },
+            ]}
           />
-
-          <FormItem name="objectKey" label={t('form.voiceData')} layout="horizontal">
+          <FormItem name="objectKey" label={t('form.target_csv')} layout="horizontal">
             <Upload accept=".csv" showUploadList={false} onChange={handleFileUpload}>
               <Button icon={<ImageIcon path="actions/upload.svg" />} variant="primary-outline">
                 {t('form.fileUpload')}
@@ -321,7 +357,11 @@ export const CallListForm = ({ record }: { record?: any }) => {
                 options={operatorOptions}
               />
             ))}
-            <Button variant="primary-outline" onClick={() => handleOperator('add')}>
+            <Button
+              disabled={formState?.operators.length === 0}
+              variant="primary-outline"
+              onClick={() => handleOperator('add')}
+            >
               {t('form.addOperator')}
             </Button>
           </FormItem>
@@ -331,6 +371,17 @@ export const CallListForm = ({ record }: { record?: any }) => {
             label={t('form.aiOperationCount')}
             placeholder={t('form.aiOperationCountPlaceholder')}
             className="!max-w-20"
+            min={0}
+            rules={[
+              {
+                validator: (_, value) => {
+                  if (value < 0) {
+                    return Promise.reject(t('form.cannotBeNegative'));
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
           />
 
           <ToggleSwitch
@@ -373,18 +424,19 @@ export const CallListForm = ({ record }: { record?: any }) => {
         </div>
 
         {/* Right column */}
-        <div className="w-full flex flex-col ">
+        <div className="w-full flex flex-col h-full ">
           <TextAreaInput
             name="description"
             label={t('form.description')}
-            rows={10}
             placeholder={t('form.descriptionPlaceholder')}
+            rows={11}
+            className="!h-full"
           />
           <TextAreaInput
             name="remarks"
             label={t('form.remarks')}
-            rows={12}
             placeholder={t('form.remarksPlaceholder')}
+            rows={11}
             className="!h-full"
           />
         </div>

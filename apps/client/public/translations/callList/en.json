@@ -19,14 +19,14 @@
   },
   "form": {
     "listId": "List ID (Alphanumeric)",
-    "listIdPlaceholder": "Auto-generated",
+    "listIdPlaceholder": "Enter Half-width alphanumeric characters",
     "listName": "List Name",
     "listNamePlaceholder": "Enter list name",
     "listNameRequired": "List name is required",
     "callStatus": "Call Status",
     "callStatusPlaceholder": "Please select call status",
     "callStatusRequired": "Call status is required",
-    "voiceData": "Voice Data",
+    "target_csv": "Target CSV",
     "fileUpload": "File Upload",
     "telNum": "Phone Number",
     "telNumPlaceholder": "Enter phone number",
@@ -34,7 +34,7 @@
     "operatorsPlaceholder": "Please select",
     "addOperator": "Add Operator",
     "aiOperationCount": "AI Operation Count",
-    "aiOperationCountPlaceholder": "AI Operation Count",
+    "aiOperationCountPlaceholder": "0",
     "aiCallUsage": "AI Call Usage",
     "aiCallStart": "AI Call Start",
     "aiCallTimeSlots": "AI Call Time Slots",
@@ -44,6 +44,9 @@
     "description": "Description",
     "descriptionPlaceholder": "Enter description",
     "remarks": "Remarks (Admin only)",
-    "remarksPlaceholder": "Enter remarks"
+    "remarksPlaceholder": "Enter remarks",
+    "emptySpace": "Cannot start with a space",
+    "mustBeGreaterThanZero": "Must be greater than 0",
+    "cannotBeNegative": "Cannot be negative"
   }
 }

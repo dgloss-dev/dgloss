@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import AntInput from 'antd/es/input';
 import ConfigProvider from 'antd/es/config-provider';
-import Image from 'next/image';
 
 type ModeTypes = 'search' | 'text' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal';
 export interface InputProps {

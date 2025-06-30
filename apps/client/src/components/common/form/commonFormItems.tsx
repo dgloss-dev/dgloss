@@ -26,7 +26,7 @@ interface TextAreaInputProps {
   name: string;
   label: string;
   placeholder: string;
-  rows: number;
+  rows?: number;
   rules?: Rule[];
   className?: string;
 }
@@ -82,7 +82,7 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
   className,
 }) => (
   <FormItem name={name} label={label} layout="horizontal" rules={rules}>
-    <TextArea rows={rows} placeholder={placeholder} className={className} />
+    <TextArea autoSize rows={rows ?? 0} placeholder={placeholder} className={className} />
   </FormItem>
 );
 
