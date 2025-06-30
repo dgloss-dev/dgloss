@@ -309,15 +309,16 @@ export const CommonTable = <T extends object>({
 
   return (
     <div className="w-full">
-      <div className="flex  items-center justify-between w-full">
+      <div className="flex flex-col xl:flex-row items-center justify-between ">
         <TableActionBar
           selectedCount={selectedRows?.length || 0}
           onForceLogout={() => {}}
           onDelete={() => {
             setOpenModalAction(MODAL_KEY.DELETE_MODAL, true);
           }}
+          className="order-2 xl:order-1"
         />
-        {filterComponent && filterComponent}
+        <div className="order-1 xl:order-2 w-full">{filterComponent && filterComponent}</div>
       </div>
       <Table<T>
         rowKey={rowKey}

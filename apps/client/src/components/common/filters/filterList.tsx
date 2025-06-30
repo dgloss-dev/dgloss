@@ -60,49 +60,58 @@ export const FilterList: React.FC<FilterListProps> = ({
   };
   return (
     <>
-      <div className="w-full flex items-end gap-x-6">
-        {filters.map((filter) => (
-          <div key={filter.key} className="w-full min-w-[140px]">
-            {filter.type === 'text' ? (
-              <Input
-                id={`filter-${filter.key}`}
-                value={selectedFilters[filter.key] as string | number}
-                onChange={(e) => handleChange(filter.key, e.target.value)}
-                placeholder={filter.placeholder}
-                disabled={disabled}
-                label={t(`filters.${filter.label}`)}
-              />
-            ) : filter.type === 'select' && filter.options ? (
-              <Select
-                id={`filter-${filter.key}`}
-                value={
-                  isStringArray(selectedFilters[filter.key])
-                    ? selectedFilters[filter.key]
-                    : isNumberArray(selectedFilters[filter.key])
+      <section className="w-full flex items-end gap-x-6">
+        <div className="w-full grid grid-cols-6  xl:grid-cols-4 gap-x-4 xl:gap-x-6 ">
+          {filters.map((filter, index) => (
+            <div key={filter.key} className={`w-full ${
+              index === 0 ? 'col-span-2 xl:col-span-1' : 
+              index === 1 ? 'col-span-3 xl:col-span-1' : 
+              index === 2 ? 'col-span-2 xl:col-span-1' : 
+              index === 3 ? 'col-span-2 xl:col-span-1' : ''
+            }`}>
+              {filter.type === 'text' ? (
+                <Input
+                  id={`filter-${filter.key}`}
+                  value={selectedFilters[filter.key] as string | number}
+                  onChange={(e) => handleChange(filter.key, e.target.value)}
+                  placeholder={filter.placeholder}
+                  disabled={disabled}
+                  label={t(`filters.${filter.label}`)}
+                />
+              ) : filter.type === 'select' && filter.options ? (
+                <Select
+                  id={`filter-${filter.key}`}
+                  value={
+                    isStringArray(selectedFilters[filter.key])
                       ? selectedFilters[filter.key]
-                      : typeof selectedFilters[filter.key] === 'string' ||
-                          typeof selectedFilters[filter.key] === 'number'
+                      : isNumberArray(selectedFilters[filter.key])
                         ? selectedFilters[filter.key]
-                        : ''
-                }
-                onChange={(val) => handleChange(filter.key, val as string | number)}
-                options={filter.options}
-                placeholder={filter.placeholder || '選択してください'}
-                disabled={disabled}
-                label={t(`filters.${filter.label}`)}
-                allowClear
-              />
-            ) : null}
-          </div>
-        ))}
-
-        <Button
-          icon={<ImageIcon path="actions/search.svg" />}
-          variant="primary-outline"
-          label={searchLabel}
-          onClick={handleSearch}
-        />
-      </div>
+                        : typeof selectedFilters[filter.key] === 'string' ||
+                            typeof selectedFilters[filter.key] === 'number'
+                          ? selectedFilters[filter.key]
+                          : ''
+                  }
+                  onChange={(val) => handleChange(filter.key, val as string | number)}
+                  options={filter.options}
+                  placeholder={filter.placeholder || '選択してください'}
+                  disabled={disabled}
+                  label={t(`filters.${filter.label}`)}
+                  className="!max-w-[180px]"
+                  allowClear
+                />
+              ) : null}
+            </div>
+          ))}
+        </div>
+        <div className="">
+          <Button
+            icon={<ImageIcon path="actions/search.svg" />}
+            variant="primary-outline"
+            label={searchLabel}
+            onClick={handleSearch}
+          />
+        </div>
+      </section>
     </>
   );
 };

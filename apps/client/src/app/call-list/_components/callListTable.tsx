@@ -24,6 +24,7 @@ import { FormModal } from '@client/components/common/form/formModal';
 import { useCallListStore } from '@client/store/callListStore';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@client/constants/routes.constant';
+import { useWindowSize } from '@workspace/ui/hooks/useWindowSize';
 
 interface CallListTableProps {
   className?: string;
@@ -40,6 +41,7 @@ export const CallListTable: React.FC<CallListTableProps> = ({
   const router = useRouter();
   const callListTexts = useTranslations('callList');
   const { setOpenModalAction } = useAppStore();
+  const { width } = useWindowSize();
   const {
     selectedRows,
     setSelectedRows,
@@ -133,7 +135,7 @@ export const CallListTable: React.FC<CallListTableProps> = ({
       title: '',
       key: 'actions',
       width: 245,
-      fixed: 'right',
+      fixed: width && width > 1024 ? 'right' : undefined,
       render: (_, record: ICallList) => (
         <div className="flex items-center justify-center gap-2 !w-full">
           <Button
