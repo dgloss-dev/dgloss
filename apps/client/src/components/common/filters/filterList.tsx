@@ -60,8 +60,8 @@ export const FilterList: React.FC<FilterListProps> = ({
   };
   return (
     <>
-      <section className="w-full flex items-end gap-x-6">
-        <div className="w-full grid grid-cols-6  xl:grid-cols-4 gap-x-4 xl:gap-x-6 ">
+      <section className="w-full flex items-end gap-x-4">
+        <div className="w-full grid grid-cols-6  xl:grid-cols-4 gap-x-4 ">
           {filters.map((filter, index) => (
             <div key={filter.key} className={`w-full ${
               index === 0 ? 'col-span-2 xl:col-span-1' : 
