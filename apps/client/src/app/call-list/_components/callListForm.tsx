@@ -285,7 +285,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
       <Form
         layout="vertical"
         form={form}
-        className="flex items-start w-full custom_ant_form !h-full"
+        className="flex flex-col lg:!flex-row gap-y-4 items-start w-full custom_ant_form !h-full"
       >
         {/* Left column */}
         <div className="w-full flex flex-col !h-">
