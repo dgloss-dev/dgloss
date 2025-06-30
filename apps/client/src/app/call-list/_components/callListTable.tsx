@@ -22,6 +22,8 @@ import { CallListFilter } from './callListFilter';
 import { MODAL_KEY } from '@client/constants/modalKey.constant';
 import { FormModal } from '@client/components/common/form/formModal';
 import { useCallListStore } from '@client/store/callListStore';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@client/constants/routes.constant';
 
 interface CallListTableProps {
   className?: string;
@@ -35,7 +37,7 @@ export const CallListTable: React.FC<CallListTableProps> = ({
   initialCount,
 }) => {
   const t = useTranslations('common');
-
+  const router = useRouter();
   const callListTexts = useTranslations('callList');
   const { setOpenModalAction } = useAppStore();
   const {
@@ -158,8 +160,8 @@ export const CallListTable: React.FC<CallListTableProps> = ({
     setOpenModalAction(MODAL_KEY.CALL_LIST, true);
   };
 
-  const handleTarget = (record: ICallList) => {
-    console.log('Target call list:', record);
+  const handleTarget = (record: any) => {
+    router.push(`${ROUTES.CALL_LIST}/${record?.id}`);
   };
 
   const DeleteModalColumns = [
