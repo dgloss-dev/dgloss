@@ -6,6 +6,7 @@ import { AntdConfigProvider } from '../providers/antdConfigProvider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { AppSidebar } from '@client/components/common/sidebar/appSidebar';
+import { PageLayout } from '@client/components/common/pageLayout';
 
 const SFPro = localFont({
   src: '../../public/fonts/SF-Pro-Text-Regular.otf',
@@ -37,9 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <aside className=" w-full !max-w-[246px] !overflow-hidden">
                   <AppSidebar />
                 </aside>
-                <div className="w-full layout-width bg-primary h-[99vh] !overflow-y-auto">
-                  {children}
-                </div>
+                <PageLayout>{children}</PageLayout>
               </section>
             </NextIntlClientProvider>
           </AntdConfigProvider>

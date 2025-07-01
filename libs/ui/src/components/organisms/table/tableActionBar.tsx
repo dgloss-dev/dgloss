@@ -14,6 +14,7 @@ interface TableActionBarProps {
     forceLogout: boolean;
     delete: boolean;
   };
+  className?: string;
 }
 
 export const TableActionBar: React.FC<TableActionBarProps> = ({
@@ -26,10 +27,11 @@ export const TableActionBar: React.FC<TableActionBarProps> = ({
     forceLogout: true,
     delete: true,
   },
+  className,
 }) => {
   const t = useTranslations('common');
   return (
-    <div className="flex items-center gap-2  w-full">
+  <>  
       <span className="text-base  whitespace-nowrap">
         {t('table.selected')} {selectedCount} {t('table.items')}
       </span>
@@ -56,6 +58,6 @@ export const TableActionBar: React.FC<TableActionBarProps> = ({
           </Button>
         )}
       </div>
-    </div>
+    </>
   );
 };

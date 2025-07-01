@@ -4,6 +4,7 @@ import { Rule } from 'antd/es/form';
 import dayjs from 'dayjs';
 
 const { Item } = Form;
+
 interface FormItemProps {
   label?: string | React.ReactNode;
   name?: string | number;
@@ -28,11 +29,13 @@ interface FormItemProps {
   getValueFromEvent?: any;
   normalize?: (value: any) => string;
 }
+
 export const FormItem: React.FC<FormItemProps> = ({
   colon = false,
   fullWidth = false,
   className,
   getValueFromEvent,
+  children,
   ...props
 }) => {
   return (
@@ -45,7 +48,6 @@ export const FormItem: React.FC<FormItemProps> = ({
             fontFamily: 'var(--font-sf-pro)',
             fontSize: 14,
             fontWeightStrong: 600,
-            labelHeight: 48,
             labelRequiredMarkColor: 'var(--color-warning-default)',
           },
         },
@@ -53,12 +55,15 @@ export const FormItem: React.FC<FormItemProps> = ({
     >
       <Item
         getValueFromEvent={getValueFromEvent}
-        className={`${fullWidth ? ' flex-1 !text-sm' : ''} ${className}`}
         colon={colon}
+        className={className}
         {...props}
       >
-        <div className=" border !w-full border-dust px-4 py-2 h-12">
-          {props.children}
+        {/* This wrapper won't break form control because it's outside of a noStyle Item */}
+        <div className={`${fullWidth ? 'flex-1 !text-sm' : ''} border !w-full border-dust px-4 py-2 min-h-12`}>
+          <Item noStyle name={props.name} valuePropName={props.valuePropName}>
+            {children}
+          </Item>
         </div>
       </Item>
     </ConfigProvider>

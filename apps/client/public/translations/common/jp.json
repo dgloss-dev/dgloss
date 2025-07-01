@@ -1,6 +1,7 @@
 {
   "headers": {
-    "accountList": "アカウント一覧"
+    "accountList": "アカウント一覧",
+    "callList": "コールリスト一覧"
   },
   "buttons": {
     "add": "新規登録",
@@ -10,7 +11,10 @@
     "cancel": "キャンセル",
     "submit": "登録",
     "delete": "削除",
-    "forceLogout": "強制停止"
+    "forceLogout": "強制停止",
+    "prohibited": "強制停止",
+    "warning": "削除",
+    "search": "検索"
   },
   "table": {
     "emptyText": "コンテンツはありません",
@@ -41,5 +45,42 @@
     "callHistory": "通話履歴",
     "setting": "設定",
     "inquiry": "問い合わせ"
+  },
+  "breadcrumb": {
+    "manager": "管理者",
+    "callList": "コールリスト管理"
+  },
+  "form": {
+    "call_list_register": "コールリスト登録"
+  },
+  "deleteModal": {
+    "delete_call_list": "アカウント削除",
+    "selected": "選択した",
+    "confirm": "件のリストを削除してよろしいですか"
+  },
+  "prohibitedModal": {
+    "prohibited_call_list": "禁止コールリスト",
+    "selected": "選択した",
+    "confirm": "件のリストを禁止してよろしいですか"
+  },
+  "titles": {
+    "call_list_created": "コールリスト作成",
+    "call_list_updated": "コールリスト更新",
+    "call_list_deleted": "コールリスト削除",
+    "call_list_delete_error": "削除エラー"
+  },
+  "descriptions": {
+    "call_list_created_description": "コールリスト作成成功",
+    "call_list_updated_description": "コールリスト更新成功",
+    "delete_call_list_description": "コールリスト削除成功",
+    "call_list_submit_error_description": "コールリスト登録失敗",
+    "delete_call_list_error_description": "コールリスト削除失敗",
+    "fetch_failed": "データ取得に失敗しました"
+  },
+  "filters": {
+    "listId": "リストID",
+    "listName": "リスト名 (前方一致)",
+    "aiCall": "AIコール可否",
+    "status": "ステータス"
   }
 }

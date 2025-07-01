@@ -157,7 +157,7 @@ textarea {
 /* ------------------- Custom styles for Ant Design Form Items ----------------------------------------------------------------------- */
 
 .custom_ant_form .ant-form-item .ant-form-item-label > label {
-  @apply !w-[192px] !px-4  !border !border-dust !text-sm !font-[600] !font-sf-pro !text-base !bg-secondary;
+  @apply !w-[192px] !px-4  !border !border-dust !text-sm !font-[600] !font-sf-pro !text-base !h-full !bg-secondary;
 }
 .custom_form .ant-form-item .ant-form-item-explain-error {
   margin-bottom: 12px !important;
@@ -183,3 +183,12 @@ button.ant-modal-close:hover {
   color: var(--color-base-80) !important;
 }
 
+.delete_table .ant-table-cell:not(.ant-table-thead .ant-table-cell) {
+  background-color: var(--color-primary-light) !important;
+}
+
+/* ------------------ Custom Styles For Ant Tags -------------------------------------------------------------------------------- */
+
+.custom_ant_tag {
+  @apply !px-2 !py-0.5 !rounded !text-[12px] !font-normal !max-h-6 !m-0 !flex !flex-row !items-center !gap-1 !w-fit;
+}

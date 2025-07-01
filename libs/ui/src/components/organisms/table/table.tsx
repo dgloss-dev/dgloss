@@ -77,8 +77,8 @@ export const Table = <T extends object>(props: Prop<T>) => {
   );
   const total =
     isPaginationObject(otherProps.pagination) && otherProps.pagination.total !== undefined
-      ? otherProps.pagination.total
-      : otherProps.dataSource.length;
+      ? otherProps?.pagination?.total
+      : otherProps?.dataSource?.length;
 
   const handlePageChange = (page: number, size: number) => {
     setCurrent(page);
@@ -144,10 +144,10 @@ export const Table = <T extends object>(props: Prop<T>) => {
             headerColor: 'var(--color-base)',
             fontWeightStrong: 400,
             fontSize: 16,
-            rowHoverBg: 'var(--color-base-20)',
+            rowHoverBg: 'var(--color-secondary)',
             borderColor: 'var(--color-dust)',
-            rowSelectedBg: 'var(--color-primary-10)',
-            rowSelectedHoverBg: 'var(--color-base-30)',
+            rowSelectedBg: 'var(--color-secondary)',
+            rowSelectedHoverBg: 'var(--color-secondary)',
             cellPaddingInline: 16,
             cellPaddingBlock: 12,
             cellPaddingInlineMD: 16,
@@ -160,6 +160,11 @@ export const Table = <T extends object>(props: Prop<T>) => {
             paddingContentVerticalLG: 16,
             bodySortBg: 'transparent',
             headerSortActiveBg: 'var(--color-dust)',
+          },
+          Checkbox: {
+            colorPrimary: 'var(--color-success)',
+            colorPrimaryHover: 'var(--color-success)',
+            colorPrimaryActive: 'var(--color-success)',
           },
         },
       }}

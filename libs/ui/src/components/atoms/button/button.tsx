@@ -59,12 +59,12 @@ const getButtonClasses = (type: ButtonType, variant: ButtonVariant, size: Button
   };
 
   const variantClasses: Record<ButtonVariant, string> = {
-    primary: `!bg-success disabled:!bg-success/50 !text-primary-light hover:!bg-success/80 !shadow-primary ${heightClasses[size]} ${fontSize}`,
-    'primary-outline': `!bg-primary-light disabled:!bg-primary-light/50 !text-base hover:!bg-primary-light/80 !border-[1px] !shadow-primary-outline !border-dust ${heightClasses[size]} ${fontSize}`,
-    secondary: `!bg-neutral disabled:!bg-neutral/50  !text-primary-light hover:!bg-neutral/80  !shadow-secondary ${heightClasses[size]} ${fontSize}`,
-    tertiary: `!bg-base-10 disabled:!bg-base-10/50 !text-base hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
-    quaternary: `!bg-transparent disabled:!bg-transparent/50 !text-base-dark hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
-    warning: `!bg-warning disabled:!bg-warning/50 !text-primary-light  hover:!bg-warning/80 !shadow-warning ${heightClasses[size]} ${fontSize}`,
+    primary: `!font-normal !bg-success disabled:!bg-success/50 !text-primary-light hover:!bg-success/80 !shadow-primary ${heightClasses[size]} ${fontSize}`,
+    'primary-outline': `!font-normal !bg-primary-light disabled:!bg-primary-light/50 !text-base hover:!bg-primary-light/80 !border-[1px] !shadow-primary-outline !border-dust ${heightClasses[size]} ${fontSize}`,
+    secondary: `!font-normal !bg-neutral disabled:!bg-neutral/50  !text-primary-light hover:!bg-neutral/80  !shadow-secondary ${heightClasses[size]} ${fontSize}`,
+    tertiary: `!font-normal !bg-base-10 disabled:!bg-base-10/50 !text-base hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
+    quaternary: `!font-normal !bg-transparent disabled:!bg-transparent/50 !text-base-dark hover:!text-primary hover:!bg-primary-20 ${heightClasses[size]} ${fontSize}`,
+    warning: `!font-normal !bg-warning disabled:!bg-warning/50 !text-primary-light  hover:!bg-warning/80 !shadow-warning ${heightClasses[size]} ${fontSize}`,
   };
 
   const typeClasses: Record<ButtonType, string> = {

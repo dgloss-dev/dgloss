@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import AntForm from 'antd/es/form';
 import { useForm } from 'antd/es/form/Form';
 import { ConfigProvider } from 'antd';
+import { useTranslations } from 'next-intl';
+import { Rule } from 'antd/es/form';
 
 type FormLayout = 'horizontal' | 'vertical' | 'inline';
 type FormVariant = 'outlined' | 'filled' | 'borderless';
@@ -39,13 +41,6 @@ export const Form: React.FC<FormProps> = ({
   layout = 'vertical',
   ...props
 }) => {
-  const [myform] = useForm();
-  useEffect(() => {
-    if (props.initialValues) {
-      myform.setFieldsValue(props.initialValues);
-    }
-  }, [props.initialValues, myform]);
-
   return (
     <ConfigProvider
       theme={{
@@ -55,7 +50,7 @@ export const Form: React.FC<FormProps> = ({
       }}
     >
       <AntForm
-        form={props.form ? props.form : myform}
+        form={props.form}
         initialValues={props.initialValues}
         className={props.className ? props.className : ' w-full flex'}
         layout={layout}
@@ -72,3 +67,4 @@ export const Form: React.FC<FormProps> = ({
 };
 
 export { useForm };
+export type { Rule };

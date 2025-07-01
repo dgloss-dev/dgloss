@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import AntInput from 'antd/es/input';
 import ConfigProvider from 'antd/es/config-provider';
-import Image from 'next/image';
 
 type ModeTypes = 'search' | 'text' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal';
 export interface InputProps {
@@ -16,7 +15,7 @@ export interface InputProps {
   allowClear?: boolean;
   maxLength?: number;
   showCount?: boolean;
-  value?: string;
+  value?: string | number;
   placeholder?: string;
   name?: string;
   label?: string;
@@ -24,6 +23,8 @@ export interface InputProps {
   className?: string;
   type?: string;
   errorMessage?: string;
+  min?: number;
+  max?: number;
   theme?: {
     token?: {
       [key: string]: any;
@@ -98,6 +99,8 @@ export const Input: React.FC<InputProps> = (props) => {
           name={props.name}
           type={props.type}
           inputMode={props.inputMode}
+          min={props.min}
+          max={props.max}
         />
 
         {props.suffixLabel && (

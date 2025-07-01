@@ -1,6 +1,7 @@
 {
   "headers": {
-    "accountList": "Account List"
+    "accountList": "Account List",
+    "callList": "Call List"
   },
   "buttons": {
     "add": "Add",
@@ -10,7 +11,10 @@
     "cancel": "Cancel",
     "submit": "Submit",
     "delete": "Delete",
-    "forceLogout": "Force Logout"
+    "prohibited": "Prohibited",
+    "forceLogout": "Force Logout",
+    "warning": "Delete",
+    "search": "Search"
   },
   "table": {
     "emptyText": "No content",
@@ -41,5 +45,44 @@
     "callHistory": "Call History",
     "setting": "Setting",
     "inquiry": "Inquiry"
+  },
+  "breadcrumb": {
+    "manager": "Manager",
+    "callList": "Call List"
+  },
+  "form": {
+    "call_list_register": "Call List Registration"
+  },
+  "deleteModal": {
+    "delete_call_list": "Delete Call List",
+    "selected": "selected",
+    "confirm": "items you need to delete ? "
+  },
+  "prohibitedModal": {
+    "prohibited_call_list": "Prohibited Call List",
+    "selected": "selected",
+    "confirm": "items you need to prohibit ? "
+  },
+  "titles": {
+    "call_list_created": "Call List Created",
+    "call_list_updated": "Call List Updated",
+    "call_list_deleted": "Call List Deleted",
+    "call_list_delete_error": "Delete Error"
+  },
+  "descriptions": {
+    "call_list_created_description": "Call List Created Successfully",
+    "call_list_updated_description": "Call List Updated Successfully",
+    "call_list_deleted_description": "Call List Deleted Successfully",
+    "call_list_submit_error_description": "Call List Submission failed",
+    "call_list_delete_error_description": "Call List Deletion failed",
+    "prohibited_call_list_description": "Call List Prohibited Successfully",
+    "prohibited_call_list_error_description": "Call List Prohibited failed",
+    "fetch_failed": "Fetch Failed"
+  },
+  "filters": {
+    "listId": "List ID",
+    "listName": "List Name (Prefix Match)",
+    "aiCall": "AI Call Allowed",
+    "status": "Status"
   }
 }

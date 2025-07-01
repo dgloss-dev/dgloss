@@ -1,7 +1,9 @@
-import { BACKEND_BASE_URL, CONTENT_BUCKET } from '@workspace/types/constants/config';
-import { APIS, UTILS_APIS } from '@workspace/types/constants/api';
-import { httpPost } from './httpClient.service';
 import axios from 'axios';
+
+import { APIS, UTILS_APIS } from '@workspace/types/constants/api';
+import { BACKEND_BASE_URL, CONTENT_UTILS_BUCKET } from '@workspace/types/constants/config';
+
+import { httpPost } from './httpClient.service';
 
 const URL = `${BACKEND_BASE_URL}/${APIS.UTILS}`;
 
@@ -15,6 +17,7 @@ export const getPresignedUrl = async (request: any) => {
     throw error;
   }
 };
+
 export const multipartUploadToS3 = async (
   preSignedUrl: string,
   selectedFile: File,
@@ -67,20 +70,36 @@ export const uploadToS3 = async (
   try {
     const valueKey = `${name}/${fileName}`;
     const requestFile = {
-      bucket: bucketName || CONTENT_BUCKET,
+      bucket: CONTENT_UTILS_BUCKET,
       key: valueKey,
     };
-
     const filePresignedUrl = await getPresignedUrl(requestFile);
 
     if (filePresignedUrl) {
       const fileToUpload = file.originFileObj || file;
-      await uploadToS3(filePresignedUrl.data.url, fileToUpload, fileName);
+      await upload(filePresignedUrl.data.url, fileToUpload, fileName);
     } else {
       throw new Error('Failed to get presigned URL for the file.');
     }
   } catch (error) {
     console.error('Error uploading file to S3:', error);
     throw error;
+  }
+};
+
+const upload = async (preSignedUrl: any, selectedFile: any, filename: any) => {
+  try {
+    const response = await axios.put(preSignedUrl, selectedFile, {
+      headers: {
+        'Content-Disposition': `attachment; filename="${filename}"`,
+      },
+      withCredentials: false,
+    });
+    if (response) {
+      return true;
+    }
+  } catch (error) {
+    console.error('Error uploading to S3:', error);
+    throw new Error('Error uploading to S3');
   }
 };

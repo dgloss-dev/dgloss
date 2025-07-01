@@ -101,16 +101,7 @@ export const Tag: React.FC<TagProps> = ({
         icon={icon}
         onClose={onClose}
         className={`custom_ant_tag ${className}`}
-        style={{
-          ...style,
-          paddingInline: 8,
-          paddingBlock: 2,
-          borderRadius: 4,
-          fontSize: 12,
-          fontWeight: 400,
-          maxHeight: 24,
-          margin: 0,
-        }}
+      
       >
         {children}
       </AntTag>

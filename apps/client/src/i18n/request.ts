@@ -7,7 +7,8 @@ export default getRequestConfig(async () => {
   const locale = cookieStore.get(COOKIE_STORAGE_KEYS.NEXT_LOCALE)?.value || 'jp';
   const messages = {
     common: (await import(`../../public/translations/common/${locale}.json`)).default,
-};
+    callList: (await import(`../../public/translations/callList/${locale}.json`)).default,
+  };
 
   return {
     locale,

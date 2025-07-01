@@ -19,4 +19,7 @@ export const iconMap = {
   Prohibited: () => import('react-icons/pi').then((m) => ({ default: m.PiProhibitBold })),
   Seated: () => import('react-icons/pi').then((m) => ({ default: m.PiOfficeChairFill })),
   Delete: () => import('react-icons/fa').then((m) => ({ default: m.FaTrash })),
+  InformationCircle: () => import('react-icons/hi').then((m) => ({ default: m.HiInformationCircle })),
+  CheckCircle: () => import('react-icons/hi').then((m) => ({ default: m.HiCheckCircle })),
+  XCircle: () => import('react-icons/hi').then((m) => ({ default: m.HiXCircle })),
 };
