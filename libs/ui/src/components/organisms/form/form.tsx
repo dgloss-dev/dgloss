@@ -66,4 +66,5 @@ export const Form: React.FC<FormProps> = ({
   );
 };
 
-export { useForm, Rule };
+export { useForm };
+export type { Rule };
