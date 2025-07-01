@@ -79,6 +79,7 @@ interface CommonTableProps<T extends object> {
   filterComponent?: React.ReactNode;
   filters?: Record<string, any>;
   setFilters?: (filters: Record<string, any>) => void;
+  actionBar?: boolean;
 }
 
 export const CommonTable = <T extends object>({
@@ -120,6 +121,7 @@ export const CommonTable = <T extends object>({
   filterComponent,
   filters,
   setFilters,
+  actionBar = true,
 }: CommonTableProps<T>) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -309,15 +311,19 @@ export const CommonTable = <T extends object>({
 
   return (
     <div className="w-full">
-      <div className="flex flex-col xl:flex-row items-center justify-between ">
-        <TableActionBar
-          selectedCount={selectedRows?.length || 0}
-          onForceLogout={() => setOpenModalAction(MODAL_KEY.PROHIBITED_MODAL, true)}
-          onDelete={() => {
-            setOpenModalAction(MODAL_KEY.DELETE_MODAL, true);
-          }}
-          className="order-2 xl:order-1"
-        />
+      <div className="flex flex-col xl:flex-row items-center justify-between pb-4 ">
+        <div className={`flex items-center gap-2 pt-[26px]  w-full ${className}`}>
+          {actionBar && (
+            <TableActionBar
+              selectedCount={selectedRows?.length || 0}
+              onForceLogout={() => setOpenModalAction(MODAL_KEY.PROHIBITED_MODAL, true)}
+              onDelete={() => {
+                setOpenModalAction(MODAL_KEY.DELETE_MODAL, true);
+              }}
+              className="order-2 xl:order-1"
+            />
+          )}
+        </div>
         <div className="order-1 xl:order-2 w-full">{filterComponent && filterComponent}</div>
       </div>
       <Table<T>

@@ -3,6 +3,7 @@ import { CallListPageHeader } from './_components/callListPageHeader';
 import { CallListTable } from './_components/callListTable';
 import { getServerAllCallLists } from '@client/services/callList.server.services';
 import { DetailsTable } from '@client/components/common/commonTable/detailsTable';
+import { Loader } from '@workspace/ui/components/atoms/loader/loader';
 
 const CallListManagementPage = async () => {
   let data;
@@ -18,10 +19,12 @@ const CallListManagementPage = async () => {
   }
 
   return (
-    <Suspense fallback={<></>}>
-      <CallListPageHeader />
-      <CallListTable initialData={data?.rows} initialCount={data?.count} />
-    </Suspense>
+    <>
+      <Suspense fallback={<Loader fullscreen />}>
+        <CallListPageHeader />
+        <CallListTable initialData={data?.rows} initialCount={data?.count} />
+      </Suspense>
+    </>
   );
 };
 

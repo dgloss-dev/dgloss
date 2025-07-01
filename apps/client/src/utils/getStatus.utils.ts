@@ -1,17 +1,17 @@
-import { CALL_STATUS } from '@workspace/types/enums/callList';
+import { CALL_MODES, CALL_STATUS } from '@workspace/types/enums/callList';
 
 export const getCallStatusType = (status: CALL_STATUS) => {
   switch (status) {
     case CALL_STATUS.ON_CALL:
-      return 'active';
+      return;
     case CALL_STATUS.CALL_SUSPENDED:
-      return 'pause';
+      return CALL_MODES.PAUSE;
     case CALL_STATUS.MANUAL_STOP:
-      return 'inActive';
+      return CALL_MODES.INACTIVE;
     case CALL_STATUS.COMPLETED:
-      return 'inActive';
+      return CALL_MODES.INACTIVE;
     default:
-      return 'inActive';
+      return CALL_MODES.INACTIVE;
   }
 };
 

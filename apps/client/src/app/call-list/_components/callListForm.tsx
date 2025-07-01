@@ -284,7 +284,7 @@ export const CallListForm = ({ record }: { record?: any }) => {
 
       {canRemove && (
         <div className="cursor-pointer" onClick={() => onRemove(idx)}>
-          <ImageIcon path="actions/remove.svg" className="" />
+          <ImageIcon path="actions/remove.svg"  />
         </div>
       )}
     </div>

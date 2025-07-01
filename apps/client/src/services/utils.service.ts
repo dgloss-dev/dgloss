@@ -70,7 +70,7 @@ export const uploadToS3 = async (
   try {
     const valueKey = `${name}/${fileName}`;
     const requestFile = {
-      bucket: 'dgloss-utils-dev',
+      bucket: CONTENT_BUCKET,
       key: valueKey,
     };
     const filePresignedUrl = await getPresignedUrl(requestFile);
