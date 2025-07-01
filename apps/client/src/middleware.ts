@@ -7,7 +7,7 @@ export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const isProtectedRoute = protectedRoutePrefixes.some((prefix) => pathname.startsWith(prefix));
   // const isAdminHubRoute = adminHubRoutePrefixes.some((prefix) => pathname.startsWith(prefix));
-
+  
   if (!isProtectedRoute) {
     return NextResponse.next();
   }

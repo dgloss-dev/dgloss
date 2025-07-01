@@ -26,7 +26,7 @@ applications:
               fi
 
             - echo "Installing Dependencies..."
-            - yarn install --frozen-lockfile --ignore-scripts
+            - yarn install
             - echo "Dependencies installed successfully"
             - echo "Clearing nx cache..."
             - yarn run clear:nx:cache
