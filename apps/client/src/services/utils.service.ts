@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { APIS, UTILS_APIS } from '@workspace/types/constants/api';
-import { BACKEND_BASE_URL, CONTENT_BUCKET } from '@workspace/types/constants/config';
+import { BACKEND_BASE_URL, CONTENT_UTILS_BUCKET } from '@workspace/types/constants/config';
 
 import { httpPost } from './httpClient.service';
 
@@ -70,7 +70,7 @@ export const uploadToS3 = async (
   try {
     const valueKey = `${name}/${fileName}`;
     const requestFile = {
-      bucket: CONTENT_BUCKET,
+      bucket: CONTENT_UTILS_BUCKET,
       key: valueKey,
     };
     const filePresignedUrl = await getPresignedUrl(requestFile);

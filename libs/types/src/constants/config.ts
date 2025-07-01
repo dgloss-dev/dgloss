@@ -4,4 +4,5 @@ export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export const ENVIRONMENT = process.env.NEXT_PUBLIC_ENVIRONMENT;
 export const CONTENT_URL = process.env.NEXT_PUBLIC_CONTENT_URL;
 export const CONTENT_BUCKET = process.env.NEXT_PUBLIC_CONTENT_BUCKET;
+export const CONTENT_UTILS_BUCKET = process.env.NEXT_PUBLIC_CONTENT_UTILS_BUCKET;
 export const COOKIES_DOMAIN = process.env.NEXT_PUBLIC_COOKIES_DOMAIN;
